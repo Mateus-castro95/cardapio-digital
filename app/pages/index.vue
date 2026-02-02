@@ -1,8 +1,7 @@
 <template>
   <!-- Página inicial do cardápio digital -->
   <div class="container">
-    <h1>Cardápio Digital</h1>
-    <p>Bem-vindo ao seu cardápio digital!</p>
+    <h1>Dashboard</h1>
   </div>
 </template>
 

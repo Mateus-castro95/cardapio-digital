@@ -8,40 +8,34 @@
     
     <!-- Menu de navegação principal do sistema -->
     <nav class="sidebar-nav">
-      <!-- Botão: Página inicial com visão geral do sistema -->
-      <button class="nav-button">
+
+      <NuxtLink to="/" class="nav-button">
         Dashboard
-      </button>
+      </NuxtLink>
       
-      <!-- Botão: Gerenciamento de pedidos ativos -->
-      <button class="nav-button">
+      <NuxtLink to="/pedidos" class="nav-button">
         Pedidos
-      </button>
+      </NuxtLink>
       
-      <!-- Botão: Finalização e fechamento de contas de mesas -->
-      <button class="nav-button">
+      <NuxtLink to="/fechar-mesa" class="nav-button">
         Fechar Mesa
-      </button>
+      </NuxtLink>
       
-      <!-- Botão: Cadastro e gerenciamento de produtos -->
-      <button class="nav-button">
+      <NuxtLink to="/produtos" class="nav-button">
         Produtos
-      </button>
+      </NuxtLink>
       
-      <!-- Botão: Visualização e edição do cardápio digital -->
-      <button class="nav-button">
+      <NuxtLink to="/cardapio" class="nav-button">
         Cardápio
-      </button>
+      </NuxtLink>
       
-      <!-- Botão: Gerenciamento de mesas do estabelecimento -->
-      <button class="nav-button">
+      <NuxtLink to="/mesas" class="nav-button">
         Mesas
-      </button>
+      </NuxtLink>
       
-      <!-- Botão: Configurações gerais do sistema -->
-      <button class="nav-button">
+      <NuxtLink to="/configuracoes" class="nav-button">
         Configurações
-      </button>
+      </NuxtLink>
     </nav>
   </aside>
 </template>
@@ -87,6 +81,7 @@
 }
 
 .nav-button {
+  display: block;
   width: 100%;
   padding: 1rem 1.5rem;
   background: transparent;
@@ -95,6 +90,7 @@
   font-size: 1rem;
   font-weight: 500;
   text-align: left;
+  text-decoration: none;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
@@ -123,5 +119,14 @@
 
 .nav-button:active {
   transform: scale(0.98);
+}
+
+.nav-button.router-link-active {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.nav-button.router-link-active::before {
+  height: 70%;
 }
 </style>
