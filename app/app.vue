@@ -11,6 +11,10 @@
     <main class="main-content">
       <NuxtPage />
     </main>
+
+    <!-- Notificações globais -->
+    <BaseToast />
+    <BaseLoading />
   </div>
 </template>
 
