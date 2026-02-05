@@ -183,6 +183,119 @@ export type Database = {
                         referencedColumns: ["id"]
                     }
                 ]
+            },
+            mesas: {
+                Row: {
+                    id: string
+                    numero: number
+                    status: 'livre' | 'ocupada'
+                    atualizado_em: string
+                }
+                Insert: {
+                    id?: string
+                    numero: number
+                    status?: 'livre' | 'ocupada'
+                    atualizado_em?: string
+                }
+                Update: {
+                    id?: string
+                    numero?: number
+                    status?: 'livre' | 'ocupada'
+                    atualizado_em?: string
+                }
+                Relationships: []
+            },
+            pedidos: {
+                Row: {
+                    id: string
+                    numero_sequencial: number
+                    mesa_id: string | null
+                    status: 'novo' | 'em_preparo' | 'pronto' | 'entregue' | 'finalizado'
+                    total: number
+                    criado_em: string
+                    atualizado_em: string
+                }
+                Insert: {
+                    id?: string
+                    numero_sequencial?: number
+                    mesa_id?: string | null
+                    status?: 'novo' | 'em_preparo' | 'pronto' | 'entregue' | 'finalizado'
+                    total?: number
+                    criado_em?: string
+                    atualizado_em?: string
+                }
+                Update: {
+                    id?: string
+                    numero_sequencial?: number
+                    mesa_id?: string | null
+                    status?: 'novo' | 'em_preparo' | 'pronto' | 'entregue' | 'finalizado'
+                    total?: number
+                    criado_em?: string
+                    atualizado_em?: string
+                }
+                Relationships: [
+                    {
+                        foreignKeyName: "pedidos_mesa_id_fkey"
+                        columns: ["mesa_id"]
+                        referencedRelation: "mesas"
+                        referencedColumns: ["id"]
+                    }
+                ]
+            },
+            itens_pedido: {
+                Row: {
+                    id: string
+                    pedido_id: string
+                    produto_simples_id: string | null
+                    tamanho_id: string | null
+                    sabores: Json
+                    quantidade: number
+                    preco_unitario: number
+                    observacoes: string | null
+                    criado_em: string
+                }
+                Insert: {
+                    id?: string
+                    pedido_id: string
+                    produto_simples_id?: string | null
+                    tamanho_id?: string | null
+                    sabores?: Json
+                    quantidade?: number
+                    preco_unitario: number
+                    observacoes?: string | null
+                    criado_em?: string
+                }
+                Update: {
+                    id?: string
+                    pedido_id?: string
+                    produto_simples_id?: string | null
+                    tamanho_id?: string | null
+                    sabores?: Json
+                    quantidade?: number
+                    preco_unitario?: number
+                    observacoes?: string | null
+                    criado_em?: string
+                }
+                Relationships: [
+                    {
+                        foreignKeyName: "itens_pedido_pedido_id_fkey"
+                        columns: ["pedido_id"]
+                        referencedRelation: "pedidos"
+                        referencedColumns: ["id"]
+                    },
+                    {
+                        foreignKeyName: "itens_pedido_produto_simples_id_fkey"
+                        columns: ["produto_simples_id"]
+                        referencedRelation: "produtos_simples"
+                        referencedColumns: ["id"]
+                    },
+                    {
+                        foreignKeyName: "itens_pedido_tamanho_id_fkey"
+                        columns: ["tamanho_id"]
+                        referencedRelation: "tamanhos"
+                        referencedColumns: ["id"]
+                    }
+                ]
             }
         }
         Views: {

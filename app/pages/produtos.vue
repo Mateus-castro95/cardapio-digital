@@ -1,71 +1,46 @@
 <template>
   <div class="p-6">
-    <div class="mb-8 flex justify-between items-start">
-      <div>
-        <h1 class="text-3xl font-bold text-gray-800">Produtos</h1>
-        <p class="text-gray-500">Gerencie seus produtos e categorias aqui.</p>
-      </div>
-      <BaseButton 
-        v-if="activeTab === 'categorias'"
-        variant="primary" 
-        @click="handleOpenAddCategory"
-      >
-        Adicionar nova categoria
-      </BaseButton>
+    <div class="mb-8">
+      <h1 class="text-3xl font-black text-gray-900">Gestão do <span class="text-orange-500">Cardápio</span></h1>
+      <p class="text-gray-400 text-sm font-medium mt-1">Gerencie categorias, produtos e preços em um único lugar</p>
     </div>
 
-    <!-- Abas -->
-    <div class="border-b border-gray-200 mb-6 font-primary text-secondary-500">
-      <nav class="flex space-x-8">
-        <button 
-          @click="activeTab = 'categorias'"
-          :class="[
-            activeTab === 'categorias' 
-              ? 'border-primary-500 text-primary-600' 
-              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-            'border-b-2 py-4 px-1 text-sm font-medium transition-colors cursor-pointer whitespace-nowrap'
-          ]"
-        >
-          Categorias
-        </button>
-        <button 
-          @click="activeTab = 'itens'"
-          :class="[
-            activeTab === 'itens' 
-              ? 'border-primary-500 text-primary-600' 
-              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-            'border-b-2 py-4 px-1 text-sm font-medium transition-colors cursor-pointer whitespace-nowrap'
-          ]"
-        >
-          Itens
-        </button>
-      </nav>
-    </div>
-
-    <!-- Conteúdo da Aba Categorias -->
-    <div v-if="activeTab === 'categorias'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      <BaseCard v-for="categoria in categorias" :key="categoria.id" class="group relative">
-        <div class="flex justify-between items-center">
-          <span class="font-semibold text-lg text-gray-700">{{ categoria.nome }}</span>
-          
-          <div class="flex gap-2">
-            <BaseButton variant="outline" size="small" class="!p-2 !border-blue-100 !text-blue-600 hover:!bg-blue-50" @click="handleOpenEditCategory(categoria)">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-              </svg>
-            </BaseButton>
-            <BaseButton variant="outline" size="small" class="!p-2 !border-red-100 !text-red-600 hover:!bg-red-50" @click="confirmDelete(categoria, 'categoria')">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-            </BaseButton>
+    <div class="space-y-16">
+      <!-- SEÇÃO: CATEGORIAS NO TOPO -->
+      <section>
+        <div class="flex justify-between items-end mb-6">
+          <div>
+            <h2 class="text-2xl font-bold text-gray-800">Categorias</h2>
+            <p class="text-gray-500 text-sm">Divisões principais do cardápio</p>
           </div>
+          <BaseButton 
+            variant="primary" 
+            size="small"
+            @click="handleOpenAddCategory"
+          >
+            Adicionar nova categoria
+          </BaseButton>
         </div>
-      </BaseCard>
-    </div>
 
-    <!-- Conteúdo da Aba Itens -->
-    <div v-else-if="activeTab === 'itens'" class="space-y-12">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <BaseCard 
+            v-for="categoria in categorias" :key="categoria.id" 
+            class="group hover:border-orange-200 transition-all flex justify-between items-center"
+          >
+            <span class="font-semibold text-lg text-gray-700 capitalize">{{ categoria.nome }}</span>
+            <div class="flex gap-1 transition-opacity">
+              <button @click="handleOpenEditCategory(categoria)" class="p-2 text-gray-400 hover:text-blue-500 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+              </button>
+              <button @click="confirmDelete(categoria, 'categoria')" class="p-2 text-gray-300 hover:text-red-500 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+              </button>
+            </div>
+          </BaseCard>
+        </div>
+      </section>
+
+      <!-- SEÇÃO DE ITENS -->
       <!-- Seção de Pastéis -->
       <div>
         <div class="mb-6">
@@ -153,8 +128,8 @@
                     <BaseToggle v-model="item.ativo" @update:model-value="handleToggleAtivo(item, 'sabor')" />
                   </template>
                   <template #acoes="{ item }">
-                    <div class="flex gap-2 text-gray-400">
-                      <button class="hover:text-gray-600 transition-colors px-1" @click="handleOpenEditSabor(item)">
+                    <div class="flex gap-2">
+                      <button class="text-gray-400 hover:text-gray-600 transition-colors px-1" @click="handleOpenEditSabor(item)">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                         </svg>
@@ -210,13 +185,13 @@
                     <BaseToggle v-model="item.ativo" @update:model-value="handleToggleAtivo(item, 'sabor')" />
                   </template>
                   <template #acoes="{ item }">
-                    <div class="flex gap-2 text-gray-400">
-                      <button class="hover:text-gray-600 transition-colors px-1" @click="handleOpenEditSabor(item)">
+                    <div class="flex gap-2">
+                      <button class="text-gray-400 hover:text-gray-600 transition-colors px-1" @click="handleOpenEditSabor(item)">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                         </svg>
                       </button>
-                      <button class="hover:text-red-500 transition-colors px-1" @click="confirmDelete(item, 'sabor')">
+                      <button class="text-gray-400 hover:text-red-500 transition-colors px-1" @click="confirmDelete(item, 'sabor')">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
@@ -559,7 +534,6 @@ const { sabores, fetchSabores, addSaborCompleto, updateSaborCompleto, removeSabo
 const { variacoes, fetchVariacoesBebidas, addNovaVariacao, updateVariacaoCompleta, removeVariacao } = useVariacoes();
 const { produtos, fetchProdutosBebidas, addBebida, updateBebida, removeProduto, toggleAtivo } = useProdutos();
 
-const activeTab = ref('categorias');
 
 // Filtros para sabores de pastel
 const saboresSalgados = computed(() => sabores.value.filter(s => s.categoria === 'salgado'));

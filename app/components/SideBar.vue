@@ -16,6 +16,10 @@
       <NuxtLink to="/pedidos" class="nav-button">
         Pedidos
       </NuxtLink>
+
+      <NuxtLink to="/cozinha" class="nav-button">
+        Cozinha
+      </NuxtLink>
       
       <NuxtLink to="/fechar-mesa" class="nav-button">
         Fechar Mesa
