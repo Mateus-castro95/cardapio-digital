@@ -6,6 +6,7 @@
     :disabled="disabled"
     :class="['base-button', variant, size, { 'is-loading': loading, 'is-disabled': disabled }]"
     @click="handleClick"
+    v-bind="filteredAttrs"
   >
     <!-- Spinner de loading exibido quando o botão está processando -->
     <span v-if="loading" class="loading-spinner"></span>
@@ -46,6 +47,8 @@ interface Emits {
   (e: 'click', event: MouseEvent): void;
 }
 
+import { useAttrs, computed } from 'vue';
+
 // Define as props com valores padrão
 const props = withDefaults(defineProps<Props>(), {
   type: 'button',
@@ -57,6 +60,16 @@ const props = withDefaults(defineProps<Props>(), {
 
 // Define os eventos que o componente pode emitir
 const emit = defineEmits<Emits>();
+
+const attrs = useAttrs();
+const filteredAttrs = computed(() => {
+  const { onClick, ...rest } = attrs;
+  return rest;
+});
+
+defineOptions({
+  inheritAttrs: false
+});
 
 /**
  * Manipula o clique do botão
