@@ -79,35 +79,59 @@
           </div>
 
           <!-- AÇÕES DE PAGAMENTO -->
-          <div v-if="saldoRestante > 0" class="space-y-4">
-             <BaseInput 
-              v-model="valorPagamento" 
-              type="number" 
-              label="Valor a Pagar"
-              dark
-              class="!bg-gray-800 !border-gray-700 !text-white"
-            />
-            
-            <div class="grid grid-cols-3 gap-2">
+          <div v-if="saldoRestante > 0" class="space-y-6">
+            <!-- Toggle Integral / Parcial -->
+            <div class="flex p-1 bg-gray-800 rounded-2xl border border-gray-700">
               <button 
-                v-for="metodo in metodos" :key="metodo.id"
-                @click="metodoSelecionado = metodo.id"
-                class="py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border-2 transition-all"
-                :class="metodoSelecionado === metodo.id 
-                  ? 'bg-orange-500 border-orange-500 text-white' 
-                  : 'bg-gray-800 border-gray-700 text-gray-400 hover:border-gray-600'"
+                @click="tipoPagamento = 'integral'; valorPagamento = Number(saldoRestante.toFixed(2))"
+                class="flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all"
+                :class="tipoPagamento === 'integral' ? 'bg-gray-700 text-white shadow-sm' : 'text-gray-500 hover:text-gray-300'"
               >
-                {{ metodo.label }}
+                Integral
+              </button>
+              <button 
+                @click="tipoPagamento = 'parcial'"
+                class="flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all"
+                :class="tipoPagamento === 'parcial' ? 'bg-gray-700 text-white shadow-sm' : 'text-gray-500 hover:text-gray-300'"
+              >
+                Parcial
               </button>
             </div>
 
+            <BaseInput 
+              v-model="valorPagamento" 
+              type="number" 
+              label="Valor a Receber"
+              dark
+              :disabled="tipoPagamento === 'integral'"
+              :error="Number(valorPagamento) > saldoRestante ? 'Valor maior que o saldo' : undefined"
+              class="!bg-gray-800 !border-gray-700 !text-white"
+            />
+            
+            <div class="space-y-2">
+              <p class="text-[9px] font-black text-gray-500 uppercase tracking-widest px-1">Método</p>
+              <div class="grid grid-cols-3 gap-2">
+                <button 
+                  v-for="metodo in metodos" :key="metodo.id"
+                  @click="metodoSelecionado = metodo.id"
+                  class="py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border-2 transition-all"
+                  :class="metodoSelecionado === metodo.id 
+                    ? 'bg-orange-500 border-orange-500 text-white shadow-lg shadow-orange-900/40' 
+                    : 'bg-gray-800 border-gray-700 text-gray-400 hover:border-gray-600'"
+                >
+                  {{ metodo.label }}
+                </button>
+              </div>
+            </div>
+
             <BaseButton 
-              class="w-full !rounded-2xl !py-4 shadow-xl shadow-black/20"
+              class="w-full !rounded-2xl !py-4 shadow-xl shadow-black/20 font-black tracking-widest text-xs"
               @click="handleRegistrarPagamento"
               :loading="loadingPagamento"
-              :disabled="!valorPagamento || valorPagamento <= 0 || !metodoSelecionado"
+              :disabled="!valorPagamento || Number(valorPagamento) <= 0 || Number(valorPagamento) > (saldoRestante + 0.01) || !metodoSelecionado"
             >
-              REGISTRAR PAGAMENTO
+              <span v-if="Number(valorPagamento) > saldoRestante">VALOR EXCEDIDO</span>
+              <span v-else>CONFIRMAR R$ {{ Number(valorPagamento || 0).toFixed(2) }}</span>
             </BaseButton>
           </div>
 
@@ -149,6 +173,7 @@ const toast = useToast();
 const mesaSelecionada = ref<any>(null);
 const pagamentosMesa = ref<any[]>([]);
 const valorPagamento = ref<number | null>(null);
+const tipoPagamento = ref<'integral' | 'parcial'>('integral');
 const metodoSelecionado = ref('pix');
 const loadingPagamento = ref(false);
 const loadingFinalizar = ref(false);
@@ -223,23 +248,38 @@ const selecionarMesa = async (mesa: any) => {
 };
 
 const handleRegistrarPagamento = async () => {
-    if (!mesaSelecionada.value || !valorPagamento.value) return;
+    const valorNumerico = Number(valorPagamento.value);
     
+    if (valorNumerico > (saldoRestante.value + 0.01)) {
+        toast.error('O valor não pode ser maior que o saldo restante');
+        return;
+    }
+
     loadingPagamento.value = true;
     try {
-        await registrarPagamento({
+        const payload = {
             mesa_id: mesaSelecionada.value.id,
-            valor: valorPagamento.value,
+            valor: valorNumerico,
             metodo_pagamento: metodoSelecionado.value
-        });
+        };
+
+        const result = await registrarPagamento(payload);
         
-        toast.success(`Recebido R$ ${valorPagamento.value.toFixed(2)} (${metodoSelecionado.value})`);
+        // Se o banco registrou, independente do retorno detalhado, prosseguimos
+        toast.success(`Recebido R$ ${payload.valor.toFixed(2)} (${payload.metodo_pagamento})`);
         
-        // Atualiza pagamentos localmente
+        // Atualiza a lista de pagamentos e recalcula saldos
         pagamentosMesa.value = await fetchPagamentosMesa(mesaSelecionada.value.id);
-        valorPagamento.value = Number(saldoRestante.value.toFixed(2));
-    } catch (error) {
-        toast.error('Erro ao registrar pagamento');
+        
+        // Reseta campos conforme o tipo de pagamento
+        if (tipoPagamento.value === 'integral') {
+            valorPagamento.value = 0;
+        } else {
+            valorPagamento.value = Number(saldoRestante.value.toFixed(2));
+        }
+    } catch (error: any) {
+        console.error('Erro no checkout:', error);
+        toast.error('Erro ao registrar', error.message || 'Verifique sua conexão');
     } finally {
         loadingPagamento.value = false;
     }
@@ -271,6 +311,7 @@ const getItemName = (item: any) => {
         const p = item.produto_simples;
         if (p.tipo_bebida === 'suco' || p.sabor) return p.sabor || 'Suco';
         if (p.tipo_bebida === 'refrigerante') return p.sabor || 'Refrigerante';
+        if (p.tipo_bebida === 'agua') return p.sabor || 'Água';
         return p.sabor || 'Bebida';
     }
     return 'Item';
@@ -286,6 +327,7 @@ const getItemDescription = (item: any) => {
         if (p.tipo_preparo) detalhes.push(p.tipo_preparo === 'agua' ? 'C/ Água' : 'C/ Leite');
         if (p.tamanho) detalhes.push(p.tamanho);
         if (p.volume_ml) detalhes.push(`${p.volume_ml}ml`);
+        if (p.tipo_gas) detalhes.push(p.tipo_gas === 'com_gas' ? 'C/ Gás' : 'S/ Gás');
         return detalhes.join(' • ');
     }
     return '';

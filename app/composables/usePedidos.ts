@@ -56,8 +56,9 @@ export const usePedidos = () => {
 
             // Atualiza estado local
             const index = mesas.value.findIndex(m => m.id === mesaId);
-            if (index !== -1) {
-                mesas.value[index].status = status;
+            const mesaExistente = mesas.value[index];
+            if (mesaExistente) {
+                mesaExistente.status = status;
             }
         } catch (error: any) {
             console.error('Erro ao atualizar status da mesa:', error.message);
@@ -127,7 +128,7 @@ export const usePedidos = () => {
     };
 
     // Busca pedidos com itens e mesa associada
-    const fetchPedidos = async (filtros?: { status?: string[] }) => {
+    const fetchPedidos = async (filtros?: { status?: ('novo' | 'em_preparo' | 'pronto' | 'entregue' | 'finalizado')[] }) => {
         loading.value = true;
         try {
             let query = client
@@ -171,8 +172,9 @@ export const usePedidos = () => {
 
             // Atualiza estado local
             const index = pedidos.value.findIndex(p => p.id === pedidoId);
-            if (index !== -1) {
-                pedidos.value[index].status = novoStatus as any;
+            const pedidoExistente = pedidos.value[index];
+            if (pedidoExistente) {
+                pedidoExistente.status = novoStatus as any;
             }
         } catch (error: any) {
             console.error('Erro ao atualizar status do pedido:', error.message);
@@ -223,11 +225,10 @@ export const usePedidos = () => {
             const { data, error } = await client
                 .from('pagamentos' as any)
                 .insert([dados])
-                .select()
-                .single();
+                .select();
 
             if (error) throw error;
-            return data;
+            return data?.[0];
         } catch (error: any) {
             console.error('Erro ao registrar pagamento:', error.message);
             throw error;
