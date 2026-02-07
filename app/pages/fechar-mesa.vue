@@ -73,8 +73,8 @@
               <span class="text-sm font-black">R$ {{ totalPago.toFixed(2) }}</span>
             </div>
             <div class="pt-4 border-t border-gray-800 flex justify-between items-center">
-              <span class="text-sm font-black text-orange-400 uppercase tracking-wider">Saldo Restante</span>
-              <span class="text-3xl font-black text-white">R$ {{ saldoRestante.toFixed(2) }}</span>
+              <span class="text-[10px] font-black text-orange-400 uppercase tracking-widest">Saldo Restante</span>
+              <span class="text-xl font-black text-white tabular-nums">R$ {{ saldoRestante.toFixed(2) }}</span>
             </div>
           </div>
 
@@ -239,12 +239,36 @@ onMounted(async () => {
 const selecionarMesa = async (mesa: any) => {
     mesaSelecionada.value = mesa;
     valorPagamento.value = null;
-    // Busca pagamentos já realizados
-    pagamentosMesa.value = await fetchPagamentosMesa(mesa.id);
+    
+    // Identificamos o pedido mais antigo desta mesa para filtrar pagamentos históricos
+    await buscarPagamentosAtuais();
+    
     // Sugere o valor total restante no campo
     setTimeout(() => {
         valorPagamento.value = Number(saldoRestante.value.toFixed(2));
     }, 100);
+};
+
+// Função para buscar apenas pagamentos que pertencem ao consumo atual
+const buscarPagamentosAtuais = async () => {
+    if (!mesaSelecionada.value) return;
+
+    // Pegamos todos os pedidos ATIVOS da mesa
+    const ativos = (pedidos.value as any[]).filter(
+        p => p.mesa_id === mesaSelecionada.value.id && p.status !== 'finalizado'
+    );
+
+    if (ativos.length > 0) {
+        // Encontramos a data do pedido mais antigo
+        const datas = ativos.map(p => new Date(p.criado_em).getTime());
+        const dataMaisAntiga = new Date(Math.min(...datas)).toISOString();
+        
+        // Buscamos apenas pagamentos feitos após esse primeiro pedido
+        pagamentosMesa.value = await fetchPagamentosMesa(mesaSelecionada.value.id, dataMaisAntiga);
+    } else {
+        // Se não tem pedido, não deve ter pagamento ativo
+        pagamentosMesa.value = [];
+    }
 };
 
 const handleRegistrarPagamento = async () => {
@@ -263,13 +287,12 @@ const handleRegistrarPagamento = async () => {
             metodo_pagamento: metodoSelecionado.value
         };
 
-        const result = await registrarPagamento(payload);
+        await registrarPagamento(payload);
         
-        // Se o banco registrou, independente do retorno detalhado, prosseguimos
         toast.success(`Recebido R$ ${payload.valor.toFixed(2)} (${payload.metodo_pagamento})`);
         
-        // Atualiza a lista de pagamentos e recalcula saldos
-        pagamentosMesa.value = await fetchPagamentosMesa(mesaSelecionada.value.id);
+        // Atualiza apenas os pagamentos da conta atual
+        await buscarPagamentosAtuais();
         
         // Reseta campos conforme o tipo de pagamento
         if (tipoPagamento.value === 'integral') {
@@ -290,7 +313,15 @@ const handleFinalizarMesa = async () => {
     
     loadingFinalizar.value = true;
     try {
-        await finalizarMesa(mesaSelecionada.value.id);
+        // Geramos um ID único para esta venda (sessão)
+        // Usamos crypto.randomUUID() que é nativo do navegador moderno
+        const vendaId = crypto.randomUUID();
+
+        await finalizarMesa({ 
+            mesaId: mesaSelecionada.value.id, 
+            vendaId: vendaId 
+        });
+
         toast.success('Mesa encerrada com sucesso!');
         
         // Reseta tudo

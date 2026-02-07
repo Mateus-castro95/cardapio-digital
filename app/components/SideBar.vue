@@ -36,6 +36,10 @@
       <NuxtLink to="/mesas" class="nav-button">
         Mesas
       </NuxtLink>
+
+      <NuxtLink to="/financeiro" class="nav-button">
+        Financeiro
+      </NuxtLink>
       
       <NuxtLink to="/configuracoes" class="nav-button">
         Configurações

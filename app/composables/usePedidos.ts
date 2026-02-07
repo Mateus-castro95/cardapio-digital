@@ -203,14 +203,21 @@ export const usePedidos = () => {
         return channel;
     };
 
-    // Busca todos os pagamentos já realizados por uma mesa específica
-    const fetchPagamentosMesa = async (mesaId: string) => {
+    // Busca os pagamentos de uma mesa, opcionalmente a partir de uma data (para evitar histórico antigo)
+    const fetchPagamentosMesa = async (mesaId: string, dataApos?: string) => {
         try {
-            const { data, error } = await client
+            let query = client
                 .from('pagamentos' as any)
                 .select('*')
                 .eq('mesa_id', mesaId);
 
+            if (dataApos) {
+                // Pegamos 5 segundos antes para evitar problemas de sincronia de milisegundos
+                const dataFiltro = new Date(new Date(dataApos).getTime() - 5000).toISOString();
+                query = query.gte('criado_em', dataFiltro);
+            }
+
+            const { data, error } = await query;
             if (error) throw error;
             return data || [];
         } catch (error: any) {
@@ -220,7 +227,7 @@ export const usePedidos = () => {
     };
 
     // Registra um novo pagamento na tabela pagamentos
-    const registrarPagamento = async (dados: { mesa_id: string, valor: number, metodo_pagamento: string }) => {
+    const registrarPagamento = async (dados: { mesa_id: string, valor: number, metodo_pagamento: string, venda_id?: string }) => {
         try {
             const { data, error } = await client
                 .from('pagamentos' as any)
@@ -235,25 +242,28 @@ export const usePedidos = () => {
         }
     };
 
-    // Finaliza a mesa: limpa pagamentos, marca pedidos como finalizados e libera a mesa
-    const finalizarMesa = async (mesaId: string) => {
+    // Finaliza a mesa: vincula pedidos ao venda_id, marca como finalizados e libera a mesa
+    const finalizarMesa = async (params: { mesaId: string, vendaId: string }) => {
+        const { mesaId, vendaId } = params;
         try {
-            // 1. Marcar todos os pedidos ativos da mesa como 'finalizado'
+            // 1. Marcar todos os pedidos ativos da mesa como 'finalizado' e vincular ao venda_id
             const { error: errorPedidos } = await client
                 .from('pedidos')
-                .update({ status: 'finalizado' } as any)
+                .update({
+                    status: 'finalizado',
+                    venda_id: vendaId
+                } as any)
                 .eq('mesa_id', mesaId)
                 .neq('status', 'finalizado');
 
             if (errorPedidos) throw errorPedidos;
 
-            // 2. Remover o registro de pagamentos temporários dessa mesa (já que foi fechada)
-            // Nota: Em um sistema real, você pode querer manter isso para relatórios, 
-            // mas aqui limparemos para permitir que a próxima pessoa use a mesa do zero.
+            // 2. Vincular todos os pagamentos dessa mesa que ainda não têm venda_id
             const { error: errorPagamentos } = await client
                 .from('pagamentos' as any)
-                .delete()
-                .eq('mesa_id', mesaId);
+                .update({ venda_id: vendaId } as any)
+                .eq('mesa_id', mesaId)
+                .is('venda_id', null);
 
             if (errorPagamentos) throw errorPagamentos;
 
@@ -266,12 +276,53 @@ export const usePedidos = () => {
         }
     };
 
+    // Busca pedidos por um período específico (para o financeiro)
+    const fetchPedidosPorPeriodo = async (dataInicio: string, dataFim: string) => {
+        loading.value = true;
+        try {
+            const { data, error } = await client
+                .from('pedidos')
+                .select('*, mesa:mesas(numero)')
+                .eq('status', 'finalizado')
+                .gte('criado_em', dataInicio)
+                .lte('criado_em', dataFim)
+                .order('criado_em', { ascending: false });
+
+            if (error) throw error;
+            return data || [];
+        } catch (error: any) {
+            console.error('Erro ao buscar pedidos por período:', error.message);
+            throw error;
+        } finally {
+            loading.value = false;
+        }
+    };
+
+    // Busca detalhes de pagamentos por período (para o resumo de métodos)
+    const fetchPagamentosPorPeriodo = async (dataInicio: string, dataFim: string) => {
+        try {
+            const { data, error } = await client
+                .from('pagamentos' as any)
+                .select('*')
+                .gte('criado_em', dataInicio)
+                .lte('criado_em', dataFim);
+
+            if (error) throw error;
+            return data || [];
+        } catch (error: any) {
+            console.error('Erro ao buscar pagamentos por período:', error.message);
+            throw error;
+        }
+    };
+
     return {
         pedidos,
         mesas,
         loading,
         fetchMesas,
         fetchPedidos,
+        fetchPedidosPorPeriodo,
+        fetchPagamentosPorPeriodo,
         criarPedido,
         atualizarStatusPedido,
         atualizarStatusMesa,

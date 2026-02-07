@@ -214,6 +214,7 @@ export type Database = {
                     total: number
                     criado_em: string
                     atualizado_em: string
+                    venda_id: string | null
                 }
                 Insert: {
                     id?: string
@@ -223,6 +224,7 @@ export type Database = {
                     total?: number
                     criado_em?: string
                     atualizado_em?: string
+                    venda_id?: string | null
                 }
                 Update: {
                     id?: string
@@ -232,10 +234,45 @@ export type Database = {
                     total?: number
                     criado_em?: string
                     atualizado_em?: string
+                    venda_id?: string | null
                 }
                 Relationships: [
                     {
                         foreignKeyName: "pedidos_mesa_id_fkey"
+                        columns: ["mesa_id"]
+                        referencedRelation: "mesas"
+                        referencedColumns: ["id"]
+                    }
+                ]
+            },
+            pagamentos: {
+                Row: {
+                    id: string
+                    mesa_id: string
+                    valor: number
+                    metodo_pagamento: string
+                    criado_em: string
+                    venda_id: string | null
+                }
+                Insert: {
+                    id?: string
+                    mesa_id: string
+                    valor: number
+                    metodo_pagamento: string
+                    criado_em?: string
+                    venda_id?: string | null
+                }
+                Update: {
+                    id?: string
+                    mesa_id?: string
+                    valor?: number
+                    metodo_pagamento?: string
+                    criado_em?: string
+                    venda_id?: string | null
+                }
+                Relationships: [
+                    {
+                        foreignKeyName: "pagamentos_mesa_id_fkey"
                         columns: ["mesa_id"]
                         referencedRelation: "mesas"
                         referencedColumns: ["id"]
