@@ -1,11 +1,11 @@
 <template>
   <!-- Container principal da aplicação -->
-  <div class="app-container">
+  <div class="app-container" :class="{ 'sidebar-collapsed': isCollapsed }">
     <!-- Componente de acessibilidade para anunciar mudanças de rota -->
     <NuxtRouteAnnouncer />
     
     <!-- Barra lateral de navegação (fixa em todas as páginas) -->
-    <SideBar />
+    <SideBar :is-collapsed="isCollapsed" @toggle="isCollapsed = !isCollapsed" />
     
     <!-- Área de conteúdo principal onde as páginas são renderizadas -->
     <main class="main-content">
@@ -21,32 +21,25 @@
 <script setup lang="ts">
 /**
  * App.vue - Shell principal da aplicação
-**/
-
-// Importa o componente de navegação lateral
+ **/
+import { ref } from 'vue';
 import SideBar from '~/components/SideBar.vue';
+
+// Estado para controlar se o sidebar está recolhido
+const isCollapsed = useState('sidebar-collapsed', () => false);
 </script>
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-}
-
 .app-container {
-  display: flex;
-  min-height: 100vh;
+  @apply flex min-h-screen;
 }
 
 .main-content {
-  margin-left: 250px;
-  width: calc(100% - 250px);
-  min-height: 100vh;
-  background: #f8fafc;
+  @apply ml-[250px] w-[calc(100%-250px)] min-h-screen bg-bege-cream transition-all duration-300 ease-out;
+}
+
+/* Ajuste quando o sidebar está recolhido */
+.app-container.sidebar-collapsed .main-content {
+  @apply ml-20 w-[calc(100%-5rem)];
 }
 </style>

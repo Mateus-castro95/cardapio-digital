@@ -89,58 +89,62 @@ const handleClick = (event: MouseEvent) => {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  font-weight: 600;
+  font-weight: 700;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: inherit;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Inter', sans-serif;
   position: relative;
   overflow: hidden;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .base-button:focus {
-  outline: 2px solid #3b82f6;
+  outline: 2px solid #be9667;
   outline-offset: 2px;
 }
 
 /* Sizes */
 .small {
   padding: 0.5rem 1rem;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
 }
 
 .medium {
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
+  padding: 0.875rem 1.75rem;
+  font-size: 0.875rem;
 }
 
 .large {
-  padding: 1rem 2rem;
-  font-size: 1.125rem;
+  padding: 1.125rem 2.25rem;
+  font-size: 1rem;
 }
 
 /* Variants */
 .primary {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  background: linear-gradient(135deg, #3c2f2f 0%, #2a2121 100%);
   color: white;
+  box-shadow: 0 4px 6px -1px rgba(60, 47, 47, 0.2);
 }
 
 .primary:hover:not(.is-disabled):not(.is-loading) {
-  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  background: linear-gradient(135deg, #4a3b3b 0%, #3c2f2f 100%);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+  box-shadow: 0 10px 15px -3px rgba(60, 47, 47, 0.3);
 }
 
 .secondary {
-  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  background: linear-gradient(135deg, #be9667 0%, #a88255 100%);
   color: white;
+  box-shadow: 0 4px 6px -1px rgba(190, 150, 103, 0.2);
 }
 
 .secondary:hover:not(.is-disabled):not(.is-loading) {
-  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+  background: linear-gradient(135deg, #cfa875 0%, #be9667 100%);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 10px 15px -3px rgba(190, 150, 103, 0.3);
 }
 
 .danger {
@@ -167,12 +171,14 @@ const handleClick = (event: MouseEvent) => {
 
 .outline {
   background: transparent;
-  border: 2px solid #f59e0b;
-  color: #f59e0b;
+  border: 2px solid #be9667;
+  color: #8b7e77;
 }
 
 .outline:hover:not(.is-disabled):not(.is-loading) {
-  background: rgba(245, 158, 11, 0.1);
+  background: rgba(190, 150, 103, 0.1);
+  border-color: #a88255;
+  color: #3c2f2f;
   transform: translateY(-2px);
 }
 
@@ -180,6 +186,7 @@ const handleClick = (event: MouseEvent) => {
 .is-disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  filter: grayscale(100%);
 }
 
 .is-loading {

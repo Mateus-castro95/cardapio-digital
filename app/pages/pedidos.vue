@@ -1,70 +1,81 @@
 <template>
-  <div class="p-6 max-w-5xl mx-auto font-primary min-h-screen bg-gray-50 pb-20">
-    <!-- Cabeçalho Padronizado -->
-    <div class="flex justify-between items-end mb-10">
+  <div class="p-8 max-w-7xl mx-auto min-h-screen">
+    <!-- Cabeçalho -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
       <div>
-        <h1 class="text-3xl font-black text-gray-900">Acompanhar <span class="text-orange-500">Pedidos</span></h1>
-        <p class="text-gray-400 text-sm font-medium mt-1">Monitore o status de cada mesa em tempo real</p>
+        <h1 class="text-heading-1 text-cafe mb-2">Acompanhar <span class="text-moca">Pedidos</span></h1>
+        <p class="text-body-lg text-bege-torrado">Monitore o status de cada mesa em tempo real</p>
       </div>
-      <div class="flex items-center gap-3">
-        <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-2xl border border-gray-100 shadow-sm">
-          <span class="relative flex h-3 w-3">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
-          </span>
-          <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Monitorando</span>
-        </div>
+      <div class="flex items-center gap-3 bg-branco px-4 py-2 rounded-xl border border-bege-soft shadow-sm">
+        <span class="relative flex h-3 w-3">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+        </span>
+        <span class="text-xs font-bold text-cafe-dark uppercase tracking-wider">Monitorando</span>
       </div>
     </div>
 
-    <!-- Filtros Rápidos (Opcional para melhorar a UX) -->
-    <div class="flex gap-2 mb-8 overflow-x-auto pb-2">
+    <!-- Filtros Rápidos -->
+    <div class="flex gap-3 mb-8 overflow-x-auto pb-2 custom-scrollbar">
       <button 
         v-for="f in filtros" :key="f.label"
         @click="filtroAtual = f.value"
-        class="px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap"
-        :class="filtroAtual === f.value ? 'bg-gray-900 text-white shadow-lg' : 'bg-white text-gray-400 hover:bg-gray-100 border border-gray-100'"
+        class="px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap border-2"
+        :class="filtroAtual === f.value 
+          ? 'bg-cafe border-cafe text-white shadow-lg' 
+          : 'bg-branco border-bege-soft text-bege-torrado hover:border-moca hover:text-moca'"
       >
         {{ f.label }}
       </button>
     </div>
 
-    <!-- Lista de Pedidos em Cards Horizontais -->
+    <!-- Lista de Pedidos -->
     <div v-if="pedidosFiltrados.length > 0" class="space-y-6">
       <div 
         v-for="pedido in pedidosFiltrados" :key="pedido.id"
-        class="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-md transition-all overflow-hidden"
+        class="bg-branco rounded-3xl border border-bege-soft shadow-premium hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 overflow-hidden group"
       >
-        <!-- Conteúdo Principal do Card (Horizontal) -->
-        <div class="p-6 flex flex-col md:flex-row gap-6 items-start md:items-center">
+        <!-- Conteúdo Principal -->
+        <div class="p-6 flex flex-col md:flex-row gap-8 items-start md:items-center relative">
           
-          <!-- Lado Esquerdo: Mesa -->
-          <div class="flex flex-col items-center justify-center bg-gray-900 text-white rounded-[2rem] p-4 min-w-[100px] shrink-0">
+          <!-- Indicador de Status Lateral -->
+          <div class="absolute left-0 top-0 bottom-0 w-1.5 transition-colors"
+            :class="{
+              'bg-blue-500': pedido.status === 'novo',
+              'bg-moca': pedido.status === 'em_preparo',
+              'bg-green-500': pedido.status === 'pronto',
+              'bg-gray-300': pedido.status === 'entregue'
+            }"
+          ></div>
+
+          <!-- Mesa -->
+          <div class="flex flex-col items-center justify-center bg-cafe text-white rounded-2xl p-5 min-w-[110px] shrink-0 shadow-lg ml-2">
             <span class="text-[10px] uppercase font-black tracking-widest opacity-60 mb-1">Mesa</span>
             <span class="text-4xl font-black">{{ pedido.mesa?.numero || '?' }}</span>
           </div>
 
-          <!-- Centro: Itens do Pedido -->
-          <div class="flex-grow min-w-0">
-            <div class="flex items-center justify-between mb-3">
+          <!-- Detalhes -->
+          <div class="flex-grow min-w-0 w-full">
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
               <div class="flex items-center gap-3">
-                <span class="text-sm font-black text-gray-900">Pedido #{{ String(pedido.numero_sequencial).padStart(3, '0') }}</span>
-                <span class="text-[10px] text-gray-400 font-bold uppercase tracking-tighter bg-gray-50 px-2 py-0.5 rounded-md">
+                <span class="text-heading-3 text-cafe-dark">Pedido #{{ String(pedido.numero_sequencial).padStart(3, '0') }}</span>
+                <span class="text-[10px] text-bege-torrado font-bold uppercase tracking-wider bg-bege-cream px-2 py-1 rounded-lg border border-bege-soft/50">
                   {{ formatTime(pedido.criado_em) }}
                 </span>
               </div>
 
-              <!-- Ações Rápidas (Movidas para o cabeçalho) -->
-              <div class="shrink-0 bg-white">
-                <BaseButton 
+              <!-- Ações Rápidas -->
+              <div class="shrink-0">
+                <button 
                   v-if="pedido.status === 'pronto'"
-                  variant="primary" 
-                  size="small"
-                  class="!rounded-xl !bg-green-500 hover:!bg-green-600 shadow-lg shadow-green-100 !py-2 !px-4 text-[10px]"
+                  class="bg-green-500 hover:bg-green-600 text-white shadow-lg shadow-green-500/20 py-2.5 px-5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 flex items-center gap-2"
                   @click="handleUpdateStatus(pedido.id, 'entregue')"
                 >
-                  MARCAR ENTREGUE
-                </BaseButton>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                  </svg>
+                  Marcar Entregue
+                </button>
                 <div v-else-if="pedido.status === 'entregue'" class="flex items-center gap-2 text-green-600 font-bold text-[10px] uppercase bg-green-50 px-3 py-1.5 rounded-xl border border-green-100">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
@@ -74,59 +85,55 @@
               </div>
             </div>
             
-            <div class="flex flex-wrap gap-3 mt-4">
+            <div class="flex flex-wrap gap-3">
               <div 
                 v-for="(item, idx) in pedido.itens" :key="idx"
-                class="bg-gray-50 p-3 rounded-2xl border border-gray-100 flex flex-col gap-1 min-w-[140px]"
+                class="bg-bege-cream/50 p-3 rounded-xl border border-bege-soft hover:border-moca/30 flex flex-col gap-1 min-w-[150px] transition-colors"
               >
                 <div class="flex items-center gap-2">
-                  <span class="font-black text-orange-500 text-[10px]">{{ item.quantidade }}x</span>
-                  <span class="text-xs font-black text-gray-800 truncate">{{ getItemName(item) }}</span>
+                  <span class="w-5 h-5 flex items-center justify-center bg-cafe text-white rounded text-[10px] font-black">{{ item.quantidade }}</span>
+                  <span class="text-xs font-bold text-cafe-dark truncate">{{ getItemName(item) }}</span>
                 </div>
-                <div v-if="getItemDescription(item)" class="text-[10px] text-gray-400 font-medium italic leading-tight">
+                <div v-if="getItemDescription(item)" class="text-[10px] text-bege-torrado font-medium pl-7 leading-tight">
                   {{ getItemDescription(item) }}
                 </div>
-                <div v-if="item.observacoes" class="mt-1 text-[9px] text-red-500 font-bold uppercase truncate">
-                  Nota: {{ item.observacoes }}
+                <div v-if="item.observacoes" class="mt-1 ml-7 text-[9px] text-red-500 font-bold uppercase truncate bg-red-50 px-1 py-0.5 rounded w-fit">
+                  Obs: {{ item.observacoes }}
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Linha do Tempo (Stepper) na base do Card -->
-        <div class="px-8 py-6 bg-gray-50/50 border-t border-gray-50">
-          <div class="flex items-center justify-between relative">
-            <!-- Linhas de fundo -->
-            <div class="absolute top-1/2 left-0 w-full h-0.5 bg-gray-100 -translate-y-1/2 z-0"></div>
+        <!-- Linha do Tempo -->
+        <div class="px-8 py-6 bg-bege-cream/30 border-t border-bege-soft">
+          <div class="flex items-center justify-between relative max-w-3xl mx-auto">
+            <!-- Linha de fundo -->
+            <div class="absolute top-1/2 left-0 w-full h-0.5 bg-bege-soft -translate-y-1/2 z-0"></div>
             
             <!-- Etapas -->
             <div 
               v-for="(step, index) in steps" :key="step.status"
-              class="relative z-10 flex flex-col items-center"
-              :class="getStatusIndex(pedido.status) >= index ? 'text-gray-900' : 'text-gray-300'"
+              class="relative z-10 flex flex-col items-center group/step"
+              :class="getStatusIndex(pedido.status) >= index ? 'text-cafe' : 'text-bege-torrado/50'"
             >
               <!-- Bolinha -->
               <div 
-                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 border-4"
+                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 border-4 bg-white"
                 :class="[
                   getStatusIndex(pedido.status) >= index 
-                    ? 'bg-white border-orange-500 shadow-md shadow-orange-100 scale-110' 
-                    : 'bg-white border-gray-200'
+                    ? 'border-moca shadow-lg scale-110' 
+                    : 'border-bege-soft'
                 ]"
               >
                 <div 
-                  v-if="getStatusIndex(pedido.status) > index"
-                  class="w-3 h-3 bg-orange-500 rounded-full"
-                ></div>
-                <div 
-                  v-else-if="getStatusIndex(pedido.status) === index"
-                  class="w-3 h-3 bg-orange-500 rounded-full animate-pulse"
+                  v-if="getStatusIndex(pedido.status) >= index"
+                  class="w-3 h-3 bg-moca rounded-full"
+                  :class="{'animate-pulse': getStatusIndex(pedido.status) === index}"
                 ></div>
               </div>
               
-              <!-- Texto -->
-              <span class="text-[9px] font-black uppercase tracking-widest mt-2">
+              <span class="text-[9px] font-black uppercase tracking-widest mt-3 transition-colors">
                 {{ step.label }}
               </span>
             </div>
@@ -136,15 +143,16 @@
     </div>
 
     <!-- Empty State -->
-    <div v-else class="flex flex-col items-center justify-center py-32 text-center">
-      <div class="w-24 h-24 bg-white rounded-[2.5rem] shadow-xl shadow-gray-100 flex items-center justify-center text-5xl mb-8 border border-gray-50">
+    <div v-else class="flex flex-col items-center justify-center py-32 text-center opacity-60">
+      <div class="w-32 h-32 bg-branco rounded-[2.5rem] shadow-premium border border-bege-soft flex items-center justify-center text-6xl mb-8">
         📝
       </div>
-      <h3 class="text-2xl font-black text-gray-800">Sem pedidos ativos</h3>
-      <p class="text-gray-400 max-w-xs mt-3 font-medium">Os pedidos aparecerão nesta tela conforme forem realizados pelos clientes.</p>
+      <h3 class="text-heading-2 text-cafe-dark">Sem pedidos ativos</h3>
+      <p class="text-body text-bege-torrado max-w-sm mt-3">Os pedidos aparecerão nesta tela conforme forem realizados pelos clientes.</p>
     </div>
   </div>
 </template>
+
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';

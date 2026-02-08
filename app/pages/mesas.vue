@@ -1,61 +1,65 @@
 <template>
-  <div class="p-6 max-w-4xl mx-auto font-primary min-h-screen bg-gray-50 pb-20">
-    <div class="flex justify-between items-center mb-8">
+  <div class="p-8 max-w-7xl mx-auto">
+    <div class="flex justify-between items-center mb-10">
       <div>
-        <h1 class="text-3xl font-black text-gray-900">Gerenciar <span class="text-orange-500">Mesas</span></h1>
-        <p class="text-gray-400 text-sm font-medium mt-1">Monitore a ocupação em tempo real</p>
+        <h1 class="text-heading-1 text-cafe mb-2">Gerenciar <span class="text-moca">Mesas</span></h1>
+        <p class="text-body-lg text-bege-torrado">Monitore a ocupação em tempo real</p>
       </div>
       <div class="flex gap-3">
-        <BaseButton 
+        <button 
             v-if="mesas.length === 0"
             @click="seedMesas" 
-            :loading="loadingSeed"
-            variant="outline"
-            class="!rounded-2xl border-orange-200 text-orange-600 hover:bg-orange-50"
+            :disabled="loadingSeed"
+            class="px-6 py-3 rounded-xl border border-bege-torrado text-cafe hover:bg-bege-cream transition-colors font-medium flex items-center gap-2"
         >
+          <span v-if="loadingSeed" class="animate-spin">⌛</span>
           GERAR 5 MESAS
-        </BaseButton>
-        <BaseButton @click="showAddMesaModal = true" variant="primary" class="!rounded-2xl shadow-lg shadow-orange-100">
-          + NOVA MESA
-        </BaseButton>
+        </button>
+        <button 
+          @click="showAddMesaModal = true" 
+          class="px-6 py-3 rounded-xl bg-cafe text-branco hover:bg-cafe-dark shadow-premium hover:shadow-lg transition-all font-medium flex items-center gap-2"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          NOVA MESA
+        </button>
       </div>
     </div>
 
     <!-- Grid de Mesas -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
       <div 
         v-for="mesa in mesas" :key="mesa.id"
-        class="relative bg-white rounded-[2rem] p-6 border-2 transition-all duration-300 group"
-        :class="mesa.status === 'ocupada' ? 'border-orange-500 bg-orange-50/10' : 'border-gray-100 hover:border-orange-200'"
+        class="relative bg-branco rounded-3xl p-6 border-2 transition-all duration-300 group shadow-sm hover:shadow-premium"
+        :class="mesa.status === 'ocupada' ? 'border-moca/50 bg-moca/5' : 'border-bege-soft hover:border-cafe/30'"
       >
         <div class="absolute top-4 right-4">
             <span 
                 class="w-3 h-3 rounded-full block shadow-sm"
-                :class="mesa.status === 'ocupada' ? 'bg-orange-500 animate-pulse' : 'bg-green-400'"
+                :class="mesa.status === 'ocupada' ? 'bg-moca animate-pulse' : 'bg-green-500'"
             ></span>
         </div>
 
-        <div class="flex flex-col items-center text-center py-4">
-            <span class="text-gray-400 text-[10px] uppercase font-black tracking-[0.2em] mb-1">Mesa</span>
-            <span class="text-5xl font-black text-gray-900 mb-4">{{ mesa.numero }}</span>
+        <div class="flex flex-col items-center text-center py-6">
+            <span class="text-caption uppercase font-black tracking-[0.2em] text-bege-torrado mb-2">Mesa</span>
+            <span class="text-5xl font-black text-cafe-dark mb-6">{{ mesa.numero }}</span>
             
             <div 
                 class="px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider"
-                :class="mesa.status === 'ocupada' ? 'bg-orange-100 text-orange-700' : 'bg-green-100 text-green-700'"
+                :class="mesa.status === 'ocupada' ? 'bg-moca/20 text-moca-dark' : 'bg-green-100 text-green-700'"
             >
                 {{ mesa.status }}
             </div>
         </div>
 
         <!-- QR Code Link & Action -->
-        <div class="mt-4 pt-4 border-t border-gray-50 flex justify-center gap-2">
-            <button @click="abrirQrCode(mesa.numero)" class="p-2 bg-orange-50 rounded-xl text-orange-600 hover:bg-orange-100 transition-colors" title="Ver QR Code">
+        <div class="mt-4 pt-4 border-t border-bege-soft flex justify-center gap-2">
+            <button @click="abrirQrCode(mesa.numero)" class="p-2.5 bg-bege-cream rounded-xl text-cafe hover:bg-cafe hover:text-branco transition-colors" title="Ver QR Code">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1l-1 1m-1 1h.01m0 0h.01m0 0h.01M12 20h.01m0 0h.01m0 0h.01M7 7h.01m0 0h.01m0 0h.01M7 12h.01m0 0h.01m0 0h.01M7 17h.01m0 0h.01m0 0h.01M12 7h.01m0 0h.01m0 0h.01M12 12h.01m0 0h.01m0 0h.01M12 17h.01m0 0h.01m0 0h.01M17 7h.01m0 0h.01m0 0h.01M17 12h.01m0 0h.01m0 0h.01M17 17h.01m0 0h.01m0 0h.01" /></svg>
             </button>
-            <button @click="copiarLinkMesa(mesa.numero)" class="p-2 bg-gray-50 rounded-xl hover:bg-orange-50 text-gray-400 hover:text-orange-500 transition-colors" title="Copiar Link">
+            <button @click="copiarLinkMesa(mesa.numero)" class="p-2.5 bg-bege-cream rounded-xl text-bege-torrado hover:bg-cafe hover:text-branco transition-colors" title="Copiar Link">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
             </button>
-            <button @click="liberarMesa(mesa)" v-if="mesa.status === 'ocupada'" class="p-2 bg-red-50 rounded-xl hover:bg-red-100 text-red-400 hover:text-red-600 transition-colors" title="Liberar Mesa">
+            <button @click="liberarMesa(mesa)" v-if="mesa.status === 'ocupada'" class="p-2.5 bg-red-50 rounded-xl text-red-400 hover:bg-red-500 hover:text-white transition-colors" title="Liberar Mesa">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </button>
         </div>
@@ -63,58 +67,62 @@
     </div>
 
     <!-- Modal QR Code -->
-    <BaseModal :show="showQrModal" :title="`QR Code - Mesa ${mesaQrAtual}`" @close="showQrModal = false">
-      <div class="flex flex-col items-center py-6 text-center">
-          <div class="p-4 bg-white border-4 border-gray-900 rounded-[2.5rem] shadow-2xl mb-6">
+    <div v-if="showQrModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-preto/60 backdrop-blur-sm" @click.self="showQrModal = false">
+      <div class="bg-branco rounded-3xl p-8 max-w-sm w-full shadow-2xl animate-fade-in text-center relative">
+          <button @click="showQrModal = false" class="absolute top-4 right-4 p-2 text-bege-torrado hover:text-cafe transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 18 12"/></svg>
+          </button>
+          
+          <h3 class="text-heading-3 text-cafe mb-6">Mesa {{ mesaQrAtual }}</h3>
+          
+          <div class="p-4 bg-white border-4 border-cafe rounded-[2.5rem] shadow-premium mb-6 inline-block">
               <img 
                   v-if="mesaQrAtual"
                   :src="`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(getUrlMesa(mesaQrAtual))}`" 
                   alt="QR Code da Mesa"
-                  class="w-64 h-64"
+                  class="w-48 h-48"
               />
           </div>
-          <p class="text-sm text-gray-500 max-w-xs">
-              Aponte a câmera do celular para este código para abrir o cardápio automaticamente na <b>Mesa {{ mesaQrAtual }}</b>.
+          <p class="text-description text-preto/70 mb-8 px-4">
+              Aponte a câmera para o código acima para acessar o cardápio digital desta mesa.
           </p>
-          <div class="mt-8 w-full">
-              <BaseButton variant="outline" @click="copiarLinkMesa(mesaQrAtual!)" class="w-full !rounded-2xl">COPIAR LINK DA MESA</BaseButton>
-          </div>
+          <button @click="copiarLinkMesa(mesaQrAtual!)" class="w-full py-3 rounded-xl border border-bege-torrado text-cafe hover:bg-bege-cream font-bold transition-colors">
+            COPIAR LINK DA MESA
+          </button>
       </div>
-    </BaseModal>
+    </div>
 
     <!-- Empty State -->
-    <div v-if="mesas.length === 0 && !loading" class="flex flex-col items-center justify-center py-20 bg-white rounded-[3rem] border-2 border-dashed border-gray-100">
-        <div class="w-20 h-20 bg-orange-50 rounded-3xl flex items-center justify-center text-4xl mb-6">🪑</div>
-        <h3 class="text-xl font-bold text-gray-800">Nenhuma mesa cadastrada</h3>
-        <p class="text-gray-400 text-sm mt-2">Clique no botão acima para gerar as primeiras mesas.</p>
+    <div v-if="mesas.length === 0 && !loading" class="flex flex-col items-center justify-center py-20 bg-branco rounded-[3rem] border-2 border-dashed border-bege-soft">
+        <div class="w-24 h-24 bg-bege-cream rounded-3xl flex items-center justify-center text-5xl mb-6 shadow-sm">🪑</div>
+        <h3 class="text-heading-2 text-cafe mb-2">Nenhuma mesa</h3>
+        <p class="text-body text-bege-torrado">Clique no botão acima para começar.</p>
     </div>
 
     <!-- Modal Adicionar Mesa -->
-    <BaseModal :show="showAddMesaModal" title="Cadastrar Nova Mesa" @close="showAddMesaModal = false">
-      <div class="space-y-4 pt-4">
-        <BaseInput 
-            v-model="novaMesaNumero" 
-            label="Número da Mesa" 
-            type="number" 
-            placeholder="Ex: 6" 
-            required
-        />
-        <div class="flex justify-end gap-3 mt-8">
-          <BaseButton variant="outline" @click="showAddMesaModal = false">Cancelar</BaseButton>
-          <BaseButton @click="handleCriarMesa" :loading="loadingCriar">SALVAR MESA</BaseButton>
+    <div v-if="showAddMesaModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-preto/60 backdrop-blur-sm" @click.self="showAddMesaModal = false">
+      <div class="bg-branco rounded-2xl p-8 max-w-sm w-full shadow-2xl animate-fade-in relative">
+        <h3 class="text-heading-3 text-cafe mb-6">Nova Mesa</h3>
+        
+        <div class="space-y-4">
+          <div>
+            <label class="block text-caption font-bold text-cafe uppercase tracking-wider mb-2">Número da Mesa</label>
+            <input 
+              v-model="novaMesaNumero" 
+              type="number" 
+              placeholder="Ex: 6" 
+              class="w-full px-4 py-3 rounded-xl border border-bege-torrado/30 bg-bege-cream focus:border-cafe focus:ring-2 focus:ring-cafe/20 outline-none transition-all text-body text-preto font-bold text-center text-xl"
+            />
+          </div>
+          <div class="flex justify-end gap-3 mt-8 pt-4 border-t border-bege-soft">
+            <button @click="showAddMesaModal = false" class="px-4 py-2 text-bege-torrado hover:text-cafe font-medium transition-colors">Cancelar</button>
+            <button @click="handleCriarMesa" :disabled="loadingCriar" class="px-6 py-2 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-colors font-bold shadow-md">
+              {{ loadingCriar ? 'Salvando...' : 'SALVAR MESA' }}
+            </button>
+          </div>
         </div>
       </div>
-    </BaseModal>
-
-    <!-- Modal Confirmação de Liberação -->
-    <ModalConfirmacao
-      :show="showConfirmModal"
-      title="Liberar Mesa"
-      :message="`Deseja liberar a Mesa ${mesaToLiberate?.numero}? (Os pedidos ativos não serão excluídos, apenas a mesa ficará disponível)`"
-      :loading="loadingLiberar"
-      @confirm="handleConfirmLiberar"
-      @cancel="showConfirmModal = false"
-    />
+    </div>
   </div>
 </template>
 

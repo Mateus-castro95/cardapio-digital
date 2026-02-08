@@ -1,36 +1,21 @@
 <template>
-  <!-- Página inicial do cardápio digital -->
-  <div class="container">
-    <h1>Dashboard</h1>
+  <div class="p-8 max-w-7xl mx-auto">
+    <div class="mb-10">
+      <h1 class="text-heading-1 text-cafe mb-2">Dashboard</h1>
+      <p class="text-body-lg text-bege-torrado">Bem-vindo ao sistema de gestão Pastel Hora</p>
+    </div>
   </div>
 </template>
 
+
 <script setup lang="ts">
 /**
- * Página Index - Página inicial do sistema
+ * Página Index - Dashboard principal
  * 
- * Esta é a página principal que aparece ao acessar a raiz do sistema (/).
- * Atualmente exibe uma mensagem de boas-vindas simples.
- * Será expandida futuramente com funcionalidades do dashboard.
+ * Visão geral executiva com KPIs principais e métricas de desempenho.
  */
 </script>
 
 <style scoped>
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-h1 {
-  font-size: 2.5rem;
-  color: #333;
-  margin-bottom: 1rem;
-}
-
-p {
-  font-size: 1.2rem;
-  color: #666;
-}
+/* Estilos específicos se necessário */
 </style>

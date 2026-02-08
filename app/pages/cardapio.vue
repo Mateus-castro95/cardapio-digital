@@ -1,28 +1,28 @@
 <template>
-  <div class="min-h-screen bg-gray-50 pb-24 font-primary">
+  <div class="min-h-screen bg-bege-cream pb-24 font-primary">
     <!-- Header Minimalista -->
-    <header class="bg-white px-6 py-6 border-b border-gray-100 sticky top-0 z-30">
+    <header class="bg-branco px-6 py-6 border-b border-bege-soft sticky top-0 z-30 shadow-sm">
       <div class="max-w-2xl mx-auto flex justify-between items-center">
         <div>
-          <h1 class="text-2xl font-black text-gray-900 tracking-tight">Pastel <span class="text-orange-500">Hora</span></h1>
-          <p class="text-xs text-gray-400 font-medium">Cardápio Digital • Aberto</p>
+          <h1 class="text-heading-2 text-cafe tracking-tight">Pastel <span class="text-moca">Hora</span></h1>
+          <p class="text-caption text-bege-torrado font-medium">Cardápio Digital • Aberto</p>
         </div>
         
         <!-- Seleção de Mesa Estilizada -->
         <div class="flex flex-col items-end">
-          <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Sua Mesa</label>
+          <label class="text-[10px] font-bold text-bege-torrado uppercase tracking-widest mb-1">Sua Mesa</label>
           <div class="relative inline-flex self-end">
             <select 
               v-model="mesaSelecionadaId" 
               :disabled="isMesaLocked"
-              class="appearance-none bg-gray-900 text-white text-sm font-bold pl-4 pr-10 py-2 rounded-xl focus:outline-none cursor-pointer shadow-lg shadow-gray-200 disabled:opacity-80 disabled:cursor-not-allowed"
+              class="appearance-none bg-cafe text-branco text-body font-bold pl-4 pr-10 py-2 rounded-xl focus:outline-none cursor-pointer shadow-premium disabled:opacity-80 disabled:cursor-not-allowed hover:bg-cafe-dark transition-colors"
             >
               <option v-if="!isMesaLocked" :value="null">--</option>
               <option v-for="mesa in mesas" :key="mesa.id" :value="mesa.id">
                 Mesa {{ mesa.numero }}
               </option>
             </select>
-            <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+            <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-bege-claro">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
               </svg>
@@ -36,23 +36,23 @@
       
       <!-- SEÇÃO: PASTÉIS -->
       <div class="pt-2">
-        <h2 class="text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-4 px-2">Os Melhores Pastéis</h2>
+        <h2 class="text-caption font-black text-bege-torrado uppercase tracking-[0.2em] mb-4 px-2">Os Melhores Pastéis</h2>
         
         <div class="space-y-3">
           <!-- CARD EXPANSÍVEL: SALGADOS -->
-          <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300">
+          <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden transition-all duration-300">
             <button 
               @click="toggleSection('salgados')"
-              class="w-full flex items-center justify-between p-5 text-left"
+              class="w-full flex items-center justify-between p-5 text-left hover:bg-bege-cream/50 transition-colors"
             >
               <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center text-2xl">🥟</div>
+                <div class="w-12 h-12 bg-bege-soft text-cafe rounded-2xl flex items-center justify-center text-2xl shadow-sm">🥟</div>
                 <div>
-                  <h3 class="font-bold text-gray-800">Pastéis Salgados</h3>
-                  <p class="text-xs text-gray-400">Artesanais e crocantes</p>
+                  <h3 class="font-bold text-cafe text-body-lg">Pastéis Salgados</h3>
+                  <p class="text-caption text-bege-torrado">Artesanais e crocantes</p>
                 </div>
               </div>
-              <div :class="{'rotate-180': expandedSection === 'salgados'}" class="transition-transform duration-300 text-gray-400">
+              <div :class="{'rotate-180': expandedSection === 'salgados'}" class="transition-transform duration-300 text-bege-torrado">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
               </div>
             </button>
@@ -61,16 +61,16 @@
               <div 
                 v-for="tamanho in tamanhos" :key="tamanho.id"
                 @click="handleAbrirMontarPastel(tamanho, 'salgado')"
-                class="flex justify-between items-center p-4 bg-gray-50 rounded-2xl active:bg-orange-50 transition-colors cursor-pointer group"
+                class="flex justify-between items-center p-4 bg-bege-cream rounded-2xl border border-transparent hover:border-cafe/20 hover:shadow-md transition-all cursor-pointer group"
               >
                 <div>
-                  <span class="font-bold text-gray-700">{{ tamanho.nome }}</span>
-                  <p class="text-[10px] text-gray-400">Até {{ tamanho.max_sabores }} sabores</p>
+                  <span class="font-bold text-cafe-dark group-hover:text-cafe transition-colors">{{ tamanho.nome }}</span>
+                  <p class="text-caption text-bege-torrado/80">Até {{ tamanho.max_sabores }} sabores</p>
                 </div>
                 <div class="flex items-center gap-3">
-                  <span class="font-bold text-gray-900 text-sm">{{ formatCurrency(tamanho.preco_base) }}</span>
-                  <div class="bg-white p-1.5 rounded-lg shadow-sm group-active:scale-95 transition-transform">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                  <span class="font-bold text-cafe text-body">{{ formatCurrency(tamanho.preco_base) }}</span>
+                  <div class="bg-branco p-1.5 rounded-lg shadow-sm group-hover:scale-110 transition-transform">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-moca" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                   </div>
                 </div>
               </div>
@@ -78,19 +78,19 @@
           </div>
 
           <!-- CARD EXPANSÍVEL: DOCES -->
-          <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300">
+          <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden transition-all duration-300">
             <button 
               @click="toggleSection('doces')"
-              class="w-full flex items-center justify-between p-5 text-left"
+              class="w-full flex items-center justify-between p-5 text-left hover:bg-bege-cream/50 transition-colors"
             >
               <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-pink-50 text-pink-600 rounded-2xl flex items-center justify-center text-2xl">🍫</div>
+                <div class="w-12 h-12 bg-moca-light/20 text-moca rounded-2xl flex items-center justify-center text-2xl shadow-sm">🍫</div>
                 <div>
-                  <h3 class="font-bold text-gray-800">Pastéis Doces</h3>
-                  <p class="text-xs text-gray-400">Sobremesas perfeitas</p>
+                  <h3 class="font-bold text-cafe text-body-lg">Pastéis Doces</h3>
+                  <p class="text-caption text-bege-torrado">Sobremesas perfeitas</p>
                 </div>
               </div>
-              <div :class="{'rotate-180': expandedSection === 'doces'}" class="transition-transform duration-300 text-gray-400">
+              <div :class="{'rotate-180': expandedSection === 'doces'}" class="transition-transform duration-300 text-bege-torrado">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
               </div>
             </button>
@@ -99,16 +99,16 @@
               <div 
                 v-for="tamanho in tamanhos" :key="tamanho.id"
                 @click="handleAbrirMontarPastel(tamanho, 'doce')"
-                class="flex justify-between items-center p-4 bg-gray-50 rounded-2xl active:bg-pink-50 transition-colors cursor-pointer group"
+                class="flex justify-between items-center p-4 bg-bege-cream rounded-2xl border border-transparent hover:border-moca/20 hover:shadow-md transition-all cursor-pointer group"
               >
                 <div>
-                  <span class="font-bold text-gray-700">{{ tamanho.nome }}</span>
-                  <p class="text-[10px] text-gray-400">Até {{ tamanho.max_sabores }} sabores</p>
+                  <span class="font-bold text-cafe-dark group-hover:text-cafe transition-colors">{{ tamanho.nome }}</span>
+                  <p class="text-caption text-bege-torrado/80">Até {{ tamanho.max_sabores }} sabores</p>
                 </div>
                 <div class="flex items-center gap-3">
-                  <span class="font-bold text-gray-900 text-sm">{{ formatCurrency(tamanho.preco_base) }}</span>
-                  <div class="bg-white p-1.5 rounded-lg shadow-sm group-active:scale-95 transition-transform">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                  <span class="font-bold text-cafe text-body">{{ formatCurrency(tamanho.preco_base) }}</span>
+                  <div class="bg-branco p-1.5 rounded-lg shadow-sm group-hover:scale-110 transition-transform">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-moca" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                   </div>
                 </div>
               </div>
@@ -119,79 +119,79 @@
 
       <!-- SEÇÃO: BEBIDAS -->
       <div class="pt-6">
-        <h2 class="text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-4 px-2">Bebidas Geladas</h2>
+        <h2 class="text-caption font-black text-bege-torrado uppercase tracking-[0.2em] mb-4 px-2">Bebidas Geladas</h2>
         
         <div class="space-y-3">
           <!-- CARD EXPANSÍVEL: SUCOS -->
-          <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300">
-            <button @click="toggleSection('sucos')" class="w-full flex items-center justify-between p-5 text-left">
+          <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden transition-all duration-300">
+            <button @click="toggleSection('sucos')" class="w-full flex items-center justify-between p-5 text-left hover:bg-bege-cream/50 transition-colors">
               <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-orange-50 text-orange-500 rounded-2xl flex items-center justify-center text-2xl">🍊</div>
-                <h3 class="font-bold text-gray-800">Sucos Naturais</h3>
+                <div class="w-12 h-12 bg-bege-soft text-cafe rounded-2xl flex items-center justify-center text-2xl shadow-sm">🍊</div>
+                <h3 class="font-bold text-cafe text-body-lg">Sucos Naturais</h3>
               </div>
-              <div :class="{'rotate-180': expandedSection === 'sucos'}" class="transition-transform duration-300 text-gray-400">
+              <div :class="{'rotate-180': expandedSection === 'sucos'}" class="transition-transform duration-300 text-bege-torrado">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
               </div>
             </button>
             <div v-show="expandedSection === 'sucos'" class="px-5 pb-5 space-y-2 animate-fade-in">
-              <div v-for="grupo in sucosAgrupados" :key="grupo.nome" @click="handleAbrirOpcoesBebida(grupo)" class="flex justify-between items-center p-4 hover:bg-gray-50 rounded-2xl transition-colors cursor-pointer group border border-transparent hover:border-gray-100">
+              <div v-for="grupo in sucosAgrupados" :key="grupo.nome" @click="handleAbrirOpcoesBebida(grupo)" class="flex justify-between items-center p-4 hover:bg-bege-cream rounded-2xl transition-colors cursor-pointer group border border-transparent hover:border-bege-soft">
                 <div class="flex-1">
-                  <span class="text-sm font-bold text-gray-700">{{ grupo.nome }}</span>
-                  <p class="text-[10px] text-gray-400">{{ grupo.opcoes.length }} opções disponíveis</p>
+                  <span class="text-body font-bold text-cafe-dark">{{ grupo.nome }}</span>
+                  <p class="text-caption text-bege-torrado">{{ grupo.opcoes.length }} opções disponíveis</p>
                 </div>
                 <div class="flex items-center gap-3">
-                  <span class="font-bold text-gray-900 text-xs text-right">A partir de<br>{{ formatCurrency(grupo.preco_min) }}</span>
-                  <div class="bg-orange-50 p-1 rounded-lg group-active:scale-90"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg></div>
+                  <span class="font-bold text-cafe text-xs text-right">A partir de<br>{{ formatCurrency(grupo.preco_min) }}</span>
+                  <div class="bg-bege-soft p-1 rounded-lg group-active:scale-90"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-cafe" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg></div>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- CARD EXPANSÍVEL: REFRIGERANTES -->
-          <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300">
-            <button @click="toggleSection('refris')" class="w-full flex items-center justify-between p-5 text-left">
+          <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden transition-all duration-300">
+            <button @click="toggleSection('refris')" class="w-full flex items-center justify-between p-5 text-left hover:bg-bege-cream/50 transition-colors">
               <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-2xl">🥤</div>
-                <h3 class="font-bold text-gray-800">Refrigerantes</h3>
+                <div class="w-12 h-12 bg-red-50 text-red-700/80 rounded-2xl flex items-center justify-center text-2xl shadow-sm">🥤</div>
+                <h3 class="font-bold text-cafe text-body-lg">Refrigerantes</h3>
               </div>
-              <div :class="{'rotate-180': expandedSection === 'refris'}" class="transition-transform duration-300 text-gray-400">
+              <div :class="{'rotate-180': expandedSection === 'refris'}" class="transition-transform duration-300 text-bege-torrado">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
               </div>
             </button>
             <div v-show="expandedSection === 'refris'" class="px-5 pb-5 space-y-2 animate-fade-in">
-              <div v-for="grupo in refrisAgrupados" :key="grupo.nome" @click="handleAbrirOpcoesBebida(grupo)" class="flex justify-between items-center p-4 hover:bg-gray-50 rounded-2xl transition-colors cursor-pointer group border border-transparent hover:border-gray-100">
+              <div v-for="grupo in refrisAgrupados" :key="grupo.nome" @click="handleAbrirOpcoesBebida(grupo)" class="flex justify-between items-center p-4 hover:bg-bege-cream rounded-2xl transition-colors cursor-pointer group border border-transparent hover:border-bege-soft">
                 <div class="flex-1">
-                  <span class="text-sm font-bold text-gray-700">{{ grupo.nome }}</span>
-                  <p class="text-[10px] text-gray-400">{{ grupo.opcoes.length }} variações</p>
+                  <span class="text-body font-bold text-cafe-dark">{{ grupo.nome }}</span>
+                  <p class="text-caption text-bege-torrado">{{ grupo.opcoes.length }} variações</p>
                 </div>
                 <div class="flex items-center gap-3">
-                  <span class="font-bold text-gray-900 text-xs text-right">A partir de<br>{{ formatCurrency(grupo.preco_min) }}</span>
-                  <div class="bg-red-50 p-1 rounded-lg group-active:scale-90"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg></div>
+                  <span class="font-bold text-cafe text-xs text-right">A partir de<br>{{ formatCurrency(grupo.preco_min) }}</span>
+                  <div class="bg-bege-soft p-1 rounded-lg group-active:scale-90"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-cafe" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg></div>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- CARD EXPANSÍVEL: ÁGUAS -->
-          <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300">
-            <button @click="toggleSection('aguas')" class="w-full flex items-center justify-between p-5 text-left">
+          <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden transition-all duration-300">
+            <button @click="toggleSection('aguas')" class="w-full flex items-center justify-between p-5 text-left hover:bg-bege-cream/50 transition-colors">
               <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-2xl">💧</div>
-                <h3 class="font-bold text-gray-800">Águas</h3>
+                <div class="w-12 h-12 bg-blue-50 text-blue-700/80 rounded-2xl flex items-center justify-center text-2xl shadow-sm">💧</div>
+                <h3 class="font-bold text-cafe text-body-lg">Águas</h3>
               </div>
-              <div :class="{'rotate-180': expandedSection === 'aguas'}" class="transition-transform duration-300 text-gray-400">
+              <div :class="{'rotate-180': expandedSection === 'aguas'}" class="transition-transform duration-300 text-bege-torrado">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
               </div>
             </button>
             <div v-show="expandedSection === 'aguas'" class="px-5 pb-5 space-y-2 animate-fade-in">
-              <div v-for="grupo in aguasAgrupadas" :key="grupo.nome" @click="handleAbrirOpcoesBebida(grupo)" class="flex justify-between items-center p-4 hover:bg-gray-50 rounded-2xl transition-colors cursor-pointer group border border-transparent hover:border-gray-100">
+              <div v-for="grupo in aguasAgrupadas" :key="grupo.nome" @click="handleAbrirOpcoesBebida(grupo)" class="flex justify-between items-center p-4 hover:bg-bege-cream rounded-2xl transition-colors cursor-pointer group border border-transparent hover:border-bege-soft">
                 <div class="flex-1">
-                  <span class="text-sm font-bold text-gray-700">{{ grupo.nome || 'Água' }}</span>
-                  <p class="text-[10px] text-gray-400">{{ grupo.opcoes.length }} opções</p>
+                  <span class="text-body font-bold text-cafe-dark">{{ grupo.nome || 'Água' }}</span>
+                  <p class="text-caption text-bege-torrado">{{ grupo.opcoes.length }} opções</p>
                 </div>
                 <div class="flex items-center gap-3">
-                  <span class="font-bold text-gray-900 text-xs text-right">A partir de<br>{{ formatCurrency(grupo.preco_min) }}</span>
-                  <div class="bg-blue-50 p-1 rounded-lg group-active:scale-90"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg></div>
+                  <span class="font-bold text-cafe text-xs text-right">A partir de<br>{{ formatCurrency(grupo.preco_min) }}</span>
+                  <div class="bg-bege-soft p-1 rounded-lg group-active:scale-90"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-cafe" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg></div>
                 </div>
               </div>
             </div>
@@ -325,18 +325,59 @@
 
     <!-- Modal Carrinho -->
     <BaseModalScrollable :show="showCartModal" @close="showCartModal = false" title="Meu Pedido">
-      <div class="p-6 pt-4 pb-48">
+
+      <div class="px-6 pt-0 pb-48">
           <div v-for="(item, index) in cart" :key="index" class="bg-white py-6 flex gap-4 border-b border-gray-50 last:border-0">
               <div class="flex-1">
                   <div class="flex justify-between items-start mb-1">
                       <h4 class="font-bold text-gray-800">{{ item.nome }}</h4>
                       <span class="font-black text-gray-900 text-sm ml-2">{{ formatCurrency(item.preco_unitario * item.quantidade) }}</span>
                   </div>
-                  <p class="text-xs text-gray-400 leading-relaxed italic mb-4">
+                  <p class="text-xs text-gray-400 leading-relaxed italic mb-2">
                       {{ item.descricao }}
                   </p>
+
+                  <!-- Área de Observação do Item -->
+                  <div class="mb-3">
+                      <!-- 1. Exibir Observação Salva -->
+                      <div v-if="item.observacoes && !item.editandoObs" class="flex items-center gap-2" @click="item.editandoObs = true">
+                          <p class="text-[10px] text-orange-700 font-bold bg-orange-50 inline-block px-2 py-1 rounded cursor-pointer hover:bg-orange-100 transition-colors border border-orange-100">
+                              Obs: {{ item.observacoes.toUpperCase() }}
+                          </p>
+                          <button class="text-orange-400 hover:text-orange-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg>
+                          </button>
+                      </div>
+
+                      <!-- 2. Botão para Adicionar Observação -->
+                      <button 
+                        v-else-if="!item.editandoObs" 
+                        @click="item.editandoObs = true"
+                        class="text-[11px] font-bold text-orange-500 hover:text-orange-600 flex items-center gap-1 transition-colors"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                        Adicionar observação
+                      </button>
+
+                      <!-- 3. Campo de Edição -->
+                      <div v-else class="mt-2 animate-fade-in">
+                          <textarea 
+                              v-model="item.observacoes" 
+                              rows="2"
+                              ref="obsInput"
+                              placeholder="Ex: Sem cebola, bem passado..."
+                              class="w-full text-xs p-2 rounded-xl border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none bg-gray-50 mb-2"
+                          ></textarea>
+                          <button 
+                            @click="item.editandoObs = false"
+                            class="text-xs font-bold text-white bg-orange-500 hover:bg-orange-600 px-3 py-1 rounded-lg transition-colors shadow-sm"
+                          >
+                            Salvar Observação
+                          </button>
+                      </div>
+                  </div>
                   
-                  <div class="flex items-center justify-between">
+                  <div class="flex items-center justify-between mt-2">
                     <div class="flex items-center gap-4 bg-gray-100 p-1.5 rounded-xl">
                         <button @click="alterarQuantidade(index, -1)" class="w-8 h-8 flex items-center justify-center bg-white rounded-lg shadow-sm hover:text-orange-500 transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" /></svg>

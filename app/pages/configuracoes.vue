@@ -1,25 +1,15 @@
 <template>
-  <!-- Página de configurações do sistema -->
-  <div class="container">
-    <h1>Configurações</h1>
+  <div class="p-8 max-w-7xl mx-auto">
+    <div class="mb-10">
+      <h1 class="text-heading-1 text-cafe mb-2">Configurações</h1>
+      <p class="text-body-lg text-bege-torrado">Gerencie as preferências do sistema</p>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-// Página de configurações
+/**
+ * Página de Configurações
+ */
 </script>
 
-<style scoped>
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-h1 {
-  font-size: 2.5rem;
-  color: #333;
-  margin-bottom: 1rem;
-}
-</style>

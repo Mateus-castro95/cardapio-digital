@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    @apply font-sans antialiased bg-bege-cream text-preto selection:bg-cafe/10;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold text-cafe;
+  }
+}
+
+/* Scrollbar personalizada profissional */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-bege-cream;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-bege-claro rounded-full border-2 border-bege-cream hover:bg-bege-torrado transition-colors;
+}

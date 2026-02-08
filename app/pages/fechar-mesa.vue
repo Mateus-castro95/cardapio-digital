@@ -1,162 +1,164 @@
 <template>
-  <div class="p-6 max-w-5xl mx-auto font-primary min-h-screen bg-gray-50 pb-20">
-    <div class="mb-8">
-      <h1 class="text-3xl font-black text-gray-900">Fechar <span class="text-orange-500">Mesa</span></h1>
-      <p class="text-gray-400 text-sm font-medium mt-1">Gerencie o agrupamento de pedidos e pagamentos</p>
+  <div class="p-8 max-w-7xl mx-auto">
+    <div class="mb-10">
+      <h1 class="text-heading-1 text-cafe mb-2">Fechar <span class="text-moca">Mesa</span></h1>
+      <p class="text-body-lg text-bege-torrado">Gerencie o agrupamento de pedidos e pagamentos</p>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <!-- Coluna da Esquerda: Seleção de Mesa e Resumo -->
       <div class="lg:col-span-2 space-y-6">
         <!-- SELEÇÃO DE MESA -->
-        <BaseCard class="!p-6">
-          <h2 class="text-xs font-black text-gray-400 uppercase tracking-widest mb-4">Selecione a Mesa</h2>
+        <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft p-6">
+          <h2 class="text-caption font-bold text-bege-torrado uppercase tracking-widest mb-4">Selecione a Mesa</h2>
           <div class="grid grid-cols-4 sm:grid-cols-6 gap-3">
             <button 
               v-for="mesa in mesasOcupadas" :key="mesa.id"
               @click="selecionarMesa(mesa)"
-              class="h-14 rounded-2xl font-black text-lg transition-all border-2 flex items-center justify-center"
+              class="h-14 rounded-xl font-black text-lg transition-all border-2 flex items-center justify-center transform active:scale-95 duration-200"
               :class="mesaSelecionada?.id === mesa.id 
-                ? 'bg-orange-500 border-orange-500 text-white shadow-lg shadow-orange-100' 
-                : 'bg-white border-gray-100 text-gray-400 hover:border-orange-200 hover:text-orange-500'"
+                ? 'bg-cafe border-cafe text-white shadow-lg' 
+                : 'bg-bege-cream border-bege-soft text-cafe hover:border-moca hover:text-moca'"
             >
               {{ mesa.numero }}
             </button>
           </div>
-          <div v-if="mesasOcupadas.length === 0" class="py-4 text-center text-gray-400 text-sm italic">
+          <div v-if="mesasOcupadas.length === 0" class="py-8 text-center text-bege-torrado text-sm italic border-2 border-dashed border-bege-soft rounded-xl mt-4">
             Não há mesas ocupadas no momento.
           </div>
-        </BaseCard>
+        </div>
 
         <!-- LISTA DE ITENS AGRUPADOS -->
-        <BaseCard v-if="mesaSelecionada" class="!p-0 overflow-hidden">
-          <div class="p-6 border-b border-gray-50 flex justify-between items-center">
-            <h2 class="text-xs font-black text-gray-400 uppercase tracking-widest">Resumo do Consumo - Mesa {{ mesaSelecionada.numero }}</h2>
-            <span class="text-[10px] font-bold text-orange-500 bg-orange-50 px-3 py-1 rounded-lg uppercase">
+        <div v-if="mesaSelecionada" class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden">
+          <div class="p-6 border-b border-bege-soft flex justify-between items-center bg-bege-cream/30">
+            <h2 class="text-caption font-bold text-bege-torrado uppercase tracking-widest">Resumo do Consumo - Mesa {{ mesaSelecionada.numero }}</h2>
+            <span class="text-[10px] font-bold text-moca bg-moca/10 px-3 py-1 rounded-lg uppercase border border-moca/20">
               {{ itensAgrupados.length }} Itens únicos
             </span>
           </div>
 
-          <div class="divide-y divide-gray-50 max-h-[400px] overflow-y-auto">
-            <div v-for="item in itensAgrupados" :key="item.chave" class="p-4 flex justify-between items-center hover:bg-gray-50 transition-colors">
+          <div class="divide-y divide-bege-soft max-h-[400px] overflow-y-auto custom-scrollbar">
+            <div v-for="item in itensAgrupados" :key="item.chave" class="p-5 flex justify-between items-center hover:bg-bege-cream/50 transition-colors">
               <div class="flex gap-4 items-center">
-                <div class="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center font-black text-gray-500 text-xs shadow-sm">
+                <div class="w-10 h-10 bg-bege-cream rounded-xl flex items-center justify-center font-black text-cafe text-xs shadow-sm border border-bege-soft">
                   {{ item.quantidade }}x
                 </div>
                 <div>
-                  <h4 class="text-sm font-black text-gray-800 leading-tight">{{ item.nome }}</h4>
-                  <p class="text-[10px] text-gray-400 font-medium italic">{{ item.descricao }}</p>
+                  <h4 class="text-body font-bold text-cafe leading-tight">{{ item.nome }}</h4>
+                  <p class="text-caption text-bege-torrado font-medium">{{ item.descricao }}</p>
                 </div>
               </div>
-              <span class="text-sm font-black text-gray-900">R$ {{ (item.preco_unitario * item.quantidade).toFixed(2) }}</span>
+              <span class="text-body font-black text-cafe-dark">{{ formatCurrency(item.preco_unitario * item.quantidade) }}</span>
             </div>
           </div>
 
-          <div v-if="itensAgrupados.length === 0" class="p-12 text-center text-gray-400 text-sm">
+          <div v-if="itensAgrupados.length === 0" class="p-12 text-center text-bege-torrado text-sm">
             Nenhum item encontrado para esta mesa.
           </div>
-        </BaseCard>
+        </div>
       </div>
 
       <!-- Coluna da Direita: Painel de Pagamento -->
       <div class="space-y-6">
-        <BaseCard v-if="mesaSelecionada" class="!p-6 !bg-gray-900 text-white sticky top-6">
-          <h2 class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-6">Financeiro</h2>
+        <div v-if="mesaSelecionada" class="bg-cafe-dark text-branco rounded-3xl shadow-2xl p-6 sticky top-6 border border-white/10">
+          <h2 class="text-[10px] font-black text-bege-claro/60 uppercase tracking-widest mb-6">Financeiro</h2>
           
           <div class="space-y-4 mb-8">
-            <div class="flex justify-between items-center opacity-60">
+            <div class="flex justify-between items-center text-bege-claro/80">
               <span class="text-xs font-bold uppercase">Total Consumido</span>
-              <span class="text-sm font-black">R$ {{ totalConsumido.toFixed(2) }}</span>
+              <span class="text-sm font-black">{{ formatCurrency(totalConsumido) }}</span>
             </div>
             <div class="flex justify-between items-center text-green-400">
               <span class="text-xs font-bold uppercase">Total Pago</span>
-              <span class="text-sm font-black">R$ {{ totalPago.toFixed(2) }}</span>
+              <span class="text-sm font-black">{{ formatCurrency(totalPago) }}</span>
             </div>
-            <div class="pt-4 border-t border-gray-800 flex justify-between items-center">
-              <span class="text-[10px] font-black text-orange-400 uppercase tracking-widest">Saldo Restante</span>
-              <span class="text-xl font-black text-white tabular-nums">R$ {{ saldoRestante.toFixed(2) }}</span>
+            <div class="pt-4 border-t border-white/10 flex justify-between items-center">
+              <span class="text-xs font-black text-moca-light uppercase tracking-widest">Saldo Restante</span>
+              <span class="text-2xl font-black text-white tabular-nums">{{ formatCurrency(saldoRestante) }}</span>
             </div>
           </div>
 
           <!-- AÇÕES DE PAGAMENTO -->
           <div v-if="saldoRestante > 0" class="space-y-6">
             <!-- Toggle Integral / Parcial -->
-            <div class="flex p-1 bg-gray-800 rounded-2xl border border-gray-700">
+            <div class="flex p-1 bg-black/20 rounded-xl border border-white/5">
               <button 
                 @click="tipoPagamento = 'integral'; valorPagamento = Number(saldoRestante.toFixed(2))"
-                class="flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all"
-                :class="tipoPagamento === 'integral' ? 'bg-gray-700 text-white shadow-sm' : 'text-gray-500 hover:text-gray-300'"
+                class="flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all"
+                :class="tipoPagamento === 'integral' ? 'bg-moca text-white shadow-md' : 'text-bege-claro/50 hover:text-white'"
               >
                 Integral
               </button>
               <button 
                 @click="tipoPagamento = 'parcial'"
-                class="flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all"
-                :class="tipoPagamento === 'parcial' ? 'bg-gray-700 text-white shadow-sm' : 'text-gray-500 hover:text-gray-300'"
+                class="flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all"
+                :class="tipoPagamento === 'parcial' ? 'bg-moca text-white shadow-md' : 'text-bege-claro/50 hover:text-white'"
               >
                 Parcial
               </button>
             </div>
 
-            <BaseInput 
-              v-model="valorPagamento" 
-              type="number" 
-              label="Valor a Receber"
-              dark
-              :disabled="tipoPagamento === 'integral'"
-              :error="Number(valorPagamento) > saldoRestante ? 'Valor maior que o saldo' : undefined"
-              class="!bg-gray-800 !border-gray-700 !text-white"
-            />
+            <div class="space-y-1">
+              <label class="text-[9px] font-black text-bege-claro/60 uppercase tracking-widest px-1">Valor a Receber</label>
+              <BaseInputCurrency 
+                v-model="valorPagamento" 
+                :disabled="tipoPagamento === 'integral'"
+                placeholder="0,00"
+                input-class="w-full px-4 py-3 bg-black/20 border border-white/10 rounded-xl text-white font-bold outline-none focus:border-moca focus:ring-1 focus:ring-moca transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                :class="{'border-red-500 ring-1 ring-red-500': Number(valorPagamento) > saldoRestante}"
+              />
+              <p v-if="Number(valorPagamento) > saldoRestante" class="text-[10px] text-red-400 font-bold px-1 pt-1">Valor maior que o saldo</p>
+            </div>
             
             <div class="space-y-2">
-              <p class="text-[9px] font-black text-gray-500 uppercase tracking-widest px-1">Método</p>
+              <p class="text-[9px] font-black text-bege-claro/60 uppercase tracking-widest px-1">Método</p>
               <div class="grid grid-cols-3 gap-2">
                 <button 
                   v-for="metodo in metodos" :key="metodo.id"
                   @click="metodoSelecionado = metodo.id"
-                  class="py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border-2 transition-all"
+                  class="py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border border-white/10 transition-all hover:bg-white/5"
                   :class="metodoSelecionado === metodo.id 
-                    ? 'bg-orange-500 border-orange-500 text-white shadow-lg shadow-orange-900/40' 
-                    : 'bg-gray-800 border-gray-700 text-gray-400 hover:border-gray-600'"
+                    ? 'bg-moca !border-moca text-white shadow-lg transform scale-105' 
+                    : 'bg-transparent text-bege-claro/60'"
                 >
                   {{ metodo.label }}
                 </button>
               </div>
             </div>
 
-            <BaseButton 
-              class="w-full !rounded-2xl !py-4 shadow-xl shadow-black/20 font-black tracking-widest text-xs"
+            <button 
+              class="w-full py-4 rounded-xl bg-branco text-cafe-dark hover:bg-bege-cream font-black tracking-widest text-xs shadow-xl transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
               @click="handleRegistrarPagamento"
-              :loading="loadingPagamento"
-              :disabled="!valorPagamento || Number(valorPagamento) <= 0 || Number(valorPagamento) > (saldoRestante + 0.01) || !metodoSelecionado"
+              :disabled="loadingPagamento || !valorPagamento || Number(valorPagamento) <= 0 || Number(valorPagamento) > (saldoRestante + 0.01) || !metodoSelecionado"
             >
-              <span v-if="Number(valorPagamento) > saldoRestante">VALOR EXCEDIDO</span>
-              <span v-else>CONFIRMAR R$ {{ Number(valorPagamento || 0).toFixed(2) }}</span>
-            </BaseButton>
+              <span v-if="loadingPagamento" class="animate-pulse">PROCESSANDO...</span>
+              <span v-else-if="Number(valorPagamento) > saldoRestante">VALOR EXCEDIDO</span>
+              <span v-else>CONFIRMAR {{ formatCurrency(Number(valorPagamento || 0)) }}</span>
+            </button>
           </div>
 
           <div v-else class="space-y-6">
-            <div class="p-4 bg-green-500/10 border border-green-500/20 rounded-[2rem] text-center">
+            <div class="p-4 bg-green-500/10 border border-green-500/20 rounded-2xl text-center">
               <p class="text-green-400 text-xs font-black uppercase mb-1">Conta Quitada! 🥂</p>
               <p class="text-[10px] text-green-400/60 leading-tight">Todos os débitos foram liquidados. A mesa pode ser liberada.</p>
             </div>
             
-            <BaseButton 
-              variant="primary"
-              class="w-full !rounded-2xl !py-4 !bg-orange-500 hover:!bg-orange-600 font-black shadow-xl shadow-orange-900/40"
+            <button 
+              class="w-full py-4 rounded-xl bg-moca text-white hover:bg-moca-light font-black tracking-widest text-xs shadow-xl shadow-black/20 transition-all active:scale-95 flex items-center justify-center gap-2"
               @click="handleFinalizarMesa"
-              :loading="loadingFinalizar"
+              :disabled="loadingFinalizar"
             >
+              <span v-if="loadingFinalizar" class="animate-spin w-4 h-4 border-2 border-white/30 border-t-white rounded-full"></span>
               FINALIZAR E LIBERAR MESA
-            </BaseButton>
+            </button>
           </div>
-        </BaseCard>
+        </div>
 
         <!-- EMPTY STATE FINANCEIRO -->
-        <BaseCard v-else class="!p-12 flex flex-col items-center justify-center text-center opacity-50">
-          <div class="text-4xl mb-4">💳</div>
-          <p class="text-xs font-black text-gray-400 uppercase tracking-widest leading-loose">Selecione uma mesa<br>para iniciar o acerto</p>
-        </BaseCard>
+        <div v-else class="bg-branco rounded-3xl shadow-sm border border-bege-soft p-12 flex flex-col items-center justify-center text-center opacity-50 h-[400px]">
+          <div class="text-5xl mb-6 grayscale text-bege-torrado">💳</div>
+          <p class="text-caption font-bold text-bege-torrado uppercase tracking-widest leading-loose">Selecione uma mesa<br>para iniciar o acerto</p>
+        </div>
       </div>
     </div>
   </div>
@@ -166,6 +168,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { usePedidos } from '~/composables/usePedidos';
 import { useToast } from '~/composables/useToast';
+import { formatCurrency } from '~/utils/formatters';
 
 const { mesas, fetchMesas, pedidos, fetchPedidos, fetchPagamentosMesa, registrarPagamento, finalizarMesa } = usePedidos();
 const toast = useToast();
@@ -245,7 +248,7 @@ const selecionarMesa = async (mesa: any) => {
     
     // Sugere o valor total restante no campo
     setTimeout(() => {
-        valorPagamento.value = Number(saldoRestante.value.toFixed(2));
+        valorPagamento.value = Number(saldoRestante.value);
     }, 100);
 };
 
@@ -289,7 +292,7 @@ const handleRegistrarPagamento = async () => {
 
         await registrarPagamento(payload);
         
-        toast.success(`Recebido R$ ${payload.valor.toFixed(2)} (${payload.metodo_pagamento})`);
+        toast.success(`Recebido ${formatCurrency(payload.valor)} (${payload.metodo_pagamento})`);
         
         // Atualiza apenas os pagamentos da conta atual
         await buscarPagamentosAtuais();
@@ -298,7 +301,7 @@ const handleRegistrarPagamento = async () => {
         if (tipoPagamento.value === 'integral') {
             valorPagamento.value = 0;
         } else {
-            valorPagamento.value = Number(saldoRestante.value.toFixed(2));
+            valorPagamento.value = Number(saldoRestante.value);
         }
     } catch (error: any) {
         console.error('Erro no checkout:', error);

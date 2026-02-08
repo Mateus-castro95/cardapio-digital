@@ -1,122 +1,121 @@
 <template>
-  <div class="p-6 max-w-6xl mx-auto font-primary min-h-screen bg-gray-50 pb-20">
+  <div class="p-8 max-w-7xl mx-auto min-h-screen">
     <!-- Cabeçalho -->
-    <div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
+    <div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
       <div>
-        <h1 class="text-3xl font-black text-gray-900">Controle <span class="text-green-600">Financeiro</span></h1>
-        <p class="text-gray-400 text-sm font-medium mt-1">Monitore o desempenho e faturamento da pastelaria</p>
+        <h1 class="text-heading-1 text-cafe mb-2">Controle <span class="text-green-600">Financeiro</span></h1>
+        <p class="text-body-lg text-bege-torrado">Monitore o desempenho e faturamento</p>
       </div>
 
       <!-- Filtro de Data -->
-      <div class="flex flex-wrap items-end gap-3 bg-white p-4 rounded-3xl border border-gray-100 shadow-sm">
+      <div class="flex flex-wrap items-end gap-3 bg-branco p-4 rounded-3xl border border-bege-soft shadow-premium">
         <div class="space-y-1">
-          <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Início</label>
+          <label class="text-[10px] font-black text-bege-torrado uppercase tracking-widest px-1">Início</label>
           <input 
             v-model="filtro.inicio" 
             type="date" 
-            class="block w-full px-3 py-2 bg-gray-50 border-0 rounded-xl text-sm font-bold text-gray-700 focus:ring-2 focus:ring-green-500 transition-all outline-none"
+            class="block w-full px-4 py-2.5 bg-bege-cream/50 border border-bege-soft rounded-xl text-sm font-bold text-cafe focus:border-moca focus:ring-1 focus:ring-moca transition-all outline-none"
           >
         </div>
         <div class="space-y-1">
-          <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Fim</label>
+          <label class="text-[10px] font-black text-bege-torrado uppercase tracking-widest px-1">Fim</label>
           <input 
             v-model="filtro.fim" 
             type="date" 
-            class="block w-full px-3 py-2 bg-gray-50 border-0 rounded-xl text-sm font-bold text-gray-700 focus:ring-2 focus:ring-green-500 transition-all outline-none"
+            class="block w-full px-4 py-2.5 bg-bege-cream/50 border border-bege-soft rounded-xl text-sm font-bold text-cafe focus:border-moca focus:ring-1 focus:ring-moca transition-all outline-none"
           >
         </div>
-        <BaseButton 
-          variant="primary" 
-          size="small" 
-          class="!bg-green-600 hover:!bg-green-700 !h-[42px] !px-6"
+        <button 
+          class="px-6 py-2.5 rounded-xl bg-cafe text-white font-black tracking-wide text-xs shadow-lg hover:bg-cafe-dark transition-all h-[42px] flex items-center justify-center gap-2"
           @click="carregarDados"
-          :loading="loadingReport"
+          :disabled="loadingReport"
         >
+          <span v-if="loadingReport" class="animate-spin w-3 h-3 border-2 border-white/30 border-t-white rounded-full"></span>
           FILTRAR
-        </BaseButton>
+        </button>
       </div>
     </div>
 
     <!-- Cards de Métricas Principais -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
       <!-- Card Faturamento -->
-      <BaseCard class="!p-8 border-l-4 border-l-green-500 relative overflow-hidden group hover:shadow-xl transition-all duration-500">
+      <div class="bg-branco p-8 rounded-3xl shadow-premium border border-bege-soft border-l-4 border-l-green-500 relative overflow-hidden group hover:shadow-xl transition-all duration-500">
         <div class="relative z-10">
-          <p class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Faturamento Total</p>
+          <p class="text-[10px] font-black text-bege-torrado uppercase tracking-widest mb-4">Faturamento Total</p>
           <div class="flex items-baseline gap-2">
             <span class="text-lg font-black text-green-600">R$</span>
-            <h2 class="text-4xl font-black text-gray-900 leading-none tabular-nums">{{ totalFaturado.toFixed(2) }}</h2>
+            <h2 class="text-4xl font-black text-cafe-dark leading-none tabular-nums">{{ formatCurrency(totalFaturado).replace('R$', '').trim() }}</h2>
           </div>
         </div>
-        <span class="absolute -right-4 -bottom-4 text-7xl opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-500 pointer-events-none">💰</span>
-      </BaseCard>
+        <span class="absolute -right-4 -bottom-4 text-8xl opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-500 grayscale pointer-events-none">💰</span>
+      </div>
 
       <!-- Card Pedidos -->
-      <BaseCard class="!p-8 border-l-4 border-l-blue-500 relative overflow-hidden group hover:shadow-xl transition-all duration-500">
+      <div class="bg-branco p-8 rounded-3xl shadow-premium border border-bege-soft border-l-4 border-l-moca relative overflow-hidden group hover:shadow-xl transition-all duration-500">
         <div class="relative z-10">
-          <p class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Volume de Vendas</p>
+          <p class="text-[10px] font-black text-bege-torrado uppercase tracking-widest mb-4">Volume de Vendas</p>
           <div class="flex items-baseline gap-2">
-            <h2 class="text-4xl font-black text-gray-900 leading-none tabular-nums">{{ totalPedidos }}</h2>
-            <span class="text-sm font-black text-blue-500 uppercase tracking-widest">Pedidos</span>
+            <h2 class="text-4xl font-black text-cafe-dark leading-none tabular-nums">{{ totalPedidos }}</h2>
+            <span class="text-sm font-black text-moca uppercase tracking-widest">Pedidos</span>
           </div>
         </div>
-        <span class="absolute -right-4 -bottom-4 text-7xl opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-500 pointer-events-none">📝</span>
-      </BaseCard>
+        <span class="absolute -right-4 -bottom-4 text-8xl opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-500 grayscale pointer-events-none">📝</span>
+      </div>
 
       <!-- Card Ticket Médio -->
-      <BaseCard class="!p-8 border-l-4 border-l-orange-500 relative overflow-hidden group hover:shadow-xl transition-all duration-500">
+      <div class="bg-branco p-8 rounded-3xl shadow-premium border border-bege-soft border-l-4 border-l-cafe relative overflow-hidden group hover:shadow-xl transition-all duration-500">
         <div class="relative z-10">
-          <p class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Ticket Médio</p>
+          <p class="text-[10px] font-black text-bege-torrado uppercase tracking-widest mb-4">Ticket Médio</p>
           <div class="flex items-baseline gap-2">
-            <span class="text-lg font-black text-orange-500">R$</span>
-            <h2 class="text-4xl font-black text-gray-900 leading-none tabular-nums">{{ ticketMedio.toFixed(2) }}</h2>
+            <span class="text-lg font-black text-cafe">R$</span>
+            <h2 class="text-4xl font-black text-cafe-dark leading-none tabular-nums">{{ formatCurrency(ticketMedio).replace('R$', '').trim() }}</h2>
           </div>
         </div>
-        <span class="absolute -right-4 -bottom-4 text-7xl opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-500 pointer-events-none">🎯</span>
-      </BaseCard>
+        <span class="absolute -right-4 -bottom-4 text-8xl opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-500 grayscale pointer-events-none">🎯</span>
+      </div>
     </div>
 
     <!-- Resumo de Métodos de Pagamento -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-      <div class="bg-white p-6 rounded-[2rem] border border-gray-100 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
+      <div class="bg-branco p-6 rounded-3xl border border-bege-soft flex items-center justify-between shadow-premium hover:shadow-xl transition-all group">
         <div class="flex items-center gap-4">
-          <div class="w-12 h-12 bg-cyan-50 text-cyan-600 rounded-2xl flex items-center justify-center text-xl">📱</div>
+          <div class="w-12 h-12 bg-cyan-50 text-cyan-600 rounded-2xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform">📱</div>
           <div>
-            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Pix</p>
-            <h3 class="text-xl font-black text-gray-900 tabular-nums">R$ {{ totalPix.toFixed(2) }}</h3>
+            <p class="text-[10px] font-black text-bege-torrado uppercase tracking-widest">Pix</p>
+            <h3 class="text-xl font-black text-cafe-dark tabular-nums">{{ formatCurrency(totalPix) }}</h3>
           </div>
         </div>
-        <span class="text-[10px] font-bold text-cyan-600 bg-cyan-50 px-2 py-1 rounded-md">{{ percPix.toFixed(0) }}%</span>
+        <span class="text-[10px] font-bold text-cyan-700 bg-cyan-50 px-2.5 py-1 rounded-lg border border-cyan-100">{{ percPix.toFixed(0) }}%</span>
       </div>
 
-      <div class="bg-white p-6 rounded-[2rem] border border-gray-100 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
+      <div class="bg-branco p-6 rounded-3xl border border-bege-soft flex items-center justify-between shadow-premium hover:shadow-xl transition-all group">
         <div class="flex items-center gap-4">
-          <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-xl">💳</div>
+          <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform">💳</div>
           <div>
-            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Cartão</p>
-            <h3 class="text-xl font-black text-gray-900 tabular-nums">R$ {{ totalCartao.toFixed(2) }}</h3>
+            <p class="text-[10px] font-black text-bege-torrado uppercase tracking-widest">Cartão</p>
+            <h3 class="text-xl font-black text-cafe-dark tabular-nums">{{ formatCurrency(totalCartao) }}</h3>
           </div>
         </div>
-        <span class="text-[10px] font-bold text-purple-600 bg-purple-50 px-2 py-1 rounded-md">{{ percCartao.toFixed(0) }}%</span>
+        <span class="text-[10px] font-bold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-lg border border-purple-100">{{ percCartao.toFixed(0) }}%</span>
       </div>
 
-      <div class="bg-white p-6 rounded-[2rem] border border-gray-100 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
+      <div class="bg-branco p-6 rounded-3xl border border-bege-soft flex items-center justify-between shadow-premium hover:shadow-xl transition-all group">
         <div class="flex items-center gap-4">
-          <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-xl">💵</div>
+          <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform">💵</div>
           <div>
-            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Dinheiro</p>
-            <h3 class="text-xl font-black text-gray-900 tabular-nums">R$ {{ totalDinheiro.toFixed(2) }}</h3>
+            <p class="text-[10px] font-black text-bege-torrado uppercase tracking-widest">Dinheiro</p>
+            <h3 class="text-xl font-black text-cafe-dark tabular-nums">{{ formatCurrency(totalDinheiro) }}</h3>
           </div>
         </div>
-        <span class="text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded-md">{{ percDinheiro.toFixed(0) }}%</span>
+        <span class="text-[10px] font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-100">{{ percDinheiro.toFixed(0) }}%</span>
       </div>
     </div>
 
-    <!-- Lista de Vendas (Opcional, mas dá confiança no dado) -->
-    <BaseCard class="!p-0 overflow-hidden border border-gray-100 mb-10">
-      <div class="p-8 border-b border-gray-50 flex justify-between items-center bg-white">
-        <h3 class="text-xs font-black text-gray-400 uppercase tracking-widest">Histórico de Pedidos no Período</h3>
-        <span class="text-[10px] font-bold text-green-600 bg-green-50 px-3 py-1 rounded-lg uppercase">
+    <!-- Lista de Vendas -->
+    <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden mb-12">
+      <div class="p-8 border-b border-bege-soft flex justify-between items-center bg-bege-cream/20">
+        <h3 class="text-caption font-bold text-bege-torrado uppercase tracking-widest">Histórico de Pedidos no Período</h3>
+        <span class="text-[10px] font-bold text-green-700 bg-green-50 px-3 py-1 rounded-lg uppercase border border-green-100">
           {{ pedidosPeriodo.length }} vendas finalizadas
         </span>
       </div>
@@ -124,22 +123,22 @@
       <div class="px-8 pb-8 overflow-x-auto">
         <table class="w-full text-left table-fixed">
           <thead>
-            <tr class="border-b border-gray-50">
-              <th class="py-6 w-24 text-[10px] font-black text-gray-400 uppercase tracking-widest">Data</th>
-              <th class="py-6 w-20 text-[10px] font-black text-gray-400 uppercase tracking-widest">Hora</th>
-              <th class="py-6 w-28 text-[10px] font-black text-gray-400 uppercase tracking-widest">Mesa</th>
-              <th class="py-6 w-24 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Protocolo</th>
-              <th class="py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Tipo</th>
-              <th class="py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Método Pagto</th>
-              <th class="py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Valor Total</th>
+            <tr class="border-b border-bege-soft">
+              <th class="py-6 w-24 text-[10px] font-black text-bege-torrado uppercase tracking-widest">Data</th>
+              <th class="py-6 w-20 text-[10px] font-black text-bege-torrado uppercase tracking-widest">Hora</th>
+              <th class="py-6 w-28 text-[10px] font-black text-bege-torrado uppercase tracking-widest">Mesa</th>
+              <th class="py-6 w-24 text-[10px] font-black text-bege-torrado uppercase tracking-widest text-center">Protocolo</th>
+              <th class="py-6 text-[10px] font-black text-bege-torrado uppercase tracking-widest text-center">Tipo</th>
+              <th class="py-6 text-[10px] font-black text-bege-torrado uppercase tracking-widest text-center">Método Pagto</th>
+              <th class="py-6 text-[10px] font-black text-bege-torrado uppercase tracking-widest text-right">Valor Total</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-50">
-            <tr v-for="venda in vendasAgrupadas" :key="venda.id" class="hover:bg-gray-50/50 transition-colors group">
-              <td class="py-5 text-sm font-bold text-gray-900 tabular-nums">{{ formatarDia(venda.data) }}</td>
-              <td class="py-5 text-sm font-bold text-gray-900 tabular-nums">{{ formatarHora(venda.data) }}</td>
+          <tbody class="divide-y divide-bege-soft/50">
+            <tr v-for="venda in vendasAgrupadas" :key="venda.id" class="hover:bg-bege-cream/30 transition-colors group">
+              <td class="py-5 text-sm font-bold text-cafe-dark tabular-nums">{{ formatarDia(venda.data) }}</td>
+              <td class="py-5 text-sm font-bold text-cafe-dark tabular-nums">{{ formatarHora(venda.data) }}</td>
               <td class="py-5">
-                <span v-if="venda.mesa_numero" class="inline-block text-[10px] font-black px-2.5 py-1.5 rounded-lg bg-orange-50 text-orange-600 uppercase tracking-wider">
+                <span v-if="venda.mesa_numero" class="inline-block text-[10px] font-black px-2.5 py-1.5 rounded-lg bg-cafe text-white uppercase tracking-wider shadow-sm">
                   MESA {{ venda.mesa_numero }}
                 </span>
                 <span v-else class="inline-block text-[10px] font-black px-2.5 py-1.5 rounded-lg bg-gray-100 text-gray-400 uppercase tracking-wider">
@@ -147,34 +146,34 @@
                 </span>
               </td>
               <td class="py-5 text-center">
-                <span class="text-[10px] font-bold text-gray-900 bg-gray-50 px-2 py-1 rounded-md tabular-nums border border-gray-100">
+                <span class="text-[10px] font-bold text-bege-torrado bg-bege-cream/50 px-2 py-1 rounded-md tabular-nums border border-bege-soft/50">
                   #{{ venda.id.substring(0, 8) }}
                 </span>
               </td>
               <td class="py-5 text-center">
-                <span :class="['text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-tighter', 
-                  venda.tipo === 'Parcial' ? 'bg-blue-50 text-blue-500' : 'bg-gray-100 text-gray-400']">
+                <span :class="['text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-tighter border', 
+                  venda.tipo === 'Parcial' ? 'bg-blue-50 text-blue-600 border-blue-100' : 'bg-gray-50 text-gray-400 border-gray-100']">
                   {{ venda.tipo }}
                 </span>
               </td>
               <td class="py-5 text-center">
-                <span class="text-[10px] font-bold text-gray-900 capitalize italic">
+                <span class="text-[10px] font-bold text-cafe capitalize italic">
                   {{ venda.metodos }}
                 </span>
               </td>
               <td class="py-5 text-right">
-                <span class="text-sm font-black text-gray-900 group-hover:text-green-600 transition-colors tabular-nums">R$ {{ venda.total.toFixed(2) }}</span>
+                <span class="text-sm font-black text-cafe-dark group-hover:text-green-600 transition-colors tabular-nums">{{ formatCurrency(venda.total) }}</span>
               </td>
             </tr>
             <tr v-if="vendasAgrupadas.length === 0">
-              <td colspan="7" class="py-12 text-center text-gray-400 text-sm italic border-t border-gray-50">
+              <td colspan="7" class="py-12 text-center text-bege-torrado text-sm italic border-t border-bege-soft">
                 Nenhuma venda finalizada encontrada para este período.
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-    </BaseCard>
+    </div>
   </div>
 </template>
 
@@ -182,6 +181,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { usePedidos } from '~/composables/usePedidos';
 import { useToast } from '~/composables/useToast';
+import { formatCurrency } from '~/utils/formatters';
 
 const { fetchPedidosPorPeriodo, fetchPagamentosPorPeriodo } = usePedidos();
 const toast = useToast();

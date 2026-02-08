@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
+  <div class="bg-white rounded-3xl shadow-premium p-6 border border-bege-soft hover:shadow-xl transition-shadow duration-300">
     <slot />
   </div>
 </template>
