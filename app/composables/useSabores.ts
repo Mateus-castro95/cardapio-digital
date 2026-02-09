@@ -87,19 +87,23 @@ export const useSabores = () => {
 
             if (saborError) throw saborError;
 
-            // 2. Atualizar adicionais (mais simples: deletar e inserir de novo para este caso de relação fixa)
+            // 2. Atualizar adicionais apenas se o tipo foi enviado OU se novos adicionais foram fornecidos
+            // Isso evita que o toggle de 'ativo' (que não envia o tipo) apague os dados por erro
             if (updates.tipo === 'especial') {
-                // Remove antigos
+                // Se o tipo é especial, atualizamos os adicionais (limpa e insere novos)
                 await client.from('adicional_sabor_tamanho').delete().eq('sabor_id', id);
-
-                // Insere novos
                 if (adicionais.length > 0) {
                     const payload = adicionais.map(a => ({ ...a, sabor_id: id }));
                     await client.from('adicional_sabor_tamanho').insert(payload);
                 }
-            } else {
-                // Se mudou para tradicional, remove qualquer adicional existente
+            } else if (updates.tipo === 'tradicional') {
+                // Se mudou explicitamente para tradicional, remove qualquer adicional existente
                 await client.from('adicional_sabor_tamanho').delete().eq('sabor_id', id);
+            } else if (updates.tipo === undefined && adicionais.length > 0) {
+                // Se o tipo não foi enviado (não mudou) mas enviamos novos preços adicionais
+                await client.from('adicional_sabor_tamanho').delete().eq('sabor_id', id);
+                const payload = adicionais.map(a => ({ ...a, sabor_id: id }));
+                await client.from('adicional_sabor_tamanho').insert(payload);
             }
 
             // Recarrega apenas este sabor para garantir dados consistentes

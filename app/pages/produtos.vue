@@ -220,7 +220,10 @@
           <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden">
             <BaseTabela :colunas="colsSucos" :data="variacoesSucos">
               <template #sabor="{ item }">
-                <span class="font-bold text-cafe capitalize">{{ item.sabor }}</span>
+                <div class="flex items-center gap-3 px-4 py-2">
+                  <div class="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.4)]"></div>
+                  <span class="font-bold text-cafe capitalize">{{ item.sabor }}</span>
+                </div>
               </template>
               <template #tipo_preparo="{ item }">
                 <span class="text-xs px-2 py-1 rounded-full font-bold uppercase tracking-wider" :class="item.tipo_preparo === 'agua' ? 'bg-blue-50 text-blue-600' : 'bg-moca/10 text-moca'">
@@ -261,7 +264,10 @@
           <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden">
             <BaseTabela :colunas="colsRefrigerantes" :data="variacoesRefrigerantes">
               <template #sabor="{ item }">
-                <span class="font-bold text-cafe">{{ item.sabor }}</span>
+                <div class="flex items-center gap-3 px-4 py-2">
+                  <div class="w-2 h-2 rounded-full bg-slate-300 shadow-[0_0_8px_rgba(203,213,225,0.4)]"></div>
+                  <span class="font-bold text-cafe capitalize">{{ item.sabor }}</span>
+                </div>
               </template>
               <template #volume_ml="{ item }">
                 <span class="text-bege-torrado font-medium text-sm">{{ item.volume_ml }}ml</span>
@@ -304,7 +310,10 @@
           <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden">
             <BaseTabela :colunas="colsAguas" :data="variacoesAguas">
               <template #sabor="{ item }">
-                <span class="font-bold text-cafe">{{ item.sabor || 'Água' }}</span>
+                <div class="flex items-center gap-3 px-4 py-2">
+                  <div class="w-2 h-2 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.4)]"></div>
+                  <span class="font-bold text-cafe capitalize">{{ item.sabor || 'Água' }}</span>
+                </div>
               </template>
               <template #volume_ml="{ item }">
                 <span class="text-bege-torrado font-medium text-xs">{{ item.volume_ml }}ml</span>
