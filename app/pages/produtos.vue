@@ -1,37 +1,37 @@
 <template>
-  <div class="p-8 max-w-7xl mx-auto">
-    <div class="mb-10">
-      <h1 class="text-heading-1 text-cafe mb-2">Gestão do <span class="text-moca">Cardápio</span></h1>
-      <p class="text-body-lg text-bege-torrado">Gerencie categorias, produtos e preços em um único lugar</p>
+  <div class="p-4 sm:p-8 max-w-7xl mx-auto">
+    <div class="mb-8 sm:mb-10 text-center sm:text-left">
+      <h1 class="text-2xl sm:text-heading-1 text-cafe mb-1 sm:mb-2 font-black">Gestão do <span class="text-moca">Cardápio</span></h1>
+      <p class="text-sm sm:text-body-lg text-bege-torrado">Gerencie categorias, produtos e preços em um único lugar</p>
     </div>
 
-    <div class="space-y-16">
+    <div class="space-y-12 sm:space-y-16">
       <!-- SEÇÃO: CATEGORIAS NO TOPO -->
       <section>
-        <div class="flex justify-between items-end mb-6">
-          <div>
-            <h2 class="text-heading-2 text-cafe-dark">Categorias</h2>
-            <p class="text-caption text-bege-torrado">Divisões principais do cardápio</p>
+        <div class="flex flex-col sm:flex-row justify-between items-center sm:items-end mb-6 gap-4">
+          <div class="text-center sm:text-left">
+            <h2 class="text-xl sm:text-heading-2 text-cafe-dark font-black">Categorias</h2>
+            <p class="text-xs sm:text-caption text-bege-torrado font-bold">Divisões principais do cardápio</p>
           </div>
           <button 
-            class="px-4 py-2 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-colors font-bold text-sm shadow-md"
+            class="w-full sm:w-auto px-4 py-2.5 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-all font-black text-xs uppercase tracking-widest shadow-lg active:scale-95"
             @click="handleOpenAddCategory"
           >
             Adicionar nova categoria
           </button>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           <div 
             v-for="categoria in categorias" :key="categoria.id" 
-            class="group bg-branco rounded-2xl p-6 shadow-sm border border-bege-soft hover:shadow-premium hover:border-moca/30 transition-all flex justify-between items-center"
+            class="group bg-branco rounded-2xl p-4 sm:p-6 shadow-sm border border-bege-soft hover:shadow-premium hover:border-moca/30 transition-all flex justify-between items-center"
           >
-            <span class="font-bold text-lg text-cafe capitalize">{{ categoria.nome }}</span>
-            <div class="flex gap-2 transition-opacity">
-              <button @click="handleOpenEditCategory(categoria)" class="p-1.5 text-bege-torrado hover:text-cafe hover:bg-bege-cream rounded-lg transition-colors">
+            <span class="font-black text-base sm:text-lg text-cafe capitalize">{{ categoria.nome }}</span>
+            <div class="flex gap-1 sm:gap-2">
+              <button @click="handleOpenEditCategory(categoria)" class="p-2 text-bege-torrado hover:text-cafe hover:bg-bege-cream rounded-xl transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
               </button>
-              <button @click="confirmDelete(categoria, 'categoria')" class="p-1.5 text-bege-torrado hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+              <button @click="confirmDelete(categoria, 'categoria')" class="p-2 text-bege-torrado hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
               </button>
             </div>
@@ -42,162 +42,168 @@
       <!-- SEÇÃO DE ITENS -->
       <!-- Seção de Pastéis -->
       <div>
-        <div class="mb-8">
-          <h2 class="text-heading-2 text-cafe-dark">Pastéis (Configuráveis)</h2>
-          <p class="text-caption text-bege-torrado">Gerencie tamanhos base e variações de sabores</p>
+        <div class="mb-8 text-center sm:text-left">
+          <h2 class="text-xl sm:text-heading-2 text-cafe-dark font-black">Pastéis <span class="text-moca">(Configuráveis)</span></h2>
+          <p class="text-xs sm:text-caption text-bege-torrado font-bold">Gerencie tamanhos base e variações de sabores</p>
         </div>
 
-        <div class="flex flex-col gap-12">
+        <div class="flex flex-col gap-10 sm:gap-12">
           <!-- Card de Tamanhos -->
-          <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft p-6">
-            <div class="flex justify-between items-center mb-6">
-              <h3 class="text-heading-3 text-cafe">Tamanhos</h3>
-              <button class="px-4 py-2 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-colors font-bold text-sm shadow-md" @click="handleOpenAddTamanho">
+          <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft p-5 sm:p-6">
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+              <h3 class="text-lg sm:text-heading-3 text-cafe font-black">Tamanhos</h3>
+              <button class="w-full sm:w-auto px-4 py-2 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-all font-black text-xs uppercase tracking-widest shadow-lg" @click="handleOpenAddTamanho">
                 Adicionar Tamanho
               </button>
             </div>
             
-            <BaseTabela :colunas="colsTamanhos" :data="tamanhos">
-              <template #preco_base="{ item }">
-                <span class="font-bold text-moca">
-                  {{ formatCurrency(item.preco_base) }}
-                </span>
-              </template>
-              <template #max_sabores="{ item }">
-                <span class="text-bege-torrado font-medium text-sm">
-                  {{ item.max_sabores }} {{ item.max_sabores > 1 ? 'Sabores' : 'Sabor' }}
-                </span>
-              </template>
-              <template #acoes="{ item }">
-                <div class="flex gap-2">
-                  <button class="text-bege-torrado hover:text-cafe transition-colors" @click="handleOpenEditTamanho(item)">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                    </svg>
-                  </button>
-                  <button class="text-bege-torrado hover:text-red-500 transition-colors" @click="confirmDelete(item, 'tamanho')">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                  </button>
-                </div>
-              </template>
-            </BaseTabela>
+            <div class="-mx-5 sm:mx-0 overflow-x-auto">
+              <BaseTabela :colunas="colsTamanhos" :data="tamanhos" class="min-w-[500px]">
+                <template #preco_base="{ item }">
+                  <span class="font-black text-moca">
+                    {{ formatCurrency(item.preco_base) }}
+                  </span>
+                </template>
+                <template #max_sabores="{ item }">
+                  <span class="text-bege-torrado font-bold text-xs">
+                    {{ item.max_sabores }} {{ item.max_sabores > 1 ? 'Sabores' : 'Sabor' }}
+                  </span>
+                </template>
+                <template #acoes="{ item }">
+                  <div class="flex gap-2">
+                    <button class="p-2 text-bege-torrado hover:text-cafe transition-colors" @click="handleOpenEditTamanho(item)">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                      </svg>
+                    </button>
+                    <button class="p-2 text-bege-torrado hover:text-red-500 transition-colors" @click="confirmDelete(item, 'tamanho')">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  </div>
+                </template>
+              </BaseTabela>
+            </div>
           </div>
 
           <!-- Seção de Sabores -->
           <div class="space-y-12">
             <!-- Salgados -->
             <div>
-              <div class="mb-6 flex justify-between items-end">
-                <div>
-                  <h3 class="text-heading-3 text-cafe flex items-center gap-3">
+              <div class="mb-6 flex flex-col sm:flex-row justify-between items-center sm:items-end gap-4 overflow-hidden">
+                <div class="text-center sm:text-left">
+                  <h3 class="text-lg sm:text-heading-3 text-cafe font-black flex items-center justify-center sm:justify-start gap-3">
                     Sabores Salgados
-                    <span class="text-[10px] bg-bege-cream text-cafe-dark px-2 py-1 rounded-full font-bold uppercase tracking-wider">{{ saboresSalgados.length }} itens</span>
+                    <span class="text-[9px] bg-bege-cream text-cafe-dark px-2 py-0.5 rounded-full font-black uppercase tracking-wider">{{ saboresSalgados.length }}</span>
                   </h3>
-                  <p class="text-caption text-bege-torrado">Gerencie os sabores de pastéis salgados</p>
+                  <p class="text-xs sm:text-caption text-bege-torrado font-bold">Gerencie os sabores de pastéis salgados</p>
                 </div>
-                <button class="px-4 py-2 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-colors font-bold text-sm shadow-md" @click="handleOpenAddSabor('salgado')">
+                <button class="w-full sm:w-auto px-4 py-2 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-all font-black text-xs uppercase tracking-widest shadow-lg" @click="handleOpenAddSabor('salgado')">
                   Adicionar Sabor
                 </button>
               </div>
 
               <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden">
-                <BaseTabela :colunas="colsSabores" :data="saboresSalgados">
-                  <template #nome="{ item }">
-                    <div class="flex items-center gap-3 px-4 py-2">
-                      <div :class="['w-2 h-2 rounded-full', item.tipo === 'especial' ? 'bg-moca' : 'bg-green-500']"></div>
-                      <span class="font-bold text-cafe capitalize">{{ item.nome }}</span>
-                    </div>
-                  </template>
-                  <template #tipo="{ item }">
-                    <span class="text-[10px] px-2 py-1 rounded-md font-bold uppercase tracking-wider" :class="item.tipo === 'especial' ? 'bg-moca/10 text-moca' : 'bg-gray-100 text-gray-500'">
-                      {{ item.tipo }}
-                    </span>
-                  </template>
-                  <template #adicional="{ item }">
-                    <div v-if="item.tipo === 'especial'" class="flex flex-wrap gap-1">
-                      <span v-for="adj in item.adicionais" :key="adj.tamanho_id" class="text-[10px] bg-bege-cream text-cafe-dark px-1.5 py-0.5 rounded border border-bege-torrado/20 font-bold">
-                          {{ getTamanhoNome(adj.tamanho_id) }}: +{{ formatCurrency(adj.valor_adicional) }}
+                <div class="overflow-x-auto">
+                  <BaseTabela :colunas="colsSabores" :data="saboresSalgados" class="min-w-[800px]">
+                    <template #nome="{ item }">
+                      <div class="flex items-center gap-3 px-4">
+                        <div :class="['w-2.5 h-2.5 rounded-full shadow-sm', item.tipo === 'especial' ? 'bg-moca' : 'bg-green-500']"></div>
+                        <span class="font-black text-cafe-dark capitalize text-sm">{{ item.nome }}</span>
+                      </div>
+                    </template>
+                    <template #tipo="{ item }">
+                      <span class="text-[9px] px-2 py-1 rounded-lg font-black uppercase tracking-widest border" :class="item.tipo === 'especial' ? 'bg-moca/10 text-moca border-moca/20' : 'bg-gray-50 text-gray-400 border-gray-100'">
+                        {{ item.tipo }}
                       </span>
-                    </div>
-                    <span v-else class="text-bege-torrado/60 text-xs italic">Incluído no preço base</span>
-                  </template>
-                  <template #ativo="{ item }">
-                    <BaseToggle v-model="item.ativo" @update:model-value="handleToggleAtivo(item, 'sabor')" />
-                  </template>
-                  <template #acoes="{ item }">
-                    <div class="flex gap-2">
-                      <button class="text-bege-torrado hover:text-cafe transition-colors px-1" @click="handleOpenEditSabor(item)">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                        </svg>
-                      </button>
-                      <button class="text-bege-torrado hover:text-red-500 transition-colors px-1" @click="confirmDelete(item, 'sabor')">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
-                    </div>
-                  </template>
-                </BaseTabela>
+                    </template>
+                    <template #adicional="{ item }">
+                      <div v-if="item.tipo === 'especial'" class="flex flex-wrap gap-1.5 py-2">
+                        <span v-for="adj in item.adicionais" :key="adj.tamanho_id" class="text-[8px] bg-bege-cream/50 text-cafe-dark px-1.5 py-0.5 rounded-lg border border-bege-soft/50 font-black whitespace-nowrap">
+                            {{ getTamanhoNome(adj.tamanho_id) }}: +{{ formatCurrency(adj.valor_adicional) }}
+                        </span>
+                      </div>
+                      <span v-else class="text-bege-torrado/50 text-[10px] font-bold italic">Incluído</span>
+                    </template>
+                    <template #ativo="{ item }">
+                      <BaseToggle v-model="item.ativo" @update:model-value="handleToggleAtivo(item, 'sabor')" />
+                    </template>
+                    <template #acoes="{ item }">
+                      <div class="flex gap-1">
+                        <button class="p-2 text-bege-torrado hover:text-cafe transition-colors" @click="handleOpenEditSabor(item)">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                          </svg>
+                        </button>
+                        <button class="p-2 text-bege-torrado hover:text-red-500 transition-colors" @click="confirmDelete(item, 'sabor')">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </div>
+                    </template>
+                  </BaseTabela>
+                </div>
               </div>
             </div>
 
             <!-- Doces -->
             <div>
-              <div class="mb-6 flex justify-between items-end">
-                <div>
-                   <h3 class="text-heading-3 text-cafe flex items-center gap-3">
+              <div class="mb-6 flex flex-col sm:flex-row justify-between items-center sm:items-end gap-4">
+                <div class="text-center sm:text-left">
+                   <h3 class="text-lg sm:text-heading-3 text-cafe font-black flex items-center justify-center sm:justify-start gap-3">
                     Sabores Doces
-                    <span class="text-[10px] bg-bege-cream text-cafe-dark px-2 py-1 rounded-full font-bold uppercase tracking-wider">{{ saboresDoces.length }} itens</span>
+                    <span class="text-[9px] bg-bege-cream text-cafe-dark px-2 py-0.5 rounded-full font-black uppercase tracking-wider">{{ saboresDoces.length }}</span>
                   </h3>
-                  <p class="text-caption text-bege-torrado">Gerencie os sabores de pastéis doces</p>
+                  <p class="text-xs sm:text-caption text-bege-torrado font-bold">Gerencie os sabores de pastéis doces</p>
                 </div>
-                <button class="px-4 py-2 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-colors font-bold text-sm shadow-md" @click="handleOpenAddSabor('doce')">
+                <button class="w-full sm:w-auto px-4 py-2 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-all font-black text-xs uppercase tracking-widest shadow-lg" @click="handleOpenAddSabor('doce')">
                   Adicionar Sabor
                 </button>
               </div>
 
               <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden">
-                <BaseTabela :colunas="colsSabores" :data="saboresDoces">
-                  <template #nome="{ item }">
-                    <div class="flex items-center gap-3 px-4 py-2">
-                      <div :class="['w-2 h-2 rounded-full', item.tipo === 'especial' ? 'bg-moca' : 'bg-pink-400']"></div>
-                      <span class="font-bold text-cafe capitalize">{{ item.nome }}</span>
-                    </div>
-                  </template>
-                  <template #tipo="{ item }">
-                     <span class="text-[10px] px-2 py-1 rounded-md font-bold uppercase tracking-wider" :class="item.tipo === 'especial' ? 'bg-moca/10 text-moca' : 'bg-gray-100 text-gray-500'">
-                      {{ item.tipo }}
-                    </span>
-                  </template>
-                  <template #adicional="{ item }">
-                    <div v-if="item.tipo === 'especial'" class="flex flex-wrap gap-1">
-                      <span v-for="adj in item.adicionais" :key="adj.tamanho_id" class="text-[10px] bg-bege-cream text-cafe-dark px-1.5 py-0.5 rounded border border-bege-torrado/20 font-bold">
-                          {{ getTamanhoNome(adj.tamanho_id) }}: +{{ formatCurrency(adj.valor_adicional) }}
+                <div class="overflow-x-auto">
+                  <BaseTabela :colunas="colsSabores" :data="saboresDoces" class="min-w-[800px]">
+                    <template #nome="{ item }">
+                      <div class="flex items-center gap-3 px-4">
+                        <div :class="['w-2.5 h-2.5 rounded-full shadow-sm', item.tipo === 'especial' ? 'bg-moca' : 'bg-pink-400']"></div>
+                        <span class="font-black text-cafe-dark capitalize text-sm">{{ item.nome }}</span>
+                      </div>
+                    </template>
+                    <template #tipo="{ item }">
+                       <span class="text-[9px] px-2 py-1 rounded-lg font-black uppercase tracking-widest border" :class="item.tipo === 'especial' ? 'bg-moca/10 text-moca border-moca/20' : 'bg-gray-50 text-gray-400 border-gray-100'">
+                        {{ item.tipo }}
                       </span>
-                    </div>
-                    <span v-else class="text-bege-torrado/60 text-xs italic">Incluído no preço base</span>
-                  </template>
-                  <template #ativo="{ item }">
-                    <BaseToggle v-model="item.ativo" @update:model-value="handleToggleAtivo(item, 'sabor')" />
-                  </template>
-                  <template #acoes="{ item }">
-                    <div class="flex gap-2">
-                      <button class="text-bege-torrado hover:text-cafe transition-colors px-1" @click="handleOpenEditSabor(item)">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                        </svg>
-                      </button>
-                      <button class="text-bege-torrado hover:text-red-500 transition-colors px-1" @click="confirmDelete(item, 'sabor')">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
-                    </div>
-                  </template>
-                </BaseTabela>
+                    </template>
+                    <template #adicional="{ item }">
+                      <div v-if="item.tipo === 'especial'" class="flex flex-wrap gap-1.5 py-2">
+                        <span v-for="adj in item.adicionais" :key="adj.tamanho_id" class="text-[8px] bg-bege-cream/50 text-cafe-dark px-1.5 py-0.5 rounded-lg border border-bege-soft/50 font-black whitespace-nowrap">
+                            {{ getTamanhoNome(adj.tamanho_id) }}: +{{ formatCurrency(adj.valor_adicional) }}
+                        </span>
+                      </div>
+                      <span v-else class="text-bege-torrado/50 text-[10px] font-bold italic">Incluído</span>
+                    </template>
+                    <template #ativo="{ item }">
+                      <BaseToggle v-model="item.ativo" @update:model-value="handleToggleAtivo(item, 'sabor')" />
+                    </template>
+                    <template #acoes="{ item }">
+                      <div class="flex gap-1">
+                        <button class="p-2 text-bege-torrado hover:text-cafe transition-colors" @click="handleOpenEditSabor(item)">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                          </svg>
+                        </button>
+                        <button class="p-2 text-bege-torrado hover:text-red-500 transition-colors" @click="confirmDelete(item, 'sabor')">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </div>
+                    </template>
+                  </BaseTabela>
+                </div>
               </div>
             </div>
           </div>
@@ -208,138 +214,144 @@
       <div class="space-y-12">
         <!-- Sucos -->
         <div>
-          <div class="mb-6 flex justify-between items-end">
-            <div>
-              <h2 class="text-heading-2 text-cafe-dark">Sucos</h2>
-              <p class="text-caption text-bege-torrado">Gerencie os sabores e tipos de preparo</p>
+          <div class="mb-6 flex flex-col sm:flex-row justify-between items-center sm:items-end gap-4">
+            <div class="text-center sm:text-left">
+              <h2 class="text-xl sm:text-heading-2 text-cafe-dark font-black">Sucos</h2>
+              <p class="text-xs sm:text-caption text-bege-torrado font-bold">Gerencie os sabores e tipos de preparo</p>
             </div>
-            <button class="px-4 py-2 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-colors font-bold text-sm shadow-md" @click="handleOpenAddBebida('suco')">
+            <button class="w-full sm:w-auto px-4 py-2 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-all font-black text-xs uppercase tracking-widest shadow-lg" @click="handleOpenAddBebida('suco')">
               Adicionar Suco
             </button>
           </div>
           <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden">
-            <BaseTabela :colunas="colsSucos" :data="variacoesSucos">
-              <template #sabor="{ item }">
-                <div class="flex items-center gap-3 px-4 py-2">
-                  <div class="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.4)]"></div>
-                  <span class="font-bold text-cafe capitalize">{{ item.sabor }}</span>
-                </div>
-              </template>
-              <template #tipo_preparo="{ item }">
-                <span class="text-xs px-2 py-1 rounded-full font-bold uppercase tracking-wider" :class="item.tipo_preparo === 'agua' ? 'bg-blue-50 text-blue-600' : 'bg-moca/10 text-moca'">
-                  {{ item.tipo_preparo === 'agua' ? 'Feito com Água' : 'Feito com Leite' }}
-                </span>
-              </template>
-              <template #preco="{ item }">
-                <span class="font-bold text-moca">{{ formatCurrency(item.preco) }}</span>
-              </template>
-              <template #ativo="{ item }">
-                <BaseToggle v-model="item.ativo" @update:model-value="handleToggleAtivo(item, 'bebida')" />
-              </template>
-              <template #acoes="{ item }">
-                <div class="flex gap-2">
-                  <button class="text-bege-torrado hover:text-cafe transition-colors" @click="handleOpenEditBebida(item)">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
-                  </button>
-                  <button class="text-bege-torrado hover:text-red-600 transition-colors" @click="confirmDelete(item, 'bebida')">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                  </button>
-                </div>
-              </template>
-            </BaseTabela>
+            <div class="overflow-x-auto">
+              <BaseTabela :colunas="colsSucos" :data="variacoesSucos" class="min-w-[600px]">
+                <template #sabor="{ item }">
+                  <div class="flex items-center gap-3 px-4">
+                    <div class="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-md"></div>
+                    <span class="font-black text-cafe-dark capitalize text-sm">{{ item.sabor }}</span>
+                  </div>
+                </template>
+                <template #tipo_preparo="{ item }">
+                  <span class="text-[9px] px-2 py-1 rounded-lg font-black uppercase tracking-widest border" :class="item.tipo_preparo === 'agua' ? 'bg-blue-50 text-blue-600 border-blue-100' : 'bg-moca/10 text-moca border-moca/20'">
+                    {{ item.tipo_preparo === 'agua' ? 'Com Água' : 'Com Leite' }}
+                  </span>
+                </template>
+                <template #preco="{ item }">
+                  <span class="font-black text-moca text-sm">{{ formatCurrency(item.preco) }}</span>
+                </template>
+                <template #ativo="{ item }">
+                  <BaseToggle v-model="item.ativo" @update:model-value="handleToggleAtivo(item, 'bebida')" />
+                </template>
+                <template #acoes="{ item }">
+                  <div class="flex gap-1">
+                    <button class="p-2 text-bege-torrado hover:text-cafe transition-colors" @click="handleOpenEditBebida(item)">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                    </button>
+                    <button class="p-2 text-bege-torrado hover:text-red-600 transition-colors" @click="confirmDelete(item, 'bebida')">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    </button>
+                  </div>
+                </template>
+              </BaseTabela>
+            </div>
           </div>
         </div>
 
         <!-- Refrigerantes -->
         <div>
-          <div class="mb-6 flex justify-between items-end">
-            <div>
-              <h2 class="text-heading-2 text-cafe-dark">Refrigerantes</h2>
-              <p class="text-caption text-bege-torrado">Gerencie marcas e tamanhos</p>
+          <div class="mb-6 flex flex-col sm:flex-row justify-between items-center sm:items-end gap-4">
+            <div class="text-center sm:text-left">
+              <h2 class="text-xl sm:text-heading-2 text-cafe-dark font-black">Refrigerantes</h2>
+              <p class="text-xs sm:text-caption text-bege-torrado font-bold">Gerencie marcas e tamanhos</p>
             </div>
-            <button class="px-4 py-2 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-colors font-bold text-sm shadow-md" @click="handleOpenAddBebida('refrigerante')">
+            <button class="w-full sm:w-auto px-4 py-2 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-all font-black text-xs uppercase tracking-widest shadow-lg" @click="handleOpenAddBebida('refrigerante')">
               Adicionar Refrigerante
             </button>
           </div>
           <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden">
-            <BaseTabela :colunas="colsRefrigerantes" :data="variacoesRefrigerantes">
-              <template #sabor="{ item }">
-                <div class="flex items-center gap-3 px-4 py-2">
-                  <div class="w-2 h-2 rounded-full bg-slate-300 shadow-[0_0_8px_rgba(203,213,225,0.4)]"></div>
-                  <span class="font-bold text-cafe capitalize">{{ item.sabor }}</span>
-                </div>
-              </template>
-              <template #volume_ml="{ item }">
-                <span class="text-bege-torrado font-medium text-sm">{{ item.volume_ml }}ml</span>
-              </template>
-              <template #tamanho="{ item }">
-                <span class="text-xs bg-bege-cream text-cafe-dark px-2 py-1 rounded font-bold uppercase" v-if="item.tamanho">{{ item.tamanho }}</span>
-                <span v-else class="text-bege-torrado/50">-</span>
-              </template>
-              <template #preco="{ item }">
-                <span class="font-bold text-moca">{{ formatCurrency(item.preco) }}</span>
-              </template>
-              <template #ativo="{ item }">
-                <BaseToggle v-model="item.ativo" @update:model-value="handleToggleAtivo(item, 'bebida')" />
-              </template>
-              <template #acoes="{ item }">
-                <div class="flex gap-2">
-                  <button class="text-bege-torrado hover:text-cafe transition-colors" @click="handleOpenEditBebida(item)">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
-                  </button>
-                  <button class="text-bege-torrado hover:text-red-600 transition-colors" @click="confirmDelete(item, 'bebida')">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                  </button>
-                </div>
-              </template>
-            </BaseTabela>
+            <div class="overflow-x-auto">
+              <BaseTabela :colunas="colsRefrigerantes" :data="variacoesRefrigerantes" class="min-w-[700px]">
+                <template #sabor="{ item }">
+                  <div class="flex items-center gap-3 px-4">
+                    <div class="w-2.5 h-2.5 rounded-full bg-slate-300 shadow-sm"></div>
+                    <span class="font-black text-cafe-dark capitalize text-sm">{{ item.sabor }}</span>
+                  </div>
+                </template>
+                <template #volume_ml="{ item }">
+                  <span class="text-bege-torrado font-bold text-xs tabular-nums">{{ item.volume_ml }}ml</span>
+                </template>
+                <template #tamanho="{ item }">
+                  <span class="text-[9px] bg-bege-cream/50 text-cafe-dark px-2 py-1 rounded-lg font-black uppercase border border-bege-soft/50 shadow-sm" v-if="item.tamanho">{{ item.tamanho }}</span>
+                  <span v-else class="text-bege-torrado/30">-</span>
+                </template>
+                <template #preco="{ item }">
+                  <span class="font-black text-moca text-sm tabular-nums">{{ formatCurrency(item.preco) }}</span>
+                </template>
+                <template #ativo="{ item }">
+                  <BaseToggle v-model="item.ativo" @update:model-value="handleToggleAtivo(item, 'bebida')" />
+                </template>
+                <template #acoes="{ item }">
+                  <div class="flex gap-1">
+                    <button class="p-2 text-bege-torrado hover:text-cafe transition-colors" @click="handleOpenEditBebida(item)">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                    </button>
+                    <button class="p-2 text-bege-torrado hover:text-red-600 transition-colors" @click="confirmDelete(item, 'bebida')">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    </button>
+                  </div>
+                </template>
+              </BaseTabela>
+            </div>
           </div>
         </div>
 
         <!-- Águas -->
         <div>
-          <div class="mb-6 flex justify-between items-end">
-            <div>
-              <h2 class="text-heading-2 text-cafe-dark">Águas</h2>
-              <p class="text-caption text-bege-torrado">Gerencie tipos de água e gás</p>
+          <div class="mb-6 flex flex-col sm:flex-row justify-between items-center sm:items-end gap-4">
+            <div class="text-center sm:text-left">
+              <h2 class="text-xl sm:text-heading-2 text-cafe-dark font-black">Águas</h2>
+              <p class="text-xs sm:text-caption text-bege-torrado font-bold">Gerencie tipos de água e gás</p>
             </div>
-            <button class="px-4 py-2 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-colors font-bold text-sm shadow-md" @click="handleOpenAddBebida('agua')">
+            <button class="w-full sm:w-auto px-4 py-2 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-all font-black text-xs uppercase tracking-widest shadow-lg" @click="handleOpenAddBebida('agua')">
               Adicionar Água
             </button>
           </div>
           <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden">
-            <BaseTabela :colunas="colsAguas" :data="variacoesAguas">
-              <template #sabor="{ item }">
-                <div class="flex items-center gap-3 px-4 py-2">
-                  <div class="w-2 h-2 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.4)]"></div>
-                  <span class="font-bold text-cafe capitalize">{{ item.sabor || 'Água' }}</span>
-                </div>
-              </template>
-              <template #volume_ml="{ item }">
-                <span class="text-bege-torrado font-medium text-xs">{{ item.volume_ml }}ml</span>
-              </template>
-              <template #tipo_gas="{ item }">
-                <span class="text-xs px-2 py-1 rounded-full font-bold uppercase tracking-wider" :class="item.tipo_gas === 'com_gas' ? 'bg-purple-50 text-purple-600' : 'bg-gray-100 text-gray-500'">
-                  {{ item.tipo_gas === 'com_gas' ? 'Com Gás' : 'Sem Gás' }}
-                </span>
-              </template>
-              <template #preco="{ item }">
-                <span class="font-bold text-moca">{{ formatCurrency(item.preco) }}</span>
-              </template>
-              <template #ativo="{ item }">
-                <BaseToggle v-model="item.ativo" @update:model-value="handleToggleAtivo(item, 'bebida')" />
-              </template>
-              <template #acoes="{ item }">
-                <div class="flex gap-2">
-                  <button class="text-bege-torrado hover:text-cafe transition-colors" @click="handleOpenEditBebida(item)">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
-                  </button>
-                  <button class="text-bege-torrado hover:text-red-600 transition-colors" @click="confirmDelete(item, 'bebida')">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                  </button>
-                </div>
-              </template>
-            </BaseTabela>
+            <div class="overflow-x-auto">
+              <BaseTabela :colunas="colsAguas" :data="variacoesAguas" class="min-w-[700px]">
+                <template #sabor="{ item }">
+                  <div class="flex items-center gap-3 px-4">
+                    <div class="w-2.5 h-2.5 rounded-full bg-sky-400 shadow-md"></div>
+                    <span class="font-black text-cafe-dark capitalize text-sm">{{ item.sabor || 'Água' }}</span>
+                  </div>
+                </template>
+                <template #volume_ml="{ item }">
+                  <span class="text-bege-torrado font-bold text-xs tabular-nums">{{ item.volume_ml }}ml</span>
+                </template>
+                <template #tipo_gas="{ item }">
+                  <span class="text-[9px] px-2 py-1 rounded-lg font-black uppercase tracking-widest border" :class="item.tipo_gas === 'com_gas' ? 'bg-purple-50 text-purple-600 border-purple-100' : 'bg-gray-50 text-gray-400 border-gray-100'">
+                    {{ item.tipo_gas === 'com_gas' ? 'Com Gás' : 'Sem Gás' }}
+                  </span>
+                </template>
+                <template #preco="{ item }">
+                  <span class="font-black text-moca text-sm tabular-nums">{{ formatCurrency(item.preco) }}</span>
+                </template>
+                <template #ativo="{ item }">
+                  <BaseToggle v-model="item.ativo" @update:model-value="handleToggleAtivo(item, 'bebida')" />
+                </template>
+                <template #acoes="{ item }">
+                  <div class="flex gap-1">
+                    <button class="p-2 text-bege-torrado hover:text-cafe transition-colors" @click="handleOpenEditBebida(item)">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                    </button>
+                    <button class="p-2 text-bege-torrado hover:text-red-600 transition-colors" @click="confirmDelete(item, 'bebida')">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    </button>
+                  </div>
+                </template>
+              </BaseTabela>
+            </div>
           </div>
         </div>
       </div>

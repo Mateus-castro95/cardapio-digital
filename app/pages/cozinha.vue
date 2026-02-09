@@ -1,58 +1,58 @@
 <template>
-  <div class="p-8 max-w-[90rem] mx-auto min-h-screen">
-    <div class="flex justify-between items-center mb-10">
+  <div class="p-4 sm:p-8 max-w-[90rem] mx-auto min-h-screen">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 sm:mb-10 gap-6">
       <div>
-        <h1 class="text-heading-1 text-cafe mb-2">Fila da <span class="text-moca">Cozinha</span></h1>
-        <p class="text-body-lg text-bege-torrado">Gerencie a produção em tempo real</p>
+        <h1 class="text-2xl sm:text-heading-1 text-cafe mb-1 sm:mb-2">Fila da <span class="text-moca">Cozinha</span></h1>
+        <p class="text-sm sm:text-body-lg text-bege-torrado">Gerencie a produção em tempo real</p>
       </div>
-      <div class="flex items-center gap-4">
-        <div class="flex items-center gap-2 bg-branco px-4 py-2 rounded-xl border border-bege-soft shadow-sm">
+      <div class="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
+        <div class="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-branco px-4 py-2 rounded-xl border border-bege-soft shadow-sm">
           <span class="relative flex h-3 w-3">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
             <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
           </span>
-          <span class="text-xs font-bold text-cafe-dark uppercase tracking-wider">Ao Vivo</span>
+          <span class="text-[10px] sm:text-xs font-black text-cafe-dark uppercase tracking-wider">Ao Vivo</span>
         </div>
         <button 
-          class="px-4 py-2 rounded-xl border border-bege-torrado text-cafe hover:bg-bege-cream transition-colors font-bold text-sm tracking-wide flex items-center gap-2"
+          class="flex-1 sm:flex-none px-4 py-2 rounded-xl border border-bege-torrado text-cafe hover:bg-bege-cream transition-colors font-black text-xs sm:text-sm tracking-wide flex items-center justify-center gap-2"
           @click="fetchPedidosAtualizados" 
           :disabled="loading"
         >
           <span v-if="loading" class="animate-spin w-4 h-4 border-2 border-cafe/30 border-t-cafe rounded-full"></span>
-          Atualizar
+          ATUALIZAR
         </button>
       </div>
     </div>
 
     <!-- Grid de Pedidos -->
-    <div v-if="pedidosAtivos.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div v-if="pedidosAtivos.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
       <div 
         v-for="pedido in pedidosAtivos" :key="pedido.id"
         class="bg-branco rounded-3xl overflow-hidden border-2 transition-all duration-300 shadow-premium flex flex-col group relative"
-        :class="pedido.status === 'em_preparo' ? 'border-moca shadow-xl scale-[1.02] z-10' : 'border-bege-soft hover:border-moca/50'"
+        :class="pedido.status === 'em_preparo' ? 'border-moca shadow-xl sm:scale-[1.02] z-10' : 'border-bege-soft hover:border-moca/50'"
       >
         <!-- Faixa de Status Lateral -->
         <div class="absolute left-0 top-0 bottom-0 w-1.5" :class="pedido.status === 'em_preparo' ? 'bg-moca' : 'bg-green-500'"></div>
 
         <!-- Header do Card -->
-        <div class="p-6 flex justify-between items-start border-b border-bege-soft bg-bege-cream/20">
+        <div class="p-5 sm:p-6 flex justify-between items-start border-b border-bege-soft bg-bege-cream/10">
           <div class="pl-2">
-            <div class="flex items-center gap-2 mb-1">
-              <span class="text-[10px] font-black text-bege-torrado uppercase tracking-widest">Pedido</span>
-              <span class="text-heading-2 text-cafe">#{{ String(pedido.numero_sequencial).padStart(3, '0') }}</span>
+            <div class="flex items-center gap-2 mb-1.5">
+              <span class="text-[9px] sm:text-[10px] font-black text-bege-torrado uppercase tracking-widest">Pedido</span>
+              <span class="text-xl sm:text-heading-2 text-cafe font-black leading-none">#{{ String(pedido.numero_sequencial).padStart(3, '0') }}</span>
             </div>
             <div class="flex items-center gap-2">
-              <span class="px-2 py-1 bg-cafe text-branco text-[10px] font-black rounded-lg uppercase tracking-wide shadow-sm">
+              <span class="px-2 py-1 bg-cafe text-branco text-[9px] sm:text-[10px] font-black rounded-lg uppercase tracking-wide shadow-sm">
                 Mesa {{ pedido.mesa?.numero || '?' }}
               </span>
-              <span class="text-[10px] text-bege-torrado font-bold uppercase flex items-center gap-1">
+              <span class="text-[9px] sm:text-[10px] text-bege-torrado font-black uppercase flex items-center gap-1">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 {{ formatTimeAgo(pedido.criado_em) }}
               </span>
             </div>
           </div>
           <span 
-            class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm border"
+            class="px-2.5 py-1 rounded-lg text-[9px] sm:text-[10px] font-black uppercase tracking-widest shadow-sm border"
             :class="pedido.status === 'em_preparo' ? 'bg-moca text-white border-moca' : 'bg-green-100 text-green-700 border-green-200'"
           >
             {{ getStatusLabel(pedido.status) }}

@@ -1,32 +1,32 @@
 <template>
-  <div class="p-8 max-w-7xl mx-auto min-h-screen">
+  <div class="p-4 sm:p-8 max-w-7xl mx-auto min-h-screen">
     <!-- Cabeçalho -->
-    <div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+    <div class="mb-8 sm:mb-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
       <div>
-        <h1 class="text-heading-1 text-cafe mb-2">Controle <span class="text-green-600">Financeiro</span></h1>
-        <p class="text-body-lg text-bege-torrado">Monitore o desempenho e faturamento</p>
+        <h1 class="text-2xl sm:text-heading-1 text-cafe mb-1 sm:mb-2 text-center lg:text-left">Controle <span class="text-green-600">Financeiro</span></h1>
+        <p class="text-sm sm:text-body-lg text-bege-torrado text-center lg:text-left">Monitore o desempenho e faturamento</p>
       </div>
 
       <!-- Filtro de Data -->
-      <div class="flex flex-wrap items-end gap-3 bg-branco p-4 rounded-3xl border border-bege-soft shadow-premium">
-        <div class="space-y-1">
-          <label class="text-[10px] font-black text-bege-torrado uppercase tracking-widest px-1">Início</label>
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-end gap-3 bg-branco p-4 rounded-3xl border border-bege-soft shadow-premium">
+        <div class="flex-1 space-y-1">
+          <label class="text-[9px] sm:text-[10px] font-black text-bege-torrado uppercase tracking-widest px-1">Início</label>
           <input 
             v-model="filtro.inicio" 
             type="date" 
-            class="block w-full px-4 py-2.5 bg-bege-cream/50 border border-bege-soft rounded-xl text-sm font-bold text-cafe focus:border-moca focus:ring-1 focus:ring-moca transition-all outline-none"
+            class="block w-full px-4 py-2 bg-bege-cream/30 border border-bege-soft rounded-xl text-xs sm:text-sm font-bold text-cafe focus:border-moca focus:ring-1 focus:ring-moca transition-all outline-none"
           >
         </div>
-        <div class="space-y-1">
-          <label class="text-[10px] font-black text-bege-torrado uppercase tracking-widest px-1">Fim</label>
+        <div class="flex-1 space-y-1">
+          <label class="text-[9px] sm:text-[10px] font-black text-bege-torrado uppercase tracking-widest px-1">Fim</label>
           <input 
             v-model="filtro.fim" 
             type="date" 
-            class="block w-full px-4 py-2.5 bg-bege-cream/50 border border-bege-soft rounded-xl text-sm font-bold text-cafe focus:border-moca focus:ring-1 focus:ring-moca transition-all outline-none"
+            class="block w-full px-4 py-2 bg-bege-cream/30 border border-bege-soft rounded-xl text-xs sm:text-sm font-bold text-cafe focus:border-moca focus:ring-1 focus:ring-moca transition-all outline-none"
           >
         </div>
         <button 
-          class="px-6 py-2.5 rounded-xl bg-cafe text-white font-black tracking-wide text-xs shadow-lg hover:bg-cafe-dark transition-all h-[42px] flex items-center justify-center gap-2"
+          class="sm:px-6 py-2 rounded-xl bg-cafe text-white font-black tracking-wide text-xs shadow-lg hover:bg-cafe-dark transition-all h-[38px] sm:h-[42px] flex items-center justify-center gap-2"
           @click="carregarDados"
           :disabled="loadingReport"
         >
@@ -37,97 +37,81 @@
     </div>
 
     <!-- Cards de Métricas Principais -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
       <!-- Card Faturamento -->
-      <div class="bg-branco p-8 rounded-3xl shadow-premium border border-bege-soft border-l-4 border-l-green-500 relative overflow-hidden group hover:shadow-xl transition-all duration-500">
+      <div class="bg-branco p-6 sm:p-8 rounded-3xl shadow-premium border border-bege-soft border-l-4 border-l-green-500 relative overflow-hidden group hover:shadow-xl transition-all duration-500">
         <div class="relative z-10">
-          <p class="text-[10px] font-black text-bege-torrado uppercase tracking-widest mb-4">Faturamento Total</p>
-          <div class="flex items-baseline gap-2">
-            <span class="text-lg font-black text-green-600">R$</span>
-            <h2 class="text-4xl font-black text-cafe-dark leading-none tabular-nums">{{ formatCurrency(totalFaturado).replace('R$', '').trim() }}</h2>
+          <p class="text-[9px] sm:text-[10px] font-black text-bege-torrado uppercase tracking-widest mb-3 sm:mb-4">Faturamento Total</p>
+          <div class="flex items-baseline gap-1 sm:gap-2">
+            <span class="text-base sm:text-lg font-black text-green-600">R$</span>
+            <h2 class="text-3xl sm:text-4xl font-black text-cafe-dark leading-none tabular-nums">{{ formatCurrency(totalFaturado).replace('R$', '').trim() }}</h2>
           </div>
         </div>
-        <span class="absolute -right-4 -bottom-4 text-8xl opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-500 grayscale pointer-events-none">💰</span>
+        <span class="absolute -right-4 -bottom-4 text-6xl sm:text-8xl opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-500 grayscale pointer-events-none">💰</span>
       </div>
 
       <!-- Card Pedidos -->
-      <div class="bg-branco p-8 rounded-3xl shadow-premium border border-bege-soft border-l-4 border-l-moca relative overflow-hidden group hover:shadow-xl transition-all duration-500">
+      <div class="bg-branco p-6 sm:p-8 rounded-3xl shadow-premium border border-bege-soft border-l-4 border-l-moca relative overflow-hidden group hover:shadow-xl transition-all duration-500">
         <div class="relative z-10">
-          <p class="text-[10px] font-black text-bege-torrado uppercase tracking-widest mb-4">Volume de Vendas</p>
-          <div class="flex items-baseline gap-2">
-            <h2 class="text-4xl font-black text-cafe-dark leading-none tabular-nums">{{ totalPedidos }}</h2>
-            <span class="text-sm font-black text-moca uppercase tracking-widest">Pedidos</span>
+          <p class="text-[9px] sm:text-[10px] font-black text-bege-torrado uppercase tracking-widest mb-3 sm:mb-4">Volume de Vendas</p>
+          <div class="flex items-baseline gap-1 sm:gap-2">
+            <h2 class="text-3xl sm:text-4xl font-black text-cafe-dark leading-none tabular-nums">{{ totalPedidos }}</h2>
+            <span class="text-xs sm:text-sm font-black text-moca uppercase tracking-widest">Pedidos</span>
           </div>
         </div>
-        <span class="absolute -right-4 -bottom-4 text-8xl opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-500 grayscale pointer-events-none">📝</span>
+        <span class="absolute -right-4 -bottom-4 text-6xl sm:text-8xl opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-500 grayscale pointer-events-none">📝</span>
       </div>
 
       <!-- Card Ticket Médio -->
-      <div class="bg-branco p-8 rounded-3xl shadow-premium border border-bege-soft border-l-4 border-l-cafe relative overflow-hidden group hover:shadow-xl transition-all duration-500">
+      <div class="bg-branco p-6 sm:p-8 rounded-3xl shadow-premium border border-bege-soft border-l-4 border-l-cafe relative overflow-hidden group hover:shadow-xl transition-all duration-500 sm:col-span-2 lg:col-span-1">
         <div class="relative z-10">
-          <p class="text-[10px] font-black text-bege-torrado uppercase tracking-widest mb-4">Ticket Médio</p>
-          <div class="flex items-baseline gap-2">
-            <span class="text-lg font-black text-cafe">R$</span>
-            <h2 class="text-4xl font-black text-cafe-dark leading-none tabular-nums">{{ formatCurrency(ticketMedio).replace('R$', '').trim() }}</h2>
+          <p class="text-[9px] sm:text-[10px] font-black text-bege-torrado uppercase tracking-widest mb-3 sm:mb-4">Ticket Médio</p>
+          <div class="flex items-baseline gap-1 sm:gap-2">
+            <span class="text-base sm:text-lg font-black text-cafe">R$</span>
+            <h2 class="text-3xl sm:text-4xl font-black text-cafe-dark leading-none tabular-nums">{{ formatCurrency(ticketMedio).replace('R$', '').trim() }}</h2>
           </div>
         </div>
-        <span class="absolute -right-4 -bottom-4 text-8xl opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-500 grayscale pointer-events-none">🎯</span>
+        <span class="absolute -right-4 -bottom-4 text-6xl sm:text-8xl opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-500 grayscale pointer-events-none">🎯</span>
       </div>
     </div>
 
     <!-- Resumo de Métodos de Pagamento -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-      <div class="bg-branco p-6 rounded-3xl border border-bege-soft flex items-center justify-between shadow-premium hover:shadow-xl transition-all group">
-        <div class="flex items-center gap-4">
-          <div class="w-12 h-12 bg-cyan-50 text-cyan-600 rounded-2xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform">📱</div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-12">
+      <div v-for="item in [
+        { label: 'Pix', valor: totalPix, perc: percPix, icon: '📱', color: 'cyan' },
+        { label: 'Cartão', valor: totalCartao, perc: percCartao, icon: '💳', color: 'purple' },
+        { label: 'Dinheiro', valor: totalDinheiro, perc: percDinheiro, icon: '💵', color: 'amber' }
+      ]" :key="item.label" 
+      class="bg-branco p-4 sm:p-6 rounded-3xl border border-bege-soft flex items-center justify-between shadow-premium hover:shadow-xl transition-all group">
+        <div class="flex items-center gap-3 sm:gap-4">
+          <div :class="`w-10 h-10 sm:w-12 sm:h-12 bg-${item.color}-50 text-${item.color}-600 rounded-2xl flex items-center justify-center text-lg sm:text-xl group-hover:scale-110 transition-transform`">{{ item.icon }}</div>
           <div>
-            <p class="text-[10px] font-black text-bege-torrado uppercase tracking-widest">Pix</p>
-            <h3 class="text-xl font-black text-cafe-dark tabular-nums">{{ formatCurrency(totalPix) }}</h3>
+            <p class="text-[9px] sm:text-[10px] font-black text-bege-torrado uppercase tracking-widest">{{ item.label }}</p>
+            <h3 class="text-lg sm:text-xl font-black text-cafe-dark tabular-nums">{{ formatCurrency(item.valor) }}</h3>
           </div>
         </div>
-        <span class="text-[10px] font-bold text-cyan-700 bg-cyan-50 px-2.5 py-1 rounded-lg border border-cyan-100">{{ percPix.toFixed(0) }}%</span>
-      </div>
-
-      <div class="bg-branco p-6 rounded-3xl border border-bege-soft flex items-center justify-between shadow-premium hover:shadow-xl transition-all group">
-        <div class="flex items-center gap-4">
-          <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform">💳</div>
-          <div>
-            <p class="text-[10px] font-black text-bege-torrado uppercase tracking-widest">Cartão</p>
-            <h3 class="text-xl font-black text-cafe-dark tabular-nums">{{ formatCurrency(totalCartao) }}</h3>
-          </div>
-        </div>
-        <span class="text-[10px] font-bold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-lg border border-purple-100">{{ percCartao.toFixed(0) }}%</span>
-      </div>
-
-      <div class="bg-branco p-6 rounded-3xl border border-bege-soft flex items-center justify-between shadow-premium hover:shadow-xl transition-all group">
-        <div class="flex items-center gap-4">
-          <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform">💵</div>
-          <div>
-            <p class="text-[10px] font-black text-bege-torrado uppercase tracking-widest">Dinheiro</p>
-            <h3 class="text-xl font-black text-cafe-dark tabular-nums">{{ formatCurrency(totalDinheiro) }}</h3>
-          </div>
-        </div>
-        <span class="text-[10px] font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-100">{{ percDinheiro.toFixed(0) }}%</span>
+        <span :class="`text-[9px] sm:text-[10px] font-bold text-${item.color}-700 bg-${item.color}-50 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg border border-${item.color}-100`">{{ item.perc.toFixed(0) }}%</span>
       </div>
     </div>
 
     <!-- Lista de Vendas -->
     <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden mb-12">
-      <div class="p-8 border-b border-bege-soft flex justify-between items-center bg-bege-cream/20">
-        <h3 class="text-caption font-bold text-bege-torrado uppercase tracking-widest">Histórico de Pedidos no Período</h3>
-        <span class="text-[10px] font-bold text-green-700 bg-green-50 px-3 py-1 rounded-lg uppercase border border-green-100">
+      <div class="p-6 sm:p-8 border-b border-bege-soft flex flex-col sm:flex-row justify-between items-center bg-bege-cream/10 gap-4">
+        <h3 class="text-xs sm:text-caption font-black text-bege-torrado uppercase tracking-[0.2em]">Histórico de Vendas</h3>
+        <span class="text-[9px] sm:text-[10px] font-black text-green-700 bg-green-50 px-3 py-1.5 rounded-xl uppercase border border-green-100 shadow-sm">
           {{ pedidosPeriodo.length }} vendas finalizadas
         </span>
       </div>
 
-      <div class="px-8 pb-8 overflow-x-auto">
+      <!-- Versão Tabela (Desktop) -->
+      <div class="hidden lg:block px-8 pb-8 overflow-x-auto">
         <table class="w-full text-left table-fixed">
           <thead>
             <tr class="border-b border-bege-soft">
               <th class="py-6 w-24 text-[10px] font-black text-bege-torrado uppercase tracking-widest">Data</th>
               <th class="py-6 w-20 text-[10px] font-black text-bege-torrado uppercase tracking-widest">Hora</th>
               <th class="py-6 w-28 text-[10px] font-black text-bege-torrado uppercase tracking-widest">Mesa</th>
-              <th class="py-6 w-24 text-[10px] font-black text-bege-torrado uppercase tracking-widest text-center">Protocolo</th>
+              <th class="py-6 w-28 text-[10px] font-black text-bege-torrado uppercase tracking-widest text-center">Protocolo</th>
               <th class="py-6 text-[10px] font-black text-bege-torrado uppercase tracking-widest text-center">Tipo</th>
               <th class="py-6 text-[10px] font-black text-bege-torrado uppercase tracking-widest text-center">Método Pagto</th>
               <th class="py-6 text-[10px] font-black text-bege-torrado uppercase tracking-widest text-right">Valor Total</th>
@@ -146,12 +130,12 @@
                 </span>
               </td>
               <td class="py-5 text-center">
-                <span class="text-[10px] font-bold text-bege-torrado bg-bege-cream/50 px-2 py-1 rounded-md tabular-nums border border-bege-soft/50">
-                  #{{ venda.id.substring(0, 8) }}
+                <span class="text-[10px] font-bold text-bege-torrado bg-bege-cream/50 px-2.5 py-1 rounded-lg tabular-nums border border-bege-soft/50">
+                  #{{ venda.venda_id ? venda.venda_id.substring(0, 8).toUpperCase() : venda.id.substring(0, 8).toUpperCase() }}
                 </span>
               </td>
               <td class="py-5 text-center">
-                <span :class="['text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-tighter border', 
+                <span :class="['text-[9px] font-black px-2.5 py-1 rounded-md uppercase tracking-tighter border shadow-xs', 
                   venda.tipo === 'Parcial' ? 'bg-blue-50 text-blue-600 border-blue-100' : 'bg-gray-50 text-gray-400 border-gray-100']">
                   {{ venda.tipo }}
                 </span>
@@ -165,13 +149,47 @@
                 <span class="text-sm font-black text-cafe-dark group-hover:text-green-600 transition-colors tabular-nums">{{ formatCurrency(venda.total) }}</span>
               </td>
             </tr>
-            <tr v-if="vendasAgrupadas.length === 0">
-              <td colspan="7" class="py-12 text-center text-bege-torrado text-sm italic border-t border-bege-soft">
-                Nenhuma venda finalizada encontrada para este período.
-              </td>
-            </tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- Versão Cards (Mobile) -->
+      <div class="lg:hidden divide-y divide-bege-soft/50">
+        <div v-for="venda in vendasAgrupadas" :key="venda.id" class="p-5 hover:bg-bege-cream/20 transition-colors">
+          <div class="flex justify-between items-start mb-3">
+            <div class="space-y-1">
+              <span v-if="venda.mesa_numero" class="inline-block text-[10px] font-black px-2.5 py-1.5 rounded-lg bg-cafe text-white uppercase tracking-wider mr-2">
+                MESA {{ venda.mesa_numero }}
+              </span>
+              <span v-else class="inline-block text-[10px] font-black px-2.5 py-1.5 rounded-lg bg-gray-100 text-gray-400 uppercase tracking-wider mr-2">
+                EXTERNO
+              </span>
+              <span class="text-[9px] font-black text-bege-torrado uppercase bg-bege-cream/50 px-2 py-1 rounded-lg border border-bege-soft/30">
+                #{{ (venda.venda_id || venda.id).substring(0, 8).toUpperCase() }}
+              </span>
+            </div>
+            <span class="text-sm font-black text-cafe-dark tabular-nums">{{ formatCurrency(venda.total) }}</span>
+          </div>
+          
+          <div class="flex justify-between items-center text-[10px]">
+            <div class="flex items-center gap-3 text-bege-torrado font-bold">
+              <span class="flex items-center gap-1">📅 {{ formatarDia(venda.data) }}</span>
+              <span class="flex items-center gap-1">🕒 {{ formatarHora(venda.data) }}</span>
+            </div>
+            <div class="flex items-center gap-2">
+               <span :class="['text-[8px] font-black px-1.5 py-0.5 rounded uppercase border', 
+                  venda.tipo === 'Parcial' ? 'bg-blue-50 text-blue-600 border-blue-100' : 'bg-gray-50 text-gray-400 border-gray-100']">
+                  {{ venda.tipo }}
+                </span>
+               <span class="font-bold text-cafe-dark/70 italic capitalize">{{ venda.metodos }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="vendasAgrupadas.length === 0" class="py-16 text-center">
+        <div class="text-4xl mb-4 grayscale opacity-20">📊</div>
+        <p class="text-bege-torrado text-sm font-bold uppercase tracking-widest">Nenhuma venda finalizada encontrada</p>
       </div>
     </div>
   </div>

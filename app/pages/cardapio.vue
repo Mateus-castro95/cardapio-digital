@@ -1,29 +1,34 @@
 <template>
   <div class="min-h-screen bg-bege-cream pb-24 font-primary">
     <!-- Header Minimalista -->
-    <header class="bg-branco px-6 py-6 border-b border-bege-soft sticky top-0 z-30 shadow-sm">
-      <div class="max-w-2xl mx-auto flex justify-between items-center">
-        <div>
-          <h1 class="text-heading-2 text-cafe tracking-tight">Pastel <span class="text-moca">Hora</span></h1>
-          <p class="text-caption text-bege-torrado font-medium">Cardápio Digital • Aberto</p>
+    <header class="bg-branco px-4 sm:px-6 py-4 sm:py-6 border-b border-bege-soft sticky top-0 z-30 shadow-sm">
+      <div class="max-w-2xl mx-auto flex justify-between items-center gap-4">
+        <div class="flex-1 min-w-0">
+          <h1 class="text-xl sm:text-heading-2 text-cafe tracking-tight truncate">
+            Pastel <span class="text-moca">Hora</span>
+          </h1>
+          <p class="text-[10px] sm:text-caption text-bege-torrado font-medium truncate">Cardápio Digital • Aberto</p>
         </div>
         
         <!-- Seleção de Mesa Estilizada -->
-        <div class="flex flex-col items-end">
-          <label class="text-[10px] font-bold text-bege-torrado uppercase tracking-widest mb-1">Sua Mesa</label>
-          <div class="relative inline-flex self-end">
+        <div class="flex flex-col items-end shrink-0">
+          <label class="text-[9px] sm:text-[10px] font-black uppercase tracking-widest mb-1" :class="mesaInvalida ? 'text-red-500' : 'text-bege-torrado'">
+            {{ mesaInvalida ? 'Mesa Inexistente' : 'Sua Mesa' }}
+          </label>
+          <div class="relative inline-flex">
             <select 
               v-model="mesaSelecionadaId" 
               :disabled="isMesaLocked"
-              class="appearance-none bg-cafe text-branco text-body font-bold pl-4 pr-10 py-2 rounded-xl focus:outline-none cursor-pointer shadow-premium disabled:opacity-80 disabled:cursor-not-allowed hover:bg-cafe-dark transition-colors"
+              class="appearance-none bg-cafe text-branco text-xs sm:text-body font-bold pl-3 sm:pl-4 pr-8 sm:pr-10 py-1.5 sm:py-2 rounded-xl focus:outline-none cursor-pointer shadow-premium disabled:opacity-80 disabled:cursor-not-allowed hover:bg-cafe-dark transition-colors border-none"
+              :class="{'bg-red-600': mesaInvalida}"
             >
-              <option v-if="!isMesaLocked" :value="null">--</option>
+              <option v-if="!isMesaLocked || mesaInvalida" :value="null">--</option>
               <option v-for="mesa in mesas" :key="mesa.id" :value="mesa.id">
                 Mesa {{ mesa.numero }}
               </option>
             </select>
-            <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-bege-claro">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+            <div class="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 pointer-events-none text-bege-claro">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
               </svg>
             </div>
@@ -32,7 +37,7 @@
       </div>
     </header>
 
-    <main class="max-w-2xl mx-auto p-4 space-y-4">
+    <main v-if="!mesaInvalida || authStore.perfil" class="max-w-2xl mx-auto p-4 space-y-4">
       
       <!-- SEÇÃO: PASTÉIS -->
       <div class="pt-2">
@@ -305,46 +310,48 @@
     </BaseModalScrollable>
 
     <!-- Barra de Carrinho Inferior (Tipo Ifood) -->
-    <div v-if="cart.length > 0" class="fixed bottom-0 left-0 right-0 p-4 bg-white/80 backdrop-blur-md border-t border-gray-100 z-40">
+    <div v-if="cart.length > 0" class="fixed bottom-0 left-0 right-0 p-3 sm:p-4 bg-white/80 backdrop-blur-md border-t border-bege-soft z-40">
       <button 
         @click="showCartModal = true"
-        class="max-w-2xl mx-auto w-full bg-gray-900 text-white flex justify-between items-center p-4 rounded-2xl shadow-2xl active:scale-[0.98] transition-all"
+        class="max-w-2xl mx-auto w-full bg-cafe text-branco flex justify-between items-center p-4 rounded-2xl shadow-premium active:scale-[0.98] transition-all hover:bg-cafe-dark"
       >
         <div class="flex items-center gap-3">
-          <div class="bg-orange-500 text-white px-2 py-0.5 rounded-lg font-black text-xs">
+          <div class="bg-bege-claro text-cafe px-2 py-0.5 rounded-lg font-black text-xs">
             {{ cart.reduce((total, i) => total + i.quantidade, 0) }}
           </div>
-          <span class="font-bold text-sm tracking-tight">Ver meu pedido</span>
+          <span class="font-bold text-xs sm:text-sm uppercase tracking-wide">Meu Pedido</span>
         </div>
-        <div class="flex items-center gap-2">
-            <span class="text-xs text-gray-400 font-medium">Total:</span>
-            <span class="font-black text-lg">{{ formatCurrency(totalCart) }}</span>
+        <div class="flex items-center gap-3">
+            <span class="text-[10px] text-bege-claro/80 font-bold uppercase tracking-widest">Total:</span>
+            <span class="font-black text-base sm:text-lg">{{ formatCurrency(totalCart) }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-bege-claro" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+            </svg>
         </div>
       </button>
     </div>
 
     <!-- Modal Carrinho -->
     <BaseModalScrollable :show="showCartModal" @close="showCartModal = false" title="Meu Pedido">
-
-      <div class="px-6 pt-0 pb-48">
-          <div v-for="(item, index) in cart" :key="index" class="bg-white py-6 flex gap-4 border-b border-gray-50 last:border-0">
+      <div class="px-5 pt-2 pb-48">
+          <div v-for="(item, index) in cart" :key="index" class="bg-branco py-5 flex flex-col sm:flex-row gap-4 border-b border-bege-cream last:border-0">
               <div class="flex-1">
                   <div class="flex justify-between items-start mb-1">
-                      <h4 class="font-bold text-gray-800">{{ item.nome }}</h4>
-                      <span class="font-black text-gray-900 text-sm ml-2">{{ formatCurrency(item.preco_unitario * item.quantidade) }}</span>
+                      <h4 class="font-black text-cafe-dark uppercase text-sm tracking-tight">{{ item.nome }}</h4>
+                      <span class="font-black text-cafe text-sm ml-2">{{ formatCurrency(item.preco_unitario * item.quantidade) }}</span>
                   </div>
-                  <p class="text-xs text-gray-400 leading-relaxed italic mb-2">
+                  <p class="text-[11px] text-bege-torrado leading-relaxed italic mb-3">
                       {{ item.descricao }}
                   </p>
 
                   <!-- Área de Observação do Item -->
-                  <div class="mb-3">
+                  <div class="mb-4">
                       <!-- 1. Exibir Observação Salva -->
                       <div v-if="item.observacoes && !item.editandoObs" class="flex items-center gap-2" @click="item.editandoObs = true">
-                          <p class="text-[10px] text-orange-700 font-bold bg-orange-50 inline-block px-2 py-1 rounded cursor-pointer hover:bg-orange-100 transition-colors border border-orange-100">
+                          <p class="text-[9px] text-cafe font-bold bg-bege-cream inline-block px-2 py-1 rounded-lg cursor-pointer hover:bg-bege-soft/30 transition-colors border border-bege-soft/20">
                               Obs: {{ item.observacoes.toUpperCase() }}
                           </p>
-                          <button class="text-orange-400 hover:text-orange-600">
+                          <button class="text-bege-torrado hover:text-cafe">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg>
                           </button>
                       </div>
@@ -353,24 +360,24 @@
                       <button 
                         v-else-if="!item.editandoObs" 
                         @click="item.editandoObs = true"
-                        class="text-[11px] font-bold text-orange-500 hover:text-orange-600 flex items-center gap-1 transition-colors"
+                        class="text-[10px] font-black text-moca uppercase tracking-widest flex items-center gap-1 transition-colors"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                         Adicionar observação
                       </button>
 
                       <!-- 3. Campo de Edição -->
-                      <div v-else class="mt-2 animate-fade-in">
+                      <div v-else class="mt-2 animate-fade-in bg-bege-cream/30 p-3 rounded-2xl border border-bege-soft/20">
                           <textarea 
                               v-model="item.observacoes" 
                               rows="2"
                               ref="obsInput"
                               placeholder="Ex: Sem cebola, bem passado..."
-                              class="w-full text-xs p-2 rounded-xl border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none bg-gray-50 mb-2"
+                              class="w-full text-xs p-3 rounded-xl border border-bege-soft focus:border-moca focus:ring-1 focus:ring-moca outline-none bg-branco mb-2"
                           ></textarea>
                           <button 
                             @click="item.editandoObs = false"
-                            class="text-xs font-bold text-white bg-orange-500 hover:bg-orange-600 px-3 py-1 rounded-lg transition-colors shadow-sm"
+                            class="w-full text-[10px] font-black text-branco bg-moca hover:bg-cafe px-3 py-2 rounded-xl transition-colors shadow-sm uppercase tracking-widest"
                           >
                             Salvar Observação
                           </button>
@@ -378,42 +385,42 @@
                   </div>
                   
                   <div class="flex items-center justify-between mt-2">
-                    <div class="flex items-center gap-4 bg-gray-100 p-1.5 rounded-xl">
-                        <button @click="alterarQuantidade(index, -1)" class="w-8 h-8 flex items-center justify-center bg-white rounded-lg shadow-sm hover:text-orange-500 transition-colors">
+                    <div class="flex items-center gap-3 bg-bege-cream/50 p-1 rounded-xl border border-bege-soft/20">
+                        <button @click="alterarQuantidade(index, -1)" class="w-8 h-8 flex items-center justify-center bg-branco rounded-lg shadow-sm hover:text-moca transition-colors border border-bege-soft/20">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" /></svg>
                         </button>
-                        <span class="text-sm font-black w-4 text-center">{{ item.quantidade }}</span>
-                        <button @click="alterarQuantidade(index, 1)" class="w-8 h-8 flex items-center justify-center bg-white rounded-lg shadow-sm hover:text-orange-500 transition-colors">
+                        <span class="text-sm font-black w-4 text-center text-cafe">{{ item.quantidade }}</span>
+                        <button @click="alterarQuantidade(index, 1)" class="w-8 h-8 flex items-center justify-center bg-branco rounded-lg shadow-sm hover:text-moca transition-colors border border-bege-soft/20">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                         </button>
                     </div>
-                    <button @click="removerDoCarrinho(index)" class="text-xs text-red-500 font-bold uppercase tracking-widest hover:bg-red-50 px-3 py-1 rounded-lg transition-colors">Remover</button>
+                    <button @click="removerDoCarrinho(index)" class="text-[10px] text-red-500 font-black uppercase tracking-widest hover:bg-red-50 px-3 py-2 rounded-xl transition-colors">Remover</button>
                   </div>
               </div>
           </div>
       </div>
 
       <template #footer-fixed>
-          <div class="bg-white p-6 w-full max-w-2xl mx-auto border-t border-gray-100">
-              <div v-if="!mesaSelecionadaId" class="bg-red-50 p-4 rounded-2xl border border-red-100 mb-4 flex items-center gap-3">
+          <div class="bg-branco p-6 w-full max-w-2xl mx-auto border-t border-bege-soft">
+              <div v-if="!mesaSelecionadaId" class="bg-red-50 p-4 rounded-2xl border border-red-100 mb-5 flex items-center gap-3">
                   <span class="text-xl">⚠️</span>
-                  <p class="text-[11px] text-red-700 font-black uppercase tracking-wider">
-                      Selecione o número da sua MESA no topo da página
+                  <p class="text-[10px] text-red-700 font-black uppercase tracking-wider leading-tight">
+                      Selecione o número da sua MESA no topo da página para finalizar
                   </p>
               </div>
 
               <div class="flex justify-between items-center mb-6 px-1">
-                  <span class="text-gray-400 font-bold text-xs uppercase tracking-widest">Valor Final</span>
-                  <span class="text-3xl font-black text-gray-900">{{ formatCurrency(totalCart) }}</span>
+                  <span class="text-bege-torrado font-black text-xs uppercase tracking-widest">Total do Pedido</span>
+                  <span class="text-3xl font-black text-cafe">{{ formatCurrency(totalCart) }}</span>
               </div>
 
               <button 
                   @click="finalizarPedido"
-                  :disabled="!mesaSelecionadaId || loadingPedido"
-                  class="w-full py-5 bg-green-600 hover:bg-green-700 active:bg-green-800 disabled:bg-gray-200 disabled:text-gray-400 text-white font-black rounded-2xl transition-all shadow-xl shadow-green-100 flex items-center justify-center gap-3"
+                  :disabled="!mesaSelecionadaId || loadingPedido || cart.length === 0"
+                  class="w-full py-5 bg-green-600 hover:bg-green-700 active:bg-green-800 disabled:bg-bege-soft disabled:text-bege-torrado text-branco font-black rounded-2xl transition-all shadow-xl shadow-green-100 flex items-center justify-center gap-3 uppercase tracking-widest"
               >
-                  <span v-if="loadingPedido" class="w-5 h-5 border-3 border-white/30 border-t-white rounded-full animate-spin"></span>
-                  {{ loadingPedido ? 'ENVIANDO PEDIDO...' : 'FAZER PEDIDO AGORA' }}
+                  <span v-if="loadingPedido" class="w-5 h-5 border-3 border-branco/30 border-t-branco rounded-full animate-spin"></span>
+                  {{ loadingPedido ? 'ENVIANDO...' : 'FAZER PEDIDO AGORA' }}
               </button>
           </div>
       </template>
@@ -430,6 +437,7 @@ import { useVariacoes } from '~/composables/useVariacoes';
 import { usePedidos } from '~/composables/usePedidos';
 import { useToast } from '~/composables/useToast';
 import { useRoute } from 'vue-router';
+import { useAuthStore } from '~/stores/auth';
 
 const { fetchCategorias } = useCategorias();
 const { tamanhos, fetchTamanhos } = useTamanhos();
@@ -439,8 +447,18 @@ const { mesas, fetchMesas, criarPedido } = usePedidos();
 const toast = useToast();
 const route = useRoute();
 
+const authStore = useAuthStore();
+
 const mesaSelecionadaId = ref<string | null>(null);
-const isMesaLocked = ref(false);
+const mesaInvalida = ref(false);
+const isMesaLocked = computed(() => {
+    // Se estiver logado (caixa, admin, etc), NUNCA bloqueia a mesa
+    if (authStore.perfil) return false;
+    
+    // Para clientes, se houve QUALQUER tentativa de mesa via URL, bloqueamos a troca manual
+    return !!route.query.mesa;
+});
+
 const expandedSection = ref<string | null>('salgados');
 const cart = ref<any[]>([]);
 const loadingPedido = ref(false);
@@ -505,11 +523,19 @@ onMounted(async () => {
     // Lógica de Mesa via URL (?mesa=X)
     const mesaQuery = route.query.mesa;
     if (mesaQuery) {
-        const mesa = mesas.value.find(m => m.numero === parseInt(mesaQuery as string));
+        const numMesa = parseInt(mesaQuery as string);
+        const mesa = mesas.value.find(m => m.numero === numMesa);
+        
         if (mesa) {
             mesaSelecionadaId.value = mesa.id;
-            isMesaLocked.value = true;
+            mesaInvalida.value = false;
             toast.success(`Bem-vindo!`, `Você está na Mesa ${mesa.numero}`);
+        } else {
+            // Se o usuário digitou uma mesa que não existe (ex: mesa=10)
+            mesaInvalida.value = true;
+            if (!authStore.perfil) {
+                toast.error('Mesa Inválida', 'Esta mesa não existe em nosso sistema.');
+            }
         }
     }
 });

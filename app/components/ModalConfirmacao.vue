@@ -11,10 +11,10 @@
 
     <template #footer>
       <BaseButton variant="outline" @click="$emit('cancel')">
-        Cancelar
+        {{ cancelLabel }}
       </BaseButton>
-      <BaseButton variant="danger" :loading="loading" @click="$emit('confirm')">
-        Confirmar Exclusão
+      <BaseButton :variant="variant" :loading="loading" @click="$emit('confirm')">
+        {{ confirmLabel }}
       </BaseButton>
     </template>
   </BaseModal>
@@ -22,18 +22,24 @@
 
 <script setup lang="ts">
 /**
- * Componente ModalConfirmacao - Especializado em ações destrutivas
+ * Componente ModalConfirmacao - Especializado em ações de confirmação
  */
 interface Props {
   show: boolean;
   title?: string;
   message: string;
   loading?: boolean;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'outline';
 }
 
 withDefaults(defineProps<Props>(), {
   title: 'Confirmar Ação',
-  loading: false
+  loading: false,
+  confirmLabel: 'Confirmar',
+  cancelLabel: 'Cancelar',
+  variant: 'danger'
 });
 
 defineEmits(['confirm', 'cancel']);

@@ -1,58 +1,58 @@
 <template>
-  <div class="p-8 max-w-7xl mx-auto">
-    <div class="mb-10">
-      <h1 class="text-heading-1 text-cafe mb-2">Fechar <span class="text-moca">Mesa</span></h1>
-      <p class="text-body-lg text-bege-torrado">Gerencie o agrupamento de pedidos e pagamentos</p>
+  <div class="p-4 sm:p-8 max-w-7xl mx-auto">
+    <div class="mb-8 sm:mb-10 text-center sm:text-left">
+      <h1 class="text-2xl sm:text-heading-1 text-cafe mb-1 sm:mb-2 font-black">Fechar <span class="text-moca">Mesa</span></h1>
+      <p class="text-sm sm:text-body-lg text-bege-torrado font-bold">Gerencie o agrupamento de pedidos e pagamentos</p>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
       <!-- Coluna da Esquerda: Seleção de Mesa e Resumo -->
       <div class="lg:col-span-2 space-y-6">
         <!-- SELEÇÃO DE MESA -->
-        <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft p-6">
-          <h2 class="text-caption font-bold text-bege-torrado uppercase tracking-widest mb-4">Selecione a Mesa</h2>
-          <div class="grid grid-cols-4 sm:grid-cols-6 gap-3">
+        <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft p-5 sm:p-6">
+          <h2 class="text-[10px] sm:text-caption font-black text-bege-torrado uppercase tracking-widest mb-4">Selecione a Mesa</h2>
+          <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2 sm:gap-3">
             <button 
               v-for="mesa in mesasOcupadas" :key="mesa.id"
               @click="selecionarMesa(mesa)"
-              class="h-14 rounded-xl font-black text-lg transition-all border-2 flex items-center justify-center transform active:scale-95 duration-200"
+              class="h-12 sm:h-14 rounded-xl font-black text-base sm:text-lg transition-all border-2 flex items-center justify-center transform active:scale-95 duration-200"
               :class="mesaSelecionada?.id === mesa.id 
-                ? 'bg-cafe border-cafe text-white shadow-lg' 
-                : 'bg-bege-cream border-bege-soft text-cafe hover:border-moca hover:text-moca'"
+                ? 'bg-cafe border-cafe text-white shadow-lg shadow-cafe/20' 
+                : 'bg-bege-cream/30 border-bege-soft text-cafe hover:border-moca hover:text-moca'"
             >
               {{ mesa.numero }}
             </button>
           </div>
-          <div v-if="mesasOcupadas.length === 0" class="py-8 text-center text-bege-torrado text-sm italic border-2 border-dashed border-bege-soft rounded-xl mt-4">
+          <div v-if="mesasOcupadas.length === 0" class="py-10 text-center text-bege-torrado text-xs sm:text-sm font-bold italic border-2 border-dashed border-bege-soft/50 rounded-2xl mt-4">
             Não há mesas ocupadas no momento.
           </div>
         </div>
 
         <!-- LISTA DE ITENS AGRUPADOS -->
         <div v-if="mesaSelecionada" class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden">
-          <div class="p-6 border-b border-bege-soft flex justify-between items-center bg-bege-cream/30">
-            <h2 class="text-caption font-bold text-bege-torrado uppercase tracking-widest">Resumo do Consumo - Mesa {{ mesaSelecionada.numero }}</h2>
-            <span class="text-[10px] font-bold text-moca bg-moca/10 px-3 py-1 rounded-lg uppercase border border-moca/20">
+          <div class="p-5 sm:p-6 border-b border-bege-soft flex flex-col sm:flex-row justify-between items-center bg-bege-cream/20 gap-3">
+            <h2 class="text-[10px] sm:text-caption font-black text-bege-torrado uppercase tracking-widest">Resumo do Consumo - Mesa {{ mesaSelecionada.numero }}</h2>
+            <span class="text-[9px] sm:text-[10px] font-black text-moca bg-moca/10 px-3 py-1 rounded-lg uppercase border border-moca/20 tracking-wider">
               {{ itensAgrupados.length }} Itens únicos
             </span>
           </div>
 
-          <div class="divide-y divide-bege-soft max-h-[400px] overflow-y-auto custom-scrollbar">
-            <div v-for="item in itensAgrupados" :key="item.chave" class="p-5 flex justify-between items-center hover:bg-bege-cream/50 transition-colors">
-              <div class="flex gap-4 items-center">
-                <div class="w-10 h-10 bg-bege-cream rounded-xl flex items-center justify-center font-black text-cafe text-xs shadow-sm border border-bege-soft">
+          <div class="divide-y divide-bege-soft/50 max-h-[50vh] lg:max-h-[400px] overflow-y-auto custom-scrollbar">
+            <div v-for="item in itensAgrupados" :key="item.chave" class="p-4 sm:p-5 flex justify-between items-center hover:bg-bege-cream/10 transition-colors">
+              <div class="flex gap-3 sm:gap-4 items-center">
+                <div class="w-8 h-8 sm:w-10 sm:h-10 bg-bege-cream rounded-xl flex items-center justify-center font-black text-cafe text-[10px] sm:text-xs shadow-sm border border-bege-soft">
                   {{ item.quantidade }}x
                 </div>
-                <div>
-                  <h4 class="text-body font-bold text-cafe leading-tight">{{ item.nome }}</h4>
-                  <p class="text-caption text-bege-torrado font-medium">{{ item.descricao }}</p>
+                <div class="min-w-0">
+                  <h4 class="text-xs sm:text-body font-black text-cafe-dark leading-tight truncate">{{ item.nome }}</h4>
+                  <p class="text-[10px] sm:text-caption text-bege-torrado font-bold leading-tight">{{ item.descricao }}</p>
                 </div>
               </div>
-              <span class="text-body font-black text-cafe-dark">{{ formatCurrency(item.preco_unitario * item.quantidade) }}</span>
+              <span class="text-xs sm:text-body font-black text-cafe-dark tabular-nums ml-2 whitespace-nowrap">{{ formatCurrency(item.preco_unitario * item.quantidade) }}</span>
             </div>
           </div>
 
-          <div v-if="itensAgrupados.length === 0" class="p-12 text-center text-bege-torrado text-sm">
+          <div v-if="itensAgrupados.length === 0" class="p-12 text-center text-bege-torrado text-xs sm:text-sm font-bold italic">
             Nenhum item encontrado para esta mesa.
           </div>
         </div>

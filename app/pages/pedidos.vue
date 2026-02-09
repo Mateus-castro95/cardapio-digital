@@ -1,26 +1,26 @@
 <template>
-  <div class="p-8 max-w-7xl mx-auto min-h-screen">
+  <div class="p-4 sm:p-8 max-w-7xl mx-auto min-h-screen">
     <!-- Cabeçalho -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 sm:mb-10 gap-6">
       <div>
-        <h1 class="text-heading-1 text-cafe mb-2">Acompanhar <span class="text-moca">Pedidos</span></h1>
-        <p class="text-body-lg text-bege-torrado">Monitore o status de cada mesa em tempo real</p>
+        <h1 class="text-2xl sm:text-heading-1 text-cafe mb-1 sm:mb-2">Acompanhar <span class="text-moca">Pedidos</span></h1>
+        <p class="text-sm sm:text-body-lg text-bege-torrado">Monitore o status de cada mesa em tempo real</p>
       </div>
-      <div class="flex items-center gap-3 bg-branco px-4 py-2 rounded-xl border border-bege-soft shadow-sm">
+      <div class="flex items-center gap-3 bg-branco px-4 py-2 rounded-xl border border-bege-soft shadow-sm shrink-0">
         <span class="relative flex h-3 w-3">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
           <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
         </span>
-        <span class="text-xs font-bold text-cafe-dark uppercase tracking-wider">Monitorando</span>
+        <span class="text-[10px] sm:text-xs font-black text-cafe-dark uppercase tracking-wider">Monitorando Ao Vivo</span>
       </div>
     </div>
 
     <!-- Filtros Rápidos -->
-    <div class="flex gap-3 mb-8 overflow-x-auto pb-2 custom-scrollbar">
+    <div class="flex gap-3 mb-8 overflow-x-auto pb-4 custom-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
       <button 
         v-for="f in filtros" :key="f.label"
         @click="filtroAtual = f.value"
-        class="px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap border-2"
+        class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap border-2"
         :class="filtroAtual === f.value 
           ? 'bg-cafe border-cafe text-white shadow-lg' 
           : 'bg-branco border-bege-soft text-bege-torrado hover:border-moca hover:text-moca'"
@@ -30,13 +30,13 @@
     </div>
 
     <!-- Lista de Pedidos -->
-    <div v-if="pedidosFiltrados.length > 0" class="space-y-6">
+    <div v-if="pedidosFiltrados.length > 0" class="space-y-6 sm:space-y-8">
       <div 
         v-for="pedido in pedidosFiltrados" :key="pedido.id"
-        class="bg-branco rounded-3xl border border-bege-soft shadow-premium hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 overflow-hidden group"
+        class="bg-branco rounded-3xl border border-bege-soft shadow-premium hover:shadow-xl transition-all duration-300 overflow-hidden group"
       >
         <!-- Conteúdo Principal -->
-        <div class="p-6 flex flex-col md:flex-row gap-8 items-start md:items-center relative">
+        <div class="p-5 sm:p-6 flex flex-col md:flex-row gap-6 sm:gap-8 items-start md:items-center relative">
           
           <!-- Indicador de Status Lateral -->
           <div class="absolute left-0 top-0 bottom-0 w-1.5 transition-colors"
@@ -49,17 +49,17 @@
           ></div>
 
           <!-- Mesa -->
-          <div class="flex flex-col items-center justify-center bg-cafe text-white rounded-2xl p-5 min-w-[110px] shrink-0 shadow-lg ml-2">
-            <span class="text-[10px] uppercase font-black tracking-widest opacity-60 mb-1">Mesa</span>
-            <span class="text-4xl font-black">{{ pedido.mesa?.numero || '?' }}</span>
+          <div class="flex flex-row md:flex-col items-center justify-center bg-cafe text-white rounded-2xl p-3 sm:p-5 min-w-full md:min-w-[110px] shrink-0 shadow-lg ml-0 md:ml-2 gap-2 md:gap-0">
+            <span class="text-[9px] sm:text-[10px] uppercase font-black tracking-widest opacity-60 md:mb-1">Mesa</span>
+            <span class="text-2xl sm:text-4xl font-black">{{ pedido.mesa?.numero || '?' }}</span>
           </div>
 
           <!-- Detalhes -->
           <div class="flex-grow min-w-0 w-full">
-            <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
               <div class="flex items-center gap-3">
-                <span class="text-heading-3 text-cafe-dark">Pedido #{{ String(pedido.numero_sequencial).padStart(3, '0') }}</span>
-                <span class="text-[10px] text-bege-torrado font-bold uppercase tracking-wider bg-bege-cream px-2 py-1 rounded-lg border border-bege-soft/50">
+                <span class="text-lg sm:text-heading-3 text-cafe-dark font-black">Pedido #{{ String(pedido.numero_sequencial).padStart(3, '0') }}</span>
+                <span class="text-[9px] sm:text-[10px] text-bege-torrado font-black uppercase tracking-wider bg-bege-cream px-2 py-1 rounded-lg border border-bege-soft/50 tabular-nums">
                   {{ formatTime(pedido.criado_em) }}
                 </span>
               </div>
@@ -68,7 +68,7 @@
               <div class="shrink-0">
                 <button 
                   v-if="pedido.status === 'pronto'"
-                  class="bg-green-500 hover:bg-green-600 text-white shadow-lg shadow-green-500/20 py-2.5 px-5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 flex items-center gap-2"
+                  class="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-600/20 py-2.5 px-6 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 flex items-center justify-center gap-2"
                   @click="handleUpdateStatus(pedido.id, 'entregue')"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -76,7 +76,7 @@
                   </svg>
                   Marcar Entregue
                 </button>
-                <div v-else-if="pedido.status === 'entregue'" class="flex items-center gap-2 text-green-600 font-bold text-[10px] uppercase bg-green-50 px-3 py-1.5 rounded-xl border border-green-100">
+                <div v-else-if="pedido.status === 'entregue'" class="flex items-center justify-center sm:justify-start gap-2 text-green-700 font-black text-[9px] uppercase bg-green-50 px-3 py-2 rounded-xl border border-green-100 shadow-sm">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                   </svg>
@@ -85,19 +85,19 @@
               </div>
             </div>
             
-            <div class="flex flex-wrap gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
               <div 
                 v-for="(item, idx) in pedido.itens" :key="idx"
-                class="bg-bege-cream/50 p-3 rounded-xl border border-bege-soft hover:border-moca/30 flex flex-col gap-1 min-w-[150px] transition-colors"
+                class="bg-bege-cream/30 p-4 rounded-2xl border border-bege-soft/40 hover:border-moca/30 flex flex-col gap-1 transition-colors group/item"
               >
-                <div class="flex items-center gap-2">
-                  <span class="w-5 h-5 flex items-center justify-center bg-cafe text-white rounded text-[10px] font-black">{{ item.quantidade }}</span>
-                  <span class="text-xs font-bold text-cafe-dark truncate">{{ getItemName(item) }}</span>
+                <div class="flex items-center gap-3">
+                  <span class="w-6 h-6 flex items-center justify-center bg-cafe text-white rounded-lg text-[10px] font-black shadow-sm">{{ item.quantidade }}</span>
+                  <span class="text-xs font-black text-cafe-dark truncate">{{ getItemName(item) }}</span>
                 </div>
-                <div v-if="getItemDescription(item)" class="text-[10px] text-bege-torrado font-medium pl-7 leading-tight">
+                <div v-if="getItemDescription(item)" class="text-[10px] text-bege-torrado font-bold pl-9 leading-snug">
                   {{ getItemDescription(item) }}
                 </div>
-                <div v-if="item.observacoes" class="mt-1 ml-7 text-[9px] text-red-500 font-bold uppercase truncate bg-red-50 px-1 py-0.5 rounded w-fit">
+                <div v-if="item.observacoes" class="mt-2 ml-9 text-[9px] text-red-600 font-extrabold uppercase bg-red-50 px-2 py-1 rounded-lg w-fit border border-red-100 shadow-sm leading-none">
                   Obs: {{ item.observacoes }}
                 </div>
               </div>
@@ -105,35 +105,35 @@
           </div>
         </div>
 
-        <!-- Linha do Tempo -->
-        <div class="px-8 py-6 bg-bege-cream/30 border-t border-bege-soft">
-          <div class="flex items-center justify-between relative max-w-3xl mx-auto">
+        <!-- Linha do Tempo (Stepper) -->
+        <div class="px-5 sm:px-8 py-5 sm:py-6 bg-bege-cream/20 border-t border-bege-soft/50">
+          <div class="flex items-center justify-between relative max-w-2xl mx-auto px-2">
             <!-- Linha de fundo -->
-            <div class="absolute top-1/2 left-0 w-full h-0.5 bg-bege-soft -translate-y-1/2 z-0"></div>
+            <div class="absolute top-1/2 left-0 w-full h-0.5 bg-bege-soft/50 -translate-y-1/2 z-0"></div>
             
             <!-- Etapas -->
             <div 
               v-for="(step, index) in steps" :key="step.status"
               class="relative z-10 flex flex-col items-center group/step"
-              :class="getStatusIndex(pedido.status) >= index ? 'text-cafe' : 'text-bege-torrado/50'"
+              :class="getStatusIndex(pedido.status) >= index ? 'text-cafe' : 'text-bege-torrado/40'"
             >
               <!-- Bolinha -->
               <div 
-                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 border-4 bg-white"
+                class="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all duration-500 border-2 sm:border-4 bg-white"
                 :class="[
                   getStatusIndex(pedido.status) >= index 
-                    ? 'border-moca shadow-lg scale-110' 
-                    : 'border-bege-soft'
+                    ? 'border-moca shadow-md scale-110' 
+                    : 'border-bege-soft/60'
                 ]"
               >
                 <div 
                   v-if="getStatusIndex(pedido.status) >= index"
-                  class="w-3 h-3 bg-moca rounded-full"
+                  class="w-2 h-2 sm:w-3 sm:h-3 bg-moca rounded-full shadow-inner"
                   :class="{'animate-pulse': getStatusIndex(pedido.status) === index}"
                 ></div>
               </div>
               
-              <span class="text-[9px] font-black uppercase tracking-widest mt-3 transition-colors">
+              <span class="text-[8px] sm:text-[9px] font-black uppercase tracking-wider mt-2.5 transition-colors text-center truncate w-12 sm:w-auto">
                 {{ step.label }}
               </span>
             </div>

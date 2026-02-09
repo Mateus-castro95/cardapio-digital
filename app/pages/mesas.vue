@@ -1,66 +1,66 @@
 <template>
-  <div class="p-8 max-w-7xl mx-auto">
-    <div class="flex justify-between items-center mb-10">
-      <div>
-        <h1 class="text-heading-1 text-cafe mb-2">Gerenciar <span class="text-moca">Mesas</span></h1>
-        <p class="text-body-lg text-bege-torrado">Monitore a ocupação em tempo real</p>
+  <div class="p-4 sm:p-8 max-w-7xl mx-auto">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 sm:mb-10 gap-6">
+      <div class="text-left">
+        <h1 class="text-2xl sm:text-heading-1 text-cafe mb-1 sm:mb-2 font-black">Gerenciar <span class="text-moca">Mesas</span></h1>
+        <p class="text-sm sm:text-body-lg text-bege-torrado font-bold">Monitore a ocupação em tempo real</p>
       </div>
-      <div class="flex gap-3">
+      <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
         <button 
             v-if="mesas.length === 0"
             @click="seedMesas" 
             :disabled="loadingSeed"
-            class="px-6 py-3 rounded-xl border border-bege-torrado text-cafe hover:bg-bege-cream transition-colors font-medium flex items-center gap-2"
+            class="w-full sm:w-auto px-6 py-3 rounded-xl border-2 border-bege-torrado text-cafe hover:bg-bege-cream transition-colors font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2"
         >
-          <span v-if="loadingSeed" class="animate-spin">⌛</span>
-          GERAR 5 MESAS
+          <span v-if="loadingSeed" class="animate-spin text-lg">⌛</span>
+          Gerar 5 Mesas
         </button>
         <button 
           @click="showAddMesaModal = true" 
-          class="px-6 py-3 rounded-xl bg-cafe text-branco hover:bg-cafe-dark shadow-premium hover:shadow-lg transition-all font-medium flex items-center gap-2"
+          class="w-full sm:w-auto px-6 py-3 rounded-xl bg-cafe text-branco hover:bg-cafe-dark shadow-lg hover:shadow-xl transition-all font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-          NOVA MESA
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          Nova Mesa
         </button>
       </div>
     </div>
 
     <!-- Grid de Mesas -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
       <div 
         v-for="mesa in mesas" :key="mesa.id"
-        class="relative bg-branco rounded-3xl p-6 border-2 transition-all duration-300 group shadow-sm hover:shadow-premium"
+        class="relative bg-branco rounded-3xl p-4 sm:p-6 border-2 transition-all duration-300 group shadow-sm hover:shadow-premium"
         :class="mesa.status === 'ocupada' ? 'border-moca/50 bg-moca/5' : 'border-bege-soft hover:border-cafe/30'"
       >
-        <div class="absolute top-4 right-4">
+        <div class="absolute top-4 right-4 sm:top-5 sm:right-5">
             <span 
-                class="w-3 h-3 rounded-full block shadow-sm"
+                class="w-2.5 h-2.5 sm:w-3 h-3 rounded-full block shadow-sm"
                 :class="mesa.status === 'ocupada' ? 'bg-moca animate-pulse' : 'bg-green-500'"
             ></span>
         </div>
 
-        <div class="flex flex-col items-center text-center py-6">
-            <span class="text-caption uppercase font-black tracking-[0.2em] text-bege-torrado mb-2">Mesa</span>
-            <span class="text-5xl font-black text-cafe-dark mb-6">{{ mesa.numero }}</span>
+        <div class="flex flex-col items-center text-center py-4 sm:py-6">
+            <span class="text-[9px] sm:text-caption uppercase font-black tracking-[0.2em] text-bege-torrado mb-1 sm:mb-2 leading-none">Mesa</span>
+            <span class="text-4xl sm:text-5xl font-black text-cafe-dark mb-4 sm:mb-6 leading-none">{{ mesa.numero }}</span>
             
             <div 
-                class="px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider"
-                :class="mesa.status === 'ocupada' ? 'bg-moca/20 text-moca-dark' : 'bg-green-100 text-green-700'"
+                class="px-3 sm:px-4 py-1 sm:py-1.5 rounded-lg sm:rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider shadow-sm"
+                :class="mesa.status === 'ocupada' ? 'bg-moca/10 text-moca-dark' : 'bg-green-50 text-green-700'"
             >
                 {{ mesa.status }}
             </div>
         </div>
 
         <!-- QR Code Link & Action -->
-        <div class="mt-4 pt-4 border-t border-bege-soft flex justify-center gap-2">
-            <button @click="abrirQrCode(mesa.numero)" class="p-2.5 bg-bege-cream rounded-xl text-cafe hover:bg-cafe hover:text-branco transition-colors" title="Ver QR Code">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1l-1 1m-1 1h.01m0 0h.01m0 0h.01M12 20h.01m0 0h.01m0 0h.01M7 7h.01m0 0h.01m0 0h.01M7 12h.01m0 0h.01m0 0h.01M7 17h.01m0 0h.01m0 0h.01M12 7h.01m0 0h.01m0 0h.01M12 12h.01m0 0h.01m0 0h.01M12 17h.01m0 0h.01m0 0h.01M17 7h.01m0 0h.01m0 0h.01M17 12h.01m0 0h.01m0 0h.01M17 17h.01m0 0h.01m0 0h.01" /></svg>
+        <div class="mt-2 sm:mt-4 pt-3 sm:pt-4 border-t border-bege-soft/50 flex justify-center gap-1.5 sm:gap-2">
+            <button @click="abrirQrCode(mesa.numero)" class="p-2 sm:p-2.5 bg-bege-cream/50 rounded-xl text-cafe hover:bg-cafe hover:text-branco transition-all shadow-sm" title="Ver QR Code">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1l-1 1m-1 1h.01m0 0h.01m0 0h.01M12 20h.01m0 0h.01m0 0h.01M7 7h.01m0 0h.01m0 0h.01M7 12h.01m0 0h.01m0 0h.01M7 17h.01m0 0h.01m0 0h.01M12 7h.01m0 0h.01m0 0h.01M12 12h.01m0 0h.01m0 0h.01M12 17h.01m0 0h.01m0 0h.01M17 7h.01m0 0h.01m0 0h.01M17 12h.01m0 0h.01m0 0h.01M17 17h.01m0 0h.01m0 0h.01" /></svg>
             </button>
-            <button @click="copiarLinkMesa(mesa.numero)" class="p-2.5 bg-bege-cream rounded-xl text-bege-torrado hover:bg-cafe hover:text-branco transition-colors" title="Copiar Link">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
+            <button @click="copiarLinkMesa(mesa.numero)" class="p-2 sm:p-2.5 bg-bege-cream/50 rounded-xl text-bege-torrado hover:bg-cafe hover:text-branco transition-all shadow-sm" title="Copiar Link">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
             </button>
-            <button @click="liberarMesa(mesa)" v-if="mesa.status === 'ocupada'" class="p-2.5 bg-red-50 rounded-xl text-red-400 hover:bg-red-500 hover:text-white transition-colors" title="Liberar Mesa">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <button @click="liberarMesa(mesa)" v-if="mesa.status === 'ocupada'" class="p-2 sm:p-2.5 bg-red-50 rounded-xl text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-sm" title="Liberar Mesa">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </button>
         </div>
       </div>

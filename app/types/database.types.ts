@@ -333,6 +333,37 @@ export type Database = {
                         referencedColumns: ["id"]
                     }
                 ]
+            },
+            perfis: {
+                Row: {
+                    id: string
+                    nome: string
+                    email: string
+                    cargo: Database['public']['Enums']['cargo_colaborador']
+                    atualizado_em: string
+                }
+                Insert: {
+                    id: string
+                    nome: string
+                    email: string
+                    cargo?: Database['public']['Enums']['cargo_colaborador']
+                    atualizado_em?: string
+                }
+                Update: {
+                    id?: string
+                    nome?: string
+                    email?: string
+                    cargo?: Database['public']['Enums']['cargo_colaborador']
+                    atualizado_em?: string
+                }
+                Relationships: [
+                    {
+                        foreignKeyName: "perfis_id_fkey"
+                        columns: ["id"]
+                        referencedRelation: "users"
+                        referencedColumns: ["id"]
+                    }
+                ]
             }
         }
         Views: {
@@ -342,7 +373,7 @@ export type Database = {
             [_ in never]: never
         }
         Enums: {
-            [_ in never]: never
+            cargo_colaborador: 'super_admin' | 'dono' | 'caixa' | 'cozinha'
         }
         CompositeTypes: {
             [_ in never]: never
