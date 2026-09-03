@@ -10,31 +10,40 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                // Paleta de Cores Profissional (conforme a imagem do usuário)
+                // Paleta Nobre: Preto com Dourado (Adega & Wine Bar)
                 cafe: {
-                    light: '#8B6B42',
-                    DEFAULT: '#6F4F28',
-                    dark: '#4A351B',
+                    light: '#FFF2B2',   // Dourado claríssimo brilhante
+                    DEFAULT: '#D4AF37', // Dourado metálico nobre clássico
+                    hover: '#BFA030',   // Dourado fechado para hover
+                    dark: '#E8C86A',    // Dourado vivo luminoso (para títulos e textos com text-cafe-dark)
                 },
                 moca: {
-                    light: '#B37A60',
-                    DEFAULT: '#9B5C42',
-                    dark: '#7F4A35',
+                    light: '#FFF4CC',   // Champagne suave
+                    DEFAULT: '#F0CE65', // Dourado brilhante / realce
+                    dark: '#D4AF37',    // Ouro clássico
                 },
                 bege: {
-                    torrado: '#A67B5B',
-                    claro: '#C0977D',
-                    cream: '#FDFBF7', // Bege claríssimo para fundos de sistema
-                    soft: '#E8D8C4',
+                    torrado: '#CFC3AA', // Letras champagne / leitura secundária suave e nítida
+                    claro: '#F7E5B5',   // Dourado suave luminoso para textos de destaque
+                    cream: '#0A0A0C',   // Fundo preto da adega (Obsidian Jet Black)
+                    soft: '#DDD2BC',    // Letras champagne nos menus e links (100% legíveis sobre o preto)
+                },
+                dourado: {
+                    light: '#F7E7A9',
+                    DEFAULT: '#D4AF37',
+                    dark: '#AA8518',
                 },
                 // Cores complementares/básicas
                 preto: {
-                    DEFAULT: '#1A1A1A',
+                    light: '#1E1E24',
+                    DEFAULT: '#0A0A0C',
+                    card: '#141417',
+                    surface: '#18181C',
                     pure: '#000000',
                 },
                 branco: {
                     DEFAULT: '#FFFFFF',
-                    dirty: '#F5F2ED',
+                    dirty: '#FAF8F5',
                 },
             },
             fontFamily: {
@@ -52,7 +61,8 @@ module.exports = {
                 'caption': ['0.75rem', { lineHeight: '1.4', fontWeight: '500' }],
             },
             boxShadow: {
-                'premium': '0 4px 20px -2px rgba(111, 79, 40, 0.1), 0 2px 10px -1px rgba(111, 79, 40, 0.05)',
+                'premium': '0 4px 20px -2px rgba(0, 0, 0, 0.7), 0 0 15px -2px rgba(212, 175, 55, 0.08)',
+                'gold': '0 4px 20px -2px rgba(212, 175, 55, 0.25)',
             }
         },
     },

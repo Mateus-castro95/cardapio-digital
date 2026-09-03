@@ -3,8 +3,8 @@
     <!-- Cabeçalho -->
     <div class="mb-10 animate-fade-in-up">
       <div class="flex items-center gap-4 mb-4">
-        <div class="w-12 h-12 bg-cafe text-branco rounded-2xl flex items-center justify-center text-2xl shadow-premium">
-          ⚙️
+        <div class="w-12 h-12 bg-cafe text-branco rounded-2xl flex items-center justify-center shadow-premium">
+          <Cog6ToothIcon class="w-6 h-6 text-dourado-vivo" />
         </div>
         <div>
           <h1 class="text-heading-2 sm:text-heading-1 text-cafe leading-none">Configurações</h1>
@@ -38,8 +38,8 @@
           class="group flex flex-col sm:flex-row sm:items-center justify-between p-6 bg-bege-cream/20 hover:bg-bege-cream/40 rounded-3xl border border-bege-soft/30 transition-all duration-300"
         >
           <div class="flex items-center gap-5 mb-4 sm:mb-0">
-            <div class="w-14 h-14 bg-branco rounded-2xl flex items-center justify-center text-xl shadow-sm border border-bege-soft group-hover:scale-105 transition-transform">
-              👤
+            <div class="w-14 h-14 bg-branco rounded-2xl flex items-center justify-center shadow-sm border border-bege-soft group-hover:scale-105 transition-transform">
+              <UserIcon class="w-7 h-7 text-cafe-dark" />
             </div>
             <div>
               <h3 class="font-black text-cafe uppercase text-sm tracking-tight">{{ perfil.nome }}</h3>
@@ -69,9 +69,7 @@
                 </option>
               </select>
               <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-bege-claro">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                </svg>
+                <ChevronDownIcon class="h-4 w-4" />
               </div>
             </div>
           </div>
@@ -98,6 +96,8 @@ import { usePerfis, type Cargo, type Perfil } from '~/composables/usePerfis';
 import { useAuthStore } from '~/stores/auth';
 import { useToast } from '~/composables/useToast';
 import ModalConfirmacao from '~/components/ModalConfirmacao.vue';
+import { ChevronDownIcon } from '@heroicons/vue/20/solid';
+import { Cog6ToothIcon, UserIcon } from '@heroicons/vue/24/outline';
 
 const { perfis, loading, fetchPerfis, updateCargo } = usePerfis();
 const authStore = useAuthStore();

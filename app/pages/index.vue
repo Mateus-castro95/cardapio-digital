@@ -17,8 +17,8 @@
             {{ statsOcupacao.total }}
           </h2>
         </div>
-        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-bege-cream/50 flex items-center justify-center text-xl sm:text-2xl relative shadow-inner">
-          🪑
+        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-bege-cream/50 flex items-center justify-center relative shadow-inner">
+          <TableCellsIcon class="w-5 h-5 sm:w-6 sm:h-6 text-cafe" />
           <span 
             v-if="statsOcupacao.ocupadas > 0"
             class="absolute -top-1 -right-1 w-3.5 h-3.5 sm:w-4 sm:h-4 bg-moca rounded-full border-2 border-branco animate-pulse shadow-sm"
@@ -76,7 +76,7 @@
 
             <!-- Empty State Mesas -->
             <div v-if="detalhesMesasOcupadas.length === 0" class="col-span-full py-12 sm:py-16 text-center">
-              <span class="text-4xl sm:text-5xl mb-4 block opacity-20 filter grayscale">🏪</span>
+              <BuildingStorefrontIcon class="w-12 h-12 mb-4 mx-auto opacity-20 text-cafe" />
               <p class="text-[10px] sm:text-sm font-black text-bege-torrado uppercase tracking-[0.2em] italic opacity-60">Nenhuma mesa ativa no momento</p>
             </div>
           </div>
@@ -87,10 +87,10 @@
       <div class="lg:col-span-4 space-y-6 sm:space-y-8">
         <div class="bg-cafe rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 shadow-premium relative overflow-hidden">
           <!-- Decoração -->
-          <div class="absolute -right-6 -top-6 text-8xl opacity-10 grayscale pointer-events-none transform rotate-12">🥟</div>
+          <SparklesIcon class="absolute -right-6 -top-6 w-28 h-28 opacity-10 text-dourado-vivo pointer-events-none transform rotate-12" />
           
           <h3 class="text-[10px] sm:text-caption font-black text-bege-cream uppercase tracking-[0.2em] mb-6 sm:mb-8 flex items-center gap-3">
-             🏆 Top 5 de Hoje
+             <TrophyIcon class="w-5 h-5 text-dourado-vivo shrink-0" /> Top 5 de Hoje
           </h3>
 
           <div class="space-y-4 sm:space-y-6 relative z-10">
@@ -153,6 +153,7 @@
 import { onMounted, onUnmounted, computed } from 'vue';
 import { useDashboard } from '~/composables/useDashboard';
 import { formatCurrency } from '~/utils/formatters';
+import { TableCellsIcon, BuildingStorefrontIcon, SparklesIcon, TrophyIcon } from '@heroicons/vue/24/outline';
 
 const { 
   loading, 

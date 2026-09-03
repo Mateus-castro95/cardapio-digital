@@ -3,11 +3,14 @@
     <!-- Header Minimalista -->
     <header class="bg-branco px-4 sm:px-6 py-4 sm:py-6 border-b border-bege-soft sticky top-0 z-30 shadow-sm">
       <div class="max-w-2xl mx-auto flex justify-between items-center gap-4">
-        <div class="flex-1 min-w-0">
-          <h1 class="text-xl sm:text-heading-2 text-cafe tracking-tight truncate">
-            Pastel <span class="text-moca">Hora</span>
-          </h1>
-          <p class="text-[10px] sm:text-caption text-bege-torrado font-medium truncate">Cardápio Digital • Aberto</p>
+        <div class="flex items-center gap-3 min-w-0">
+          <img src="/logo-adega.webp" alt="Adega Canoinhas" class="h-11 w-auto object-contain logo-adega-gold shrink-0" />
+          <div class="min-w-0">
+            <h1 class="text-lg sm:text-heading-3 text-cafe font-black leading-tight tracking-tight truncate">
+              Adega <span class="text-moca">Canoinhas</span>
+            </h1>
+            <p class="text-[10px] sm:text-caption text-bege-torrado font-medium truncate">Cardápio Digital • Aberto</p>
+          </div>
         </div>
         
         <!-- Seleção de Mesa Estilizada -->
@@ -28,9 +31,7 @@
               </option>
             </select>
             <div class="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 pointer-events-none text-bege-claro">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-              </svg>
+              <ChevronDownIconSolid class="h-3 w-3 sm:h-4 sm:w-4" />
             </div>
           </div>
         </div>
@@ -51,14 +52,16 @@
               class="w-full flex items-center justify-between p-5 text-left hover:bg-bege-cream/50 transition-colors"
             >
               <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-bege-soft text-cafe rounded-2xl flex items-center justify-center text-2xl shadow-sm">🥟</div>
+                <div class="w-12 h-12 bg-bege-soft text-cafe rounded-2xl flex items-center justify-center shadow-sm">
+                  <SparklesIcon class="w-6 h-6 text-cafe" />
+                </div>
                 <div>
                   <h3 class="font-bold text-cafe text-body-lg">Pastéis Salgados</h3>
                   <p class="text-caption text-bege-torrado">Artesanais e crocantes</p>
                 </div>
               </div>
               <div :class="{'rotate-180': expandedSection === 'salgados'}" class="transition-transform duration-300 text-bege-torrado">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                <ChevronDownIcon class="h-6 w-6" />
               </div>
             </button>
             
@@ -75,7 +78,7 @@
                 <div class="flex items-center gap-3">
                   <span class="font-bold text-cafe text-body">{{ formatCurrency(tamanho.preco_base) }}</span>
                   <div class="bg-branco p-1.5 rounded-lg shadow-sm group-hover:scale-110 transition-transform">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-moca" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                    <PlusIcon class="h-4 w-4 text-moca" />
                   </div>
                 </div>
               </div>
@@ -89,14 +92,16 @@
               class="w-full flex items-center justify-between p-5 text-left hover:bg-bege-cream/50 transition-colors"
             >
               <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-moca-light/20 text-moca rounded-2xl flex items-center justify-center text-2xl shadow-sm">🍫</div>
+                <div class="w-12 h-12 bg-moca-light/20 text-moca rounded-2xl flex items-center justify-center shadow-sm">
+                  <CakeIcon class="w-6 h-6 text-moca" />
+                </div>
                 <div>
                   <h3 class="font-bold text-cafe text-body-lg">Pastéis Doces</h3>
                   <p class="text-caption text-bege-torrado">Sobremesas perfeitas</p>
                 </div>
               </div>
               <div :class="{'rotate-180': expandedSection === 'doces'}" class="transition-transform duration-300 text-bege-torrado">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                <ChevronDownIcon class="h-6 w-6" />
               </div>
             </button>
             
@@ -113,7 +118,7 @@
                 <div class="flex items-center gap-3">
                   <span class="font-bold text-cafe text-body">{{ formatCurrency(tamanho.preco_base) }}</span>
                   <div class="bg-branco p-1.5 rounded-lg shadow-sm group-hover:scale-110 transition-transform">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-moca" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                    <PlusIcon class="h-4 w-4 text-moca" />
                   </div>
                 </div>
               </div>
@@ -131,11 +136,13 @@
           <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden transition-all duration-300">
             <button @click="toggleSection('sucos')" class="w-full flex items-center justify-between p-5 text-left hover:bg-bege-cream/50 transition-colors">
               <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-bege-soft text-cafe rounded-2xl flex items-center justify-center text-2xl shadow-sm">🍊</div>
+                <div class="w-12 h-12 bg-bege-soft text-cafe rounded-2xl flex items-center justify-center shadow-sm">
+                  <BeakerIcon class="w-6 h-6 text-cafe" />
+                </div>
                 <h3 class="font-bold text-cafe text-body-lg">Sucos Naturais</h3>
               </div>
               <div :class="{'rotate-180': expandedSection === 'sucos'}" class="transition-transform duration-300 text-bege-torrado">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                <ChevronDownIcon class="h-6 w-6" />
               </div>
             </button>
             <div v-show="expandedSection === 'sucos'" class="px-5 pb-5 space-y-2 animate-fade-in">
@@ -146,7 +153,7 @@
                 </div>
                 <div class="flex items-center gap-3">
                   <span class="font-bold text-cafe text-xs text-right">A partir de<br>{{ formatCurrency(grupo.preco_min) }}</span>
-                  <div class="bg-bege-soft p-1 rounded-lg group-active:scale-90"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-cafe" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg></div>
+                  <div class="bg-bege-soft p-1 rounded-lg group-active:scale-90"><ChevronRightIcon class="h-4 w-4 text-cafe" /></div>
                 </div>
               </div>
             </div>
@@ -156,11 +163,13 @@
           <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden transition-all duration-300">
             <button @click="toggleSection('refris')" class="w-full flex items-center justify-between p-5 text-left hover:bg-bege-cream/50 transition-colors">
               <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-red-50 text-red-700/80 rounded-2xl flex items-center justify-center text-2xl shadow-sm">🥤</div>
+                <div class="w-12 h-12 bg-red-50 text-red-700/80 rounded-2xl flex items-center justify-center shadow-sm">
+                  <SparklesIcon class="w-6 h-6 text-red-600" />
+                </div>
                 <h3 class="font-bold text-cafe text-body-lg">Refrigerantes</h3>
               </div>
               <div :class="{'rotate-180': expandedSection === 'refris'}" class="transition-transform duration-300 text-bege-torrado">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                <ChevronDownIcon class="h-6 w-6" />
               </div>
             </button>
             <div v-show="expandedSection === 'refris'" class="px-5 pb-5 space-y-2 animate-fade-in">
@@ -171,7 +180,7 @@
                 </div>
                 <div class="flex items-center gap-3">
                   <span class="font-bold text-cafe text-xs text-right">A partir de<br>{{ formatCurrency(grupo.preco_min) }}</span>
-                  <div class="bg-bege-soft p-1 rounded-lg group-active:scale-90"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-cafe" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg></div>
+                  <div class="bg-bege-soft p-1 rounded-lg group-active:scale-90"><ChevronRightIcon class="h-4 w-4 text-cafe" /></div>
                 </div>
               </div>
             </div>
@@ -181,11 +190,13 @@
           <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden transition-all duration-300">
             <button @click="toggleSection('aguas')" class="w-full flex items-center justify-between p-5 text-left hover:bg-bege-cream/50 transition-colors">
               <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-blue-50 text-blue-700/80 rounded-2xl flex items-center justify-center text-2xl shadow-sm">💧</div>
+                <div class="w-12 h-12 bg-blue-50 text-blue-700/80 rounded-2xl flex items-center justify-center shadow-sm">
+                  <SparklesIcon class="w-6 h-6 text-blue-600" />
+                </div>
                 <h3 class="font-bold text-cafe text-body-lg">Águas</h3>
               </div>
               <div :class="{'rotate-180': expandedSection === 'aguas'}" class="transition-transform duration-300 text-bege-torrado">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                <ChevronDownIcon class="h-6 w-6" />
               </div>
             </button>
             <div v-show="expandedSection === 'aguas'" class="px-5 pb-5 space-y-2 animate-fade-in">
@@ -196,7 +207,7 @@
                 </div>
                 <div class="flex items-center gap-3">
                   <span class="font-bold text-cafe text-xs text-right">A partir de<br>{{ formatCurrency(grupo.preco_min) }}</span>
-                  <div class="bg-bege-soft p-1 rounded-lg group-active:scale-90"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-cafe" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg></div>
+                  <div class="bg-bege-soft p-1 rounded-lg group-active:scale-90"><ChevronRightIcon class="h-4 w-4 text-cafe" /></div>
                 </div>
               </div>
             </div>
@@ -233,9 +244,7 @@
                       </p>
                   </div>
                   <div class="w-6 h-6 rounded-xl border-2 flex items-center justify-center transition-all" :class="isSaborSelecionado(sabor) ? 'bg-orange-500 border-orange-500' : 'border-gray-200'">
-                      <svg v-if="isSaborSelecionado(sabor)" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
-                          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                      </svg>
+                      <CheckIcon v-if="isSaborSelecionado(sabor)" class="h-4 w-4 text-white" />
                   </div>
               </div>
           </div>
@@ -299,9 +308,7 @@
                   <div class="flex items-center gap-4">
                       <span class="font-black text-orange-600 text-base">{{ formatCurrency(opcao.preco) }}</span>
                       <div class="bg-orange-500 text-white p-1.5 rounded-lg shadow-sm group-hover:scale-110 transition-transform">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                              <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                          </svg>
+                          <PlusIconSolid class="h-4 w-4" />
                       </div>
                   </div>
               </div>
@@ -324,9 +331,7 @@
         <div class="flex items-center gap-3">
             <span class="text-[10px] text-bege-claro/80 font-bold uppercase tracking-widest">Total:</span>
             <span class="font-black text-base sm:text-lg">{{ formatCurrency(totalCart) }}</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-bege-claro" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-            </svg>
+            <ChevronRightIconSolid class="h-4 w-4 text-bege-claro" />
         </div>
       </button>
     </div>
@@ -352,7 +357,7 @@
                               Obs: {{ item.observacoes.toUpperCase() }}
                           </p>
                           <button class="text-bege-torrado hover:text-cafe">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg>
+                            <PencilIcon class="h-3 w-3" />
                           </button>
                       </div>
 
@@ -362,7 +367,7 @@
                         @click="item.editandoObs = true"
                         class="text-[10px] font-black text-moca uppercase tracking-widest flex items-center gap-1 transition-colors"
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                        <PlusIcon class="h-3 w-3" />
                         Adicionar observação
                       </button>
 
@@ -387,11 +392,11 @@
                   <div class="flex items-center justify-between mt-2">
                     <div class="flex items-center gap-3 bg-bege-cream/50 p-1 rounded-xl border border-bege-soft/20">
                         <button @click="alterarQuantidade(index, -1)" class="w-8 h-8 flex items-center justify-center bg-branco rounded-lg shadow-sm hover:text-moca transition-colors border border-bege-soft/20">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" /></svg>
+                            <MinusIcon class="h-4 w-4" />
                         </button>
                         <span class="text-sm font-black w-4 text-center text-cafe">{{ item.quantidade }}</span>
                         <button @click="alterarQuantidade(index, 1)" class="w-8 h-8 flex items-center justify-center bg-branco rounded-lg shadow-sm hover:text-moca transition-colors border border-bege-soft/20">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                            <PlusIcon class="h-4 w-4" />
                         </button>
                     </div>
                     <button @click="removerDoCarrinho(index)" class="text-[10px] text-red-500 font-black uppercase tracking-widest hover:bg-red-50 px-3 py-2 rounded-xl transition-colors">Remover</button>
@@ -403,7 +408,7 @@
       <template #footer-fixed>
           <div class="bg-branco p-6 w-full max-w-2xl mx-auto border-t border-bege-soft">
               <div v-if="!mesaSelecionadaId" class="bg-red-50 p-4 rounded-2xl border border-red-100 mb-5 flex items-center gap-3">
-                  <span class="text-xl">⚠️</span>
+                  <ExclamationTriangleIcon class="w-6 h-6 text-red-600 shrink-0" />
                   <p class="text-[10px] text-red-700 font-black uppercase tracking-wider leading-tight">
                       Selecione o número da sua MESA no topo da página para finalizar
                   </p>
@@ -438,6 +443,23 @@ import { usePedidos } from '~/composables/usePedidos';
 import { useToast } from '~/composables/useToast';
 import { useRoute } from 'vue-router';
 import { useAuthStore } from '~/stores/auth';
+import { 
+  ChevronDownIcon, 
+  PlusIcon, 
+  ChevronRightIcon, 
+  MinusIcon,
+  SparklesIcon,
+  CakeIcon,
+  BeakerIcon,
+  ExclamationTriangleIcon
+} from '@heroicons/vue/24/outline';
+import { 
+  CheckIcon, 
+  PlusIcon as PlusIconSolid, 
+  ChevronRightIcon as ChevronRightIconSolid,
+  PencilIcon,
+  ChevronDownIcon as ChevronDownIconSolid
+} from '@heroicons/vue/20/solid';
 
 const { fetchCategorias } = useCategorias();
 const { tamanhos, fetchTamanhos } = useTamanhos();

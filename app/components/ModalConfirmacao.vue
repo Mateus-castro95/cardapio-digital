@@ -1,12 +1,10 @@
 <template>
   <BaseModal :show="show" :title="title" size="sm" @close="$emit('cancel')">
     <div class="text-center">
-      <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-        <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-        </svg>
+      <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-900/20 border border-red-500/20 mb-4">
+        <ExclamationTriangleIcon class="h-6 w-6 text-red-500" />
       </div>
-      <p class="text-gray-600">{{ message }}</p>
+      <p class="text-[#C5B79D] font-medium">{{ message }}</p>
     </div>
 
     <template #footer>
@@ -21,6 +19,7 @@
 </template>
 
 <script setup lang="ts">
+import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline';
 /**
  * Componente ModalConfirmacao - Especializado em ações de confirmação
  */

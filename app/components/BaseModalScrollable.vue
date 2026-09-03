@@ -9,18 +9,16 @@
 
       <!-- Modal Content -->
       <div 
-        class="relative w-full max-w-2xl bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col max-h-[92vh] sm:max-h-[85vh] overflow-hidden animate-slide-up"
+        class="relative w-full max-w-2xl bg-[#141417] border border-[#2E2A20] text-[#E2DACB] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col max-h-[92vh] sm:max-h-[85vh] overflow-hidden animate-slide-up"
       >
         <!-- Header -->
-        <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white sticky top-0 z-10">
-          <h3 class="text-xl font-bold text-gray-800">{{ title }}</h3>
+        <div class="px-6 py-4 border-b border-[#2E2A20] flex justify-between items-center bg-[#18181C] sticky top-0 z-10">
+          <h3 class="text-xl font-bold text-cafe">{{ title }}</h3>
           <button 
             @click="$emit('close')"
-            class="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            class="p-2 hover:bg-white/5 rounded-full transition-colors text-bege-torrado hover:text-cafe"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <XMarkIcon class="h-6 w-6" />
           </button>
         </div>
 
@@ -30,7 +28,7 @@
         </div>
 
         <!-- Footer (Optional Slot) -->
-        <div v-if="$slots['footer-fixed']" class="bg-white border-t border-gray-100 mt-auto">
+        <div v-if="$slots['footer-fixed']" class="bg-[#18181C] border-t border-[#2E2A20] mt-auto">
           <slot name="footer-fixed"></slot>
         </div>
       </div>
@@ -39,6 +37,7 @@
 </template>
 
 <script setup lang="ts">
+import { XMarkIcon } from '@heroicons/vue/24/outline';
 defineProps<{
   show: boolean;
   title?: string;

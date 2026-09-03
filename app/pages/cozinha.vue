@@ -46,7 +46,7 @@
                 Mesa {{ pedido.mesa?.numero || '?' }}
               </span>
               <span class="text-[9px] sm:text-[10px] text-bege-torrado font-black uppercase flex items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <ClockIcon class="h-3 w-3" />
                 {{ formatTimeAgo(pedido.criado_em) }}
               </span>
             </div>
@@ -87,7 +87,7 @@
             class="w-full py-3.5 rounded-xl bg-moca hover:bg-moca-light text-white font-black tracking-widest text-xs shadow-lg shadow-moca/20 transition-all active:scale-95 flex items-center justify-center gap-2"
             @click="handleUpdateStatus(pedido.id, 'em_preparo')"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" /></svg>
+            <FireIcon class="h-4 w-4" />
             INICIAR PREPARO
           </button>
           <button 
@@ -95,7 +95,7 @@
             class="w-full py-3.5 rounded-xl bg-green-500 hover:bg-green-600 text-white font-black tracking-widest text-xs shadow-lg shadow-green-500/20 transition-all active:scale-95 flex items-center justify-center gap-2"
             @click="handleUpdateStatus(pedido.id, 'pronto')"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+            <CheckIcon class="h-4 w-4" />
             MARCAR PRONTO
           </button>
         </div>
@@ -104,8 +104,8 @@
 
     <!-- Empty State -->
     <div v-else class="flex flex-col items-center justify-center py-32 text-center opacity-60">
-      <div class="w-32 h-32 bg-branco rounded-[2.5rem] shadow-premium border border-bege-soft flex items-center justify-center text-6xl mb-8 transform rotate-3">
-        🍳
+      <div class="w-32 h-32 bg-branco rounded-[2.5rem] shadow-premium border border-bege-soft flex items-center justify-center mb-8 transform rotate-3">
+        <FireIcon class="w-16 h-16 text-cafe-dark" />
       </div>
       <h3 class="text-heading-2 text-cafe-dark">Cozinha em repouso</h3>
       <p class="text-body text-bege-torrado max-w-sm mt-3">Não há pedidos pendentes no momento. Aproveite para organizar a bancada!</p>
@@ -123,6 +123,7 @@
 import { onMounted, onUnmounted, computed, ref } from 'vue';
 import { usePedidos } from '~/composables/usePedidos';
 import { useToast } from '~/composables/useToast';
+import { ClockIcon, FireIcon, CheckIcon } from '@heroicons/vue/24/outline';
 
 const { pedidos, fetchPedidos, atualizarStatusPedido, setupRealtimePedidos, loading } = usePedidos();
 const toast = useToast();

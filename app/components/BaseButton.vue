@@ -102,7 +102,7 @@ const handleClick = (event: MouseEvent) => {
 }
 
 .base-button:focus {
-  outline: 2px solid #be9667;
+  outline: 2px solid #D4AF37;
   outline-offset: 2px;
 }
 
@@ -124,27 +124,29 @@ const handleClick = (event: MouseEvent) => {
 
 /* Variants */
 .primary {
-  background: linear-gradient(135deg, #3c2f2f 0%, #2a2121 100%);
-  color: white;
-  box-shadow: 0 4px 6px -1px rgba(60, 47, 47, 0.2);
+  background: linear-gradient(135deg, #D4AF37 0%, #B89326 100%);
+  color: #0A0A0C;
+  font-weight: 800;
+  box-shadow: 0 4px 15px -1px rgba(212, 175, 55, 0.3);
 }
 
 .primary:hover:not(.is-disabled):not(.is-loading) {
-  background: linear-gradient(135deg, #4a3b3b 0%, #3c2f2f 100%);
+  background: linear-gradient(135deg, #F3D887 0%, #D4AF37 100%);
   transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(60, 47, 47, 0.3);
+  box-shadow: 0 10px 20px -3px rgba(212, 175, 55, 0.5);
 }
 
 .secondary {
-  background: linear-gradient(135deg, #be9667 0%, #a88255 100%);
-  color: white;
-  box-shadow: 0 4px 6px -1px rgba(190, 150, 103, 0.2);
+  background: linear-gradient(135deg, #242017 0%, #15130E 100%);
+  color: #D4AF37;
+  border: 1px solid #D4AF37;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
 }
 
 .secondary:hover:not(.is-disabled):not(.is-loading) {
-  background: linear-gradient(135deg, #cfa875 0%, #be9667 100%);
+  background: linear-gradient(135deg, #363023 0%, #1F1C14 100%);
   transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(190, 150, 103, 0.3);
+  box-shadow: 0 10px 15px -3px rgba(212, 175, 55, 0.2);
 }
 
 .danger {
@@ -171,14 +173,14 @@ const handleClick = (event: MouseEvent) => {
 
 .outline {
   background: transparent;
-  border: 2px solid #be9667;
-  color: #8b7e77;
+  border: 2px solid #D4AF37;
+  color: #D4AF37;
 }
 
 .outline:hover:not(.is-disabled):not(.is-loading) {
-  background: rgba(190, 150, 103, 0.1);
-  border-color: #a88255;
-  color: #3c2f2f;
+  background: rgba(212, 175, 55, 0.1);
+  border-color: #F3D887;
+  color: #F3D887;
   transform: translateY(-2px);
 }
 

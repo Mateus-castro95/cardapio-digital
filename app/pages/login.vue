@@ -6,12 +6,11 @@
 
     <div class="w-full max-w-[440px] z-10">
       <!-- Logo / Título -->
-      <div class="text-center mb-10 animate-fade-in-up">
-        <div class="w-20 h-20 bg-cafe text-branco rounded-[2.5rem] flex items-center justify-center text-4xl shadow-premium mx-auto mb-6 transform hover:rotate-12 transition-transform duration-500">
-          🥟
+      <div class="text-center mb-8 animate-fade-in-up">
+        <div class="flex items-center justify-center mx-auto mb-5">
+          <img src="/logo-adega.webp" alt="Adega Canoinhas" class="h-36 sm:h-40 w-auto max-w-[320px] object-contain logo-adega-gold select-none" />
         </div>
-        <h1 class="text-heading-1 text-cafe mb-2 font-black leading-none">Pastel <span class="text-moca">Hora</span></h1>
-        <p class="text-body-lg text-bege-torrado font-bold">Painel Administrativo</p>
+        <p class="text-xs font-black uppercase tracking-[0.25em] text-bege-torrado">Painel Administrativo</p>
       </div>
 
       <!-- Card de Login -->
@@ -21,7 +20,7 @@
             <label for="email" class="text-xs font-black text-cafe uppercase tracking-widest px-1">E-mail</label>
             <div class="relative group">
               <span class="absolute left-4 top-1/2 -translate-y-1/2 text-bege-torrado group-focus-within:text-moca transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                <EnvelopeIcon class="w-5 h-5" />
               </span>
               <input 
                 id="email"
@@ -29,7 +28,7 @@
                 type="email" 
                 placeholder="seu@email.com"
                 required
-                class="w-full pl-12 pr-4 py-4 bg-bege-cream/30 border-2 border-bege-soft/50 rounded-2xl outline-none focus:border-moca/50 focus:bg-white transition-all text-cafe font-bold placeholder:text-bege-torrado/50"
+                class="w-full pl-12 pr-4 py-4 bg-[#18181C] border-2 border-bege-soft rounded-2xl outline-none focus:border-moca focus:bg-[#1C1C22] transition-all text-[#E2DACB] font-bold placeholder:text-bege-torrado/50"
               />
             </div>
           </div>
@@ -41,7 +40,7 @@
             </div>
             <div class="relative group">
               <span class="absolute left-4 top-1/2 -translate-y-1/2 text-bege-torrado group-focus-within:text-moca transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <LockClosedIcon class="w-5 h-5" />
               </span>
               <input 
                 id="password"
@@ -49,7 +48,7 @@
                 type="password" 
                 placeholder="••••••••"
                 required
-                class="w-full pl-12 pr-4 py-4 bg-bege-cream/30 border-2 border-bege-soft/50 rounded-2xl outline-none focus:border-moca/50 focus:bg-white transition-all text-cafe font-bold placeholder:text-bege-torrado/50"
+                class="w-full pl-12 pr-4 py-4 bg-[#18181C] border-2 border-bege-soft rounded-2xl outline-none focus:border-moca focus:bg-[#1C1C22] transition-all text-[#E2DACB] font-bold placeholder:text-bege-torrado/50"
               />
             </div>
           </div>
@@ -61,13 +60,13 @@
           >
             <span v-if="loading" class="animate-spin w-5 h-5 border-2 border-white/30 border-t-white rounded-full"></span>
             <span v-else>Entrar no Sistema</span>
-            <svg v-if="!loading" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            <ArrowRightIcon v-if="!loading" class="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
         </form>
 
         <p class="mt-8 text-center text-[10px] text-bege-torrado font-bold uppercase tracking-widest leading-loose">
           Acesso restrito a colaboradores autorizados.<br>
-          © 2024 Pastel Hora • Gestão Digital
+          © 2024 Adega Canoinhas • Gestão Digital
         </p>
       </div>
     </div>
@@ -80,6 +79,7 @@ import { useRouter } from '#app';
 import { useSupabaseClient } from '#imports';
 import { useToast } from '~/composables/useToast';
 import { useAuthStore } from '~/stores/auth';
+import { EnvelopeIcon, LockClosedIcon, ArrowRightIcon, BuildingStorefrontIcon } from '@heroicons/vue/24/outline';
 
 definePageMeta({
   layout: false // Já lidamos com isso no app.vue via isPublicRoute

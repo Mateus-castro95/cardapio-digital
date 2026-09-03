@@ -53,7 +53,8 @@ const handleChange = (event: Event) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #cbd5e1;
+  background-color: #262218;
+  border: 1px solid #3E3727;
   transition: .4s;
   border-radius: 24px;
 }
@@ -63,24 +64,26 @@ const handleChange = (event: Event) => {
   content: "";
   height: 18px;
   width: 18px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
+  left: 2px;
+  bottom: 2px;
+  background-color: #C5B79D;
   transition: .4s;
   border-radius: 50%;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
 input:checked + .slider {
-  background-color: #f59e0b;
+  background-color: #D4AF37;
+  border-color: #D4AF37;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #f59e0b;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
 }
 
 input:checked + .slider:before {
   transform: translateX(20px);
+  background-color: #0A0A0C;
 }
 
 input:disabled + .slider {

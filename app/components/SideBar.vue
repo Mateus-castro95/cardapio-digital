@@ -3,27 +3,34 @@
     <!-- Backdrop para Mobile (escurece o fundo ao abrir o menu) -->
     <div 
       v-if="isMobileOpen" 
-      class="fixed inset-0 bg-preto/60 backdrop-blur-sm z-[950] lg:hidden"
+      class="fixed inset-0 bg-preto/70 backdrop-blur-sm z-[1150] lg:hidden"
       @click="$emit('close-mobile')"
     ></div>
 
-    <!-- Barra lateral de navegação fixa -->
+    <!-- Barra lateral de navegação fixa (Direita no Mobile, Esquerda no Desktop) -->
     <aside 
       id="sidebar" 
-      class="fixed top-0 left-0 h-screen bg-gradient-to-b from-cafe-dark to-preto text-branco flex flex-col shadow-premium z-[1000] transition-all duration-300 ease-out overflow-x-hidden" 
+      class="fixed top-0 right-0 lg:right-auto lg:left-0 h-screen text-branco flex flex-col shadow-premium z-[1200] transition-all duration-300 ease-out overflow-x-hidden" 
       :class="[
         isCollapsed ? 'lg:w-20' : 'lg:w-[250px]',
-        isMobileOpen ? 'translate-x-0 w-[280px]' : '-translate-x-full lg:translate-x-0'
+        isMobileOpen ? 'translate-x-0 w-[280px]' : 'translate-x-full lg:translate-x-0'
       ]"
     >
       <!-- Cabeçalho com o nome do estabelecimento e botão de toggle -->
       <header 
-        class="border-b border-white/10 bg-black/20 flex items-center h-20 transition-all px-6"
-        :class="isCollapsed ? 'lg:justify-center lg:px-4' : 'justify-between'"
+        class="border-b border-[#2A2415] bg-black/30 flex items-center h-16 lg:h-20 transition-all px-4"
+        :class="isCollapsed ? 'lg:justify-center lg:px-2' : 'justify-between'"
       >
-        <h1 v-show="!isCollapsed || isMobileOpen" class="text-heading-3 font-bold m-0 text-bege-claro uppercase tracking-wide whitespace-nowrap overflow-hidden">
-          Pastel Hora
-        </h1>
+        <div class="flex items-center gap-3 min-w-0">
+          <img 
+            src="/logo-adega.webp" 
+            alt="Adega Canoinhas" 
+            class="h-10 w-auto object-contain shrink-0 logo-adega-gold" 
+          />
+          <h1 v-show="!isCollapsed || isMobileOpen" class="text-sm font-black m-0 text-[#E8C86A] uppercase tracking-wider whitespace-nowrap overflow-hidden leading-tight">
+            Adega<br><span class="text-xs text-[#B89758] tracking-widest">Canoinhas</span>
+          </h1>
+        </div>
         
         <!-- Botão de recolher (visível apenas desktop) -->
         <button 
@@ -31,21 +38,10 @@
           @click="$emit('toggle')" 
           :title="isCollapsed ? 'Expandir' : 'Recolher'"
         >
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="20" 
-            height="20" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            stroke-width="2" 
-            stroke-linecap="round" 
-            stroke-linejoin="round"
-            class="transition-transform duration-300"
-            :class="{ 'rotate-180': isCollapsed }"
-          >
-            <path d="m15 18-6-6 6-6"/>
-          </svg>
+          <ChevronLeftIcon 
+            class="w-5 h-5 transition-transform duration-300" 
+            :class="{ 'rotate-180': isCollapsed }" 
+          />
         </button>
 
         <!-- Botão de fechar (visível apenas mobile) -->
@@ -53,16 +49,16 @@
           class="lg:hidden text-bege-claro p-2"
           @click="$emit('close-mobile')"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          <XMarkIcon class="w-6 h-6" />
         </button>
       </header>
       
       <!-- Menu de navegação principal do sistema -->
-      <nav class="flex flex-col py-4 gap-1 overflow-y-auto flex-1 custom-scrollbar">
+      <nav class="flex flex-col pt-0 pb-4 lg:py-4 gap-0.5 overflow-y-auto flex-1 custom-scrollbar">
         <NuxtLink v-if="authStore.cargo !== 'cozinha'" to="/" class="group flex items-center w-full py-4 bg-transparent border-none text-bege-soft text-body font-medium text-left no-underline cursor-pointer transition-all duration-300 relative gap-4 whitespace-nowrap hover:bg-bege-torrado/10 hover:text-bege-claro active:scale-[0.98] [&.router-link-active]:bg-white/10 [&.router-link-active]:text-branco" :class="isCollapsed ? 'lg:justify-center lg:px-4 px-6' : 'px-6'" title="Dashboard">
           <div class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-bege-claro transition-all duration-300 group-hover:h-[70%] group-[.router-link-active]:h-[70%]"></div>
           <span class="flex items-center justify-center min-w-6 relative z-10 transition-transform duration-300 group-hover:scale-110 group-[.router-link-active]:scale-110">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            <Squares2X2Icon class="w-5 h-5" />
           </span>
           <span class="transition-opacity duration-200 relative z-10" v-show="!isCollapsed || isMobileOpen">Dashboard</span>
         </NuxtLink>
@@ -70,7 +66,7 @@
         <NuxtLink v-if="authStore.cargo !== 'cozinha'" to="/pedidos" class="group flex items-center w-full py-4 bg-transparent border-none text-bege-soft text-body font-medium text-left no-underline cursor-pointer transition-all duration-300 relative gap-4 whitespace-nowrap hover:bg-bege-torrado/10 hover:text-bege-claro active:scale-[0.98] [&.router-link-active]:bg-white/10 [&.router-link-active]:text-branco" :class="isCollapsed ? 'lg:justify-center lg:px-4 px-6' : 'px-6'" title="Pedidos">
           <div class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-bege-claro transition-all duration-300 group-hover:h-[70%] group-[.router-link-active]:h-[70%]"></div>
           <span class="flex items-center justify-center min-w-6 relative z-10 transition-transform duration-300 group-hover:scale-110 group-[.router-link-active]:scale-110">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1Z"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
+            <ClipboardDocumentListIcon class="w-5 h-5" />
           </span>
           <span class="transition-opacity duration-200 relative z-10" v-show="!isCollapsed || isMobileOpen">Pedidos</span>
         </NuxtLink>
@@ -78,7 +74,7 @@
         <NuxtLink to="/cozinha" class="group flex items-center w-full py-4 bg-transparent border-none text-bege-soft text-body font-medium text-left no-underline cursor-pointer transition-all duration-300 relative gap-4 whitespace-nowrap hover:bg-bege-torrado/10 hover:text-bege-claro active:scale-[0.98] [&.router-link-active]:bg-white/10 [&.router-link-active]:text-branco" :class="isCollapsed ? 'lg:justify-center lg:px-4 px-6' : 'px-6'" title="Cozinha">
           <div class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-bege-claro transition-all duration-300 group-hover:h-[70%] group-[.router-link-active]:h-[70%]"></div>
           <span class="flex items-center justify-center min-w-6 relative z-10 transition-transform duration-300 group-hover:scale-110 group-[.router-link-active]:scale-110">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
+            <FireIcon class="w-5 h-5" />
           </span>
           <span class="transition-opacity duration-200 relative z-10" v-show="!isCollapsed || isMobileOpen">Cozinha</span>
         </NuxtLink>
@@ -86,7 +82,7 @@
         <NuxtLink v-if="authStore.cargo !== 'cozinha'" to="/fechar-mesa" class="group flex items-center w-full py-4 bg-transparent border-none text-bege-soft text-body font-medium text-left no-underline cursor-pointer transition-all duration-300 relative gap-4 whitespace-nowrap hover:bg-bege-torrado/10 hover:text-bege-claro active:scale-[0.98] [&.router-link-active]:bg-white/10 [&.router-link-active]:text-branco" :class="isCollapsed ? 'lg:justify-center lg:px-4 px-6' : 'px-6'" title="Fechar Mesa">
           <div class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-bege-claro transition-all duration-300 group-hover:h-[70%] group-[.router-link-active]:h-[70%]"></div>
           <span class="flex items-center justify-center min-w-6 relative z-10 transition-transform duration-300 group-hover:scale-110 group-[.router-link-active]:scale-110">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2-1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5V6.5"/></svg>
+            <BanknotesIcon class="w-5 h-5" />
           </span>
           <span class="transition-opacity duration-200 relative z-10" v-show="!isCollapsed || isMobileOpen">Fechar Mesa</span>
         </NuxtLink>
@@ -94,7 +90,7 @@
         <NuxtLink v-if="authStore.cargo !== 'cozinha'" to="/produtos" class="group flex items-center w-full py-4 bg-transparent border-none text-bege-soft text-body font-medium text-left no-underline cursor-pointer transition-all duration-300 relative gap-4 whitespace-nowrap hover:bg-bege-torrado/10 hover:text-bege-claro active:scale-[0.98] [&.router-link-active]:bg-white/10 [&.router-link-active]:text-branco" :class="isCollapsed ? 'lg:justify-center lg:px-4 px-6' : 'px-6'" title="Produtos">
           <div class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-bege-claro transition-all duration-300 group-hover:h-[70%] group-[.router-link-active]:h-[70%]"></div>
           <span class="flex items-center justify-center min-w-6 relative z-10 transition-transform duration-300 group-hover:scale-110 group-[.router-link-active]:scale-110">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+            <CubeIcon class="w-5 h-5" />
           </span>
           <span class="transition-opacity duration-200 relative z-10" v-show="!isCollapsed || isMobileOpen">Produtos</span>
         </NuxtLink>
@@ -102,7 +98,7 @@
         <NuxtLink v-if="authStore.cargo !== 'cozinha'" to="/cardapio" class="group flex items-center w-full py-4 bg-transparent border-none text-bege-soft text-body font-medium text-left no-underline cursor-pointer transition-all duration-300 relative gap-4 whitespace-nowrap hover:bg-bege-torrado/10 hover:text-bege-claro active:scale-[0.98] [&.router-link-active]:bg-white/10 [&.router-link-active]:text-branco" :class="isCollapsed ? 'lg:justify-center lg:px-4 px-6' : 'px-6'" title="Cardápio">
           <div class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-bege-claro transition-all duration-300 group-hover:h-[70%] group-[.router-link-active]:h-[70%]"></div>
           <span class="flex items-center justify-center min-w-6 relative z-10 transition-transform duration-300 group-hover:scale-110 group-[.router-link-active]:scale-110">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 15h2"/><path d="M12 9v3"/><path d="M21 3a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3Z"/><path d="M9 18h6"/></svg>
+            <BookOpenIcon class="w-5 h-5" />
           </span>
           <span class="transition-opacity duration-200 relative z-10" v-show="!isCollapsed || isMobileOpen">Cardápio</span>
         </NuxtLink>
@@ -110,7 +106,7 @@
         <NuxtLink v-if="authStore.cargo !== 'cozinha'" to="/mesas" class="group flex items-center w-full py-4 bg-transparent border-none text-bege-soft text-body font-medium text-left no-underline cursor-pointer transition-all duration-300 relative gap-4 whitespace-nowrap hover:bg-bege-torrado/10 hover:text-bege-claro active:scale-[0.98] [&.router-link-active]:bg-white/10 [&.router-link-active]:text-branco" :class="isCollapsed ? 'lg:justify-center lg:px-4 px-6' : 'px-6'" title="Mesas">
           <div class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-bege-claro transition-all duration-300 group-hover:h-[70%] group-[.router-link-active]:h-[70%]"></div>
           <span class="flex items-center justify-center min-w-6 relative z-10 transition-transform duration-300 group-hover:scale-110 group-[.router-link-active]:scale-110">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>
+            <TableCellsIcon class="w-5 h-5" />
           </span>
           <span class="transition-opacity duration-200 relative z-10" v-show="!isCollapsed || isMobileOpen">Mesas</span>
         </NuxtLink>
@@ -118,7 +114,7 @@
         <NuxtLink v-if="['super_admin', 'dono', 'caixa'].includes(authStore.cargo || '')" to="/financeiro" class="group flex items-center w-full py-4 bg-transparent border-none text-bege-soft text-body font-medium text-left no-underline cursor-pointer transition-all duration-300 relative gap-4 whitespace-nowrap hover:bg-bege-torrado/10 hover:text-bege-claro active:scale-[0.98] [&.router-link-active]:bg-white/10 [&.router-link-active]:text-branco" :class="isCollapsed ? 'lg:justify-center lg:px-4 px-6' : 'px-6'" title="Financeiro">
           <div class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-bege-claro transition-all duration-300 group-hover:h-[70%] group-[.router-link-active]:h-[70%]"></div>
           <span class="flex items-center justify-center min-w-6 relative z-10 transition-transform duration-300 group-hover:scale-110 group-[.router-link-active]:scale-110">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <CurrencyDollarIcon class="w-5 h-5" />
           </span>
           <span class="transition-opacity duration-200 relative z-10" v-show="!isCollapsed || isMobileOpen">Financeiro</span>
         </NuxtLink>
@@ -126,7 +122,7 @@
         <NuxtLink v-if="authStore.isSuperAdmin" to="/configuracoes" class="group flex items-center w-full py-4 bg-transparent border-none text-bege-soft text-body font-medium text-left no-underline cursor-pointer transition-all duration-300 relative gap-4 whitespace-nowrap hover:bg-bege-torrado/10 hover:text-bege-claro active:scale-[0.98] [&.router-link-active]:bg-white/10 [&.router-link-active]:text-branco" :class="isCollapsed ? 'lg:justify-center lg:px-4 px-6' : 'px-6'" title="Configurações">
           <div class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-bege-claro transition-all duration-300 group-hover:h-[70%] group-[.router-link-active]:h-[70%]"></div>
           <span class="flex items-center justify-center min-w-6 relative z-10 transition-transform duration-300 group-hover:scale-110 group-[.router-link-active]:scale-110">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            <Cog6ToothIcon class="w-5 h-5" />
           </span>
           <span class="transition-opacity duration-200 relative z-10" v-show="!isCollapsed || isMobileOpen">Configurações</span>
         </NuxtLink>
@@ -142,7 +138,7 @@
           title="Encerrar Sessão"
         >
           <span class="flex items-center justify-center min-w-5 relative z-10 transition-transform duration-300 group-hover:scale-110">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+            <ArrowRightOnRectangleIcon class="w-4 h-4" />
           </span>
           <span class="transition-opacity duration-200 relative z-10" v-show="!isCollapsed || isMobileOpen">Sair do sistema</span>
         </button>
@@ -156,10 +152,7 @@
         >
           <!-- Avatar Estilizado -->
           <div class="shrink-0 w-10 h-10 bg-bege-cream/10 rounded-xl flex items-center justify-center border border-bege-torrado/20 shadow-inner">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-bege-claro" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-              <circle cx="12" cy="7" r="4"/>
-            </svg>
+            <UserIcon class="w-6 h-6 text-bege-claro" />
           </div>
           
           <!-- Infos Nome/Email (Ocultas se recolhido) -->
@@ -185,6 +178,21 @@ import { useSupabaseClient } from '#imports';
 import { useRouter } from '#app';
 import { useToast } from '~/composables/useToast';
 import { useAuthStore } from '~/stores/auth';
+import { 
+  Squares2X2Icon, 
+  ClipboardDocumentListIcon, 
+  FireIcon, 
+  BanknotesIcon, 
+  CubeIcon, 
+  BookOpenIcon, 
+  TableCellsIcon, 
+  CurrencyDollarIcon, 
+  Cog6ToothIcon, 
+  ChevronLeftIcon, 
+  XMarkIcon, 
+  ArrowRightOnRectangleIcon, 
+  UserIcon 
+} from '@heroicons/vue/24/outline';
 
 defineProps<{
   isCollapsed: boolean,
@@ -215,6 +223,70 @@ const handleLogout = async () => {
 </script>
 
 <style scoped>
+/* Estilização Dourada Refinada da Barra Lateral da Adega */
+#sidebar {
+  background: linear-gradient(180deg, #111114 0%, #08080A 100%) !important;
+  border-left: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+@media (min-width: 1024px) {
+  #sidebar {
+    border-left: none;
+    border-right: 1px solid rgba(212, 175, 55, 0.15);
+  }
+}
+
+#sidebar header h1 {
+  color: #C5A059 !important;
+}
+
+#sidebar header button {
+  color: #B89758 !important;
+  border-color: rgba(212, 175, 55, 0.2) !important;
+}
+
+#sidebar header button:hover {
+  color: #E5C158 !important;
+  background-color: rgba(212, 175, 55, 0.1) !important;
+}
+
+/* Links inativos: Dourado mais fechado e sóbrio */
+#sidebar nav a {
+  color: #B89758 !important;
+  transition: all 0.25s ease;
+}
+
+#sidebar nav a svg {
+  stroke: #B89758 !important;
+  transition: stroke 0.25s ease;
+}
+
+/* Hover: Dourado nobre iluminado */
+#sidebar nav a:hover {
+  color: #E5C158 !important;
+  background-color: rgba(212, 175, 55, 0.08) !important;
+}
+
+#sidebar nav a:hover svg {
+  stroke: #E5C158 !important;
+}
+
+/* Item Ativo Selecionado: Dourado de destaque (sem branco) */
+#sidebar nav a.router-link-active {
+  color: #F0CE65 !important;
+  background-color: rgba(212, 175, 55, 0.12) !important;
+}
+
+#sidebar nav a.router-link-active svg {
+  stroke: #F0CE65 !important;
+}
+
+/* Faixa indicadora dourada do item ativo */
+#sidebar nav a.router-link-active div[class*="absolute left-0"] {
+  background-color: #D4AF37 !important;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5) !important;
+}
+
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
 }
@@ -224,11 +296,11 @@ const handleLogout = async () => {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(212, 175, 55, 0.2);
   border-radius: 9999px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(212, 175, 55, 0.4);
 }
 </style>

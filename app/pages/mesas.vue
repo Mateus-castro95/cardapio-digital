@@ -12,14 +12,14 @@
             :disabled="loadingSeed"
             class="w-full sm:w-auto px-6 py-3 rounded-xl border-2 border-bege-torrado text-cafe hover:bg-bege-cream transition-colors font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2"
         >
-          <span v-if="loadingSeed" class="animate-spin text-lg">⌛</span>
+          <ArrowPathIcon v-if="loadingSeed" class="animate-spin w-4 h-4" />
           Gerar 5 Mesas
         </button>
         <button 
           @click="showAddMesaModal = true" 
           class="w-full sm:w-auto px-6 py-3 rounded-xl bg-cafe text-branco hover:bg-cafe-dark shadow-lg hover:shadow-xl transition-all font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          <PlusIcon class="w-5 h-5" />
           Nova Mesa
         </button>
       </div>
@@ -54,13 +54,13 @@
         <!-- QR Code Link & Action -->
         <div class="mt-2 sm:mt-4 pt-3 sm:pt-4 border-t border-bege-soft/50 flex justify-center gap-1.5 sm:gap-2">
             <button @click="abrirQrCode(mesa.numero)" class="p-2 sm:p-2.5 bg-bege-cream/50 rounded-xl text-cafe hover:bg-cafe hover:text-branco transition-all shadow-sm" title="Ver QR Code">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1l-1 1m-1 1h.01m0 0h.01m0 0h.01M12 20h.01m0 0h.01m0 0h.01M7 7h.01m0 0h.01m0 0h.01M7 12h.01m0 0h.01m0 0h.01M7 17h.01m0 0h.01m0 0h.01M12 7h.01m0 0h.01m0 0h.01M12 12h.01m0 0h.01m0 0h.01M12 17h.01m0 0h.01m0 0h.01M17 7h.01m0 0h.01m0 0h.01M17 12h.01m0 0h.01m0 0h.01M17 17h.01m0 0h.01m0 0h.01" /></svg>
+                <QrCodeIcon class="h-4 w-4 sm:h-5 sm:w-5" />
             </button>
             <button @click="copiarLinkMesa(mesa.numero)" class="p-2 sm:p-2.5 bg-bege-cream/50 rounded-xl text-bege-torrado hover:bg-cafe hover:text-branco transition-all shadow-sm" title="Copiar Link">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
+                <LinkIcon class="h-4 w-4 sm:h-5 sm:w-5" />
             </button>
             <button @click="liberarMesa(mesa)" v-if="mesa.status === 'ocupada'" class="p-2 sm:p-2.5 bg-red-50 rounded-xl text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-sm" title="Liberar Mesa">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <XCircleIcon class="h-4 w-4 sm:h-5 sm:w-5" />
             </button>
         </div>
       </div>
@@ -70,7 +70,7 @@
     <div v-if="showQrModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-preto/60 backdrop-blur-sm" @click.self="showQrModal = false">
       <div class="bg-branco rounded-3xl p-8 max-w-sm w-full shadow-2xl animate-fade-in text-center relative">
           <button @click="showQrModal = false" class="absolute top-4 right-4 p-2 text-bege-torrado hover:text-cafe transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 18 12"/></svg>
+            <XMarkIcon class="w-6 h-6" />
           </button>
           
           <h3 class="text-heading-3 text-cafe mb-6">Mesa {{ mesaQrAtual }}</h3>
@@ -94,7 +94,9 @@
 
     <!-- Empty State -->
     <div v-if="mesas.length === 0 && !loading" class="flex flex-col items-center justify-center py-20 bg-branco rounded-[3rem] border-2 border-dashed border-bege-soft">
-        <div class="w-24 h-24 bg-bege-cream rounded-3xl flex items-center justify-center text-5xl mb-6 shadow-sm">🪑</div>
+        <div class="w-24 h-24 bg-bege-cream rounded-3xl flex items-center justify-center mb-6 shadow-sm">
+          <TableCellsIcon class="w-12 h-12 text-cafe" />
+        </div>
         <h3 class="text-heading-2 text-cafe mb-2">Nenhuma mesa</h3>
         <p class="text-body text-bege-torrado">Clique no botão acima para começar.</p>
     </div>
@@ -130,6 +132,7 @@
 import { ref, onMounted } from 'vue';
 import { usePedidos } from '~/composables/usePedidos';
 import { useToast } from '~/composables/useToast';
+import { PlusIcon, QrCodeIcon, LinkIcon, XCircleIcon, XMarkIcon, TableCellsIcon, ArrowPathIcon } from '@heroicons/vue/24/outline';
 
 const { mesas, fetchMesas, criarMesa, atualizarStatusMesa, loading } = usePedidos();
 const toast = useToast();

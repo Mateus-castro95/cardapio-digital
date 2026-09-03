@@ -10,28 +10,20 @@
         >
           <!-- Ícones -->
           <div class="mr-3 shrink-0">
-            <svg v-if="toast.type === 'success'" class="w-6 h-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <svg v-else-if="toast.type === 'error'" class="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <svg v-else class="w-6 h-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+            <CheckCircleIcon v-if="toast.type === 'success'" class="w-6 h-6 text-green-400" />
+            <ExclamationCircleIcon v-else-if="toast.type === 'error'" class="w-6 h-6 text-red-400" />
+            <InformationCircleIcon v-else class="w-6 h-6 text-[#D4AF37]" />
           </div>
 
           <!-- Texto -->
           <div class="flex-1">
-            <p class="text-sm font-semibold text-gray-800">{{ toast.title }}</p>
-            <p v-if="toast.message" class="text-xs text-gray-500">{{ toast.message }}</p>
+            <p class="text-sm font-bold text-cafe">{{ toast.title }}</p>
+            <p v-if="toast.message" class="text-xs text-[#C5B79D]">{{ toast.message }}</p>
           </div>
 
           <!-- Botão fechar -->
-          <button @click="removeToast(toast.id)" class="ml-4 text-gray-400 hover:text-gray-600 transition-colors">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+          <button @click="removeToast(toast.id)" class="ml-4 text-bege-torrado hover:text-cafe transition-colors">
+            <XMarkIcon class="w-4 h-4" />
           </button>
         </div>
       </TransitionGroup>
@@ -40,15 +32,21 @@
 </template>
 
 <script setup lang="ts">
+import { 
+  CheckCircleIcon, 
+  ExclamationCircleIcon, 
+  InformationCircleIcon, 
+  XMarkIcon 
+} from '@heroicons/vue/24/outline';
 import { useToast } from '~/composables/useToast';
 
 const { toasts, removeToast } = useToast();
 
 const variantClasses = (type: string) => {
   switch (type) {
-    case 'success': return 'bg-white border-green-100 ring-1 ring-green-500/10';
-    case 'error': return 'bg-white border-red-100 ring-1 ring-red-500/10';
-    default: return 'bg-white border-gray-100 ring-1 ring-gray-900/5';
+    case 'success': return 'bg-[#18181C] border-[#2A261D] shadow-2xl';
+    case 'error': return 'bg-[#18181C] border-red-900/50 shadow-2xl';
+    default: return 'bg-[#18181C] border-[#2A261D] shadow-2xl';
   }
 };
 </script>

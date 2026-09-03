@@ -3,23 +3,21 @@
     <Transition name="fade">
       <div v-if="show" class="fixed inset-0 z-50 flex items-center justify-center p-4">
         <!-- Backdrop -->
-        <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" @click="$emit('close')"></div>
+        <div class="fixed inset-0 bg-black/70 backdrop-blur-sm" @click="$emit('close')"></div>
         
         <!-- Modal Content -->
         <div 
-          class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all"
+          class="relative bg-[#141417] border border-[#2E2A20] rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all text-[#E2DACB]"
           :class="sizeClasses"
         >
           <!-- Header -->
-          <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-            <h3 class="text-xl font-bold text-gray-800">{{ title }}</h3>
+          <div class="px-6 py-4 border-b border-[#2E2A20] flex justify-between items-center bg-[#18181C]">
+            <h3 class="text-xl font-bold text-cafe">{{ title }}</h3>
             <button 
               @click="$emit('close')" 
-              class="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-full hover:bg-gray-100"
+              class="text-bege-torrado hover:text-cafe transition-colors p-1 rounded-full hover:bg-white/5"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              <XMarkIcon class="h-6 w-6" />
             </button>
           </div>
 
@@ -29,7 +27,7 @@
           </div>
 
           <!-- Footer -->
-          <div v-if="$slots.footer" class="px-6 py-4 bg-gray-50 flex justify-end gap-3 border-t border-gray-100">
+          <div v-if="$slots.footer" class="px-6 py-4 bg-[#18181C] flex justify-end gap-3 border-t border-[#2E2A20]">
             <slot name="footer" />
           </div>
         </div>
@@ -39,6 +37,7 @@
 </template>
 
 <script setup lang="ts">
+import { XMarkIcon } from '@heroicons/vue/24/outline';
 /**
  * Componente BaseModal - Estrutura base para todos os modais do sistema
  */

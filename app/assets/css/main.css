@@ -4,24 +4,159 @@
 
 @layer base {
   html, body {
-    @apply font-sans antialiased bg-bege-cream text-preto selection:bg-cafe/10;
+    @apply font-sans antialiased bg-bege-cream selection:bg-cafe/30 selection:text-white;
     font-family: 'Outfit', sans-serif;
+    background-color: #0A0A0C;
+    color: #E2DACB;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold text-cafe;
+    color: #D4AF37;
+  }
+
+  p, span, label, input, select, textarea {
+    color: inherit;
   }
 }
 
-/* Scrollbar personalizada profissional */
+/* Tipografia e Textos: Garantia de Alto Contraste e Letras Douradas/Champagne */
+.text-cafe {
+  color: #D4AF37 !important;
+}
+
+.text-cafe-dark {
+  color: #E8C86A !important; /* Dourado vivo luminoso */
+}
+
+.text-cafe-light {
+  color: #FFF2B2 !important;
+}
+
+.text-moca {
+  color: #F0CE65 !important; /* Dourado brilhante */
+}
+
+.text-moca-light {
+  color: #FFF4CC !important;
+}
+
+.text-moca-dark {
+  color: #D4AF37 !important;
+}
+
+.text-bege-soft {
+  color: #DDD2BC !important; /* Letras de menu e navegação 100% legíveis */
+}
+
+.text-bege-torrado {
+  color: #CFC3AA !important; /* Subtítulos e descrições champagne nítidas */
+}
+
+.text-bege-claro {
+  color: #F7E5B5 !important; /* Dourado suave e títulos */
+}
+
+.text-preto {
+  color: #EAE3D2 !important;
+}
+
+/* Superfícies de Cards da Adega (Substitui o branco por ônix luxuoso) */
+.bg-branco {
+  background-color: #141417 !important;
+  border-color: #262218 !important;
+}
+
+/* Efeito de Vidro Escuro / Glassmorphism */
+.glass-panel {
+  background: rgba(18, 18, 22, 0.85) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(212, 175, 55, 0.15) !important;
+}
+
+/* Logo Oficial Adega Canoinhas: Tom exato dourado nobre (#E8C86A) idêntico às fontes do sistema */
+.logo-adega-gold {
+  filter: brightness(0) saturate(100%) invert(84%) sepia(28%) saturate(1088%) hue-rotate(357deg) brightness(97%) contrast(92%) !important;
+}
+
+/* Modais e painéis elevados */
+.bg-white {
+  background-color: #141417 !important;
+  color: #E2DACB !important;
+  border-color: #262218 !important;
+}
+
+/* Botões Dourados Principais com texto escuro para contraste de alto padrão */
+button.bg-cafe,
+.bg-cafe.text-branco,
+.bg-cafe.text-white,
+a.bg-cafe {
+  background-color: #D4AF37 !important;
+  color: #0A0A0C !important;
+  font-weight: 800 !important;
+}
+
+button.bg-cafe svg,
+.bg-cafe.text-branco svg,
+.bg-cafe.text-white svg {
+  stroke: #0A0A0C !important;
+}
+
+button.bg-cafe:hover,
+a.bg-cafe:hover {
+  background-color: #E8C350 !important;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.4) !important;
+}
+
+/* Ajuste fino de utilitários cinzas para modo escuro */
+.text-gray-900,
+.text-gray-800,
+.text-gray-700 {
+  color: #F2ECE1 !important;
+}
+
+.text-gray-600,
+.text-gray-500 {
+  color: #BDB29F !important;
+}
+
+.text-gray-400 {
+  color: #8A8170 !important;
+}
+
+.border-gray-50,
+.border-gray-100,
+.border-gray-200 {
+  border-color: #262218 !important;
+}
+
+.bg-gray-50,
+.bg-gray-100 {
+  background-color: #18181C !important;
+}
+
+.hover\:bg-gray-50:hover,
+.hover\:bg-gray-100:hover {
+  background-color: #1C1C21 !important;
+}
+
+/* Scrollbar personalizada da Adega */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-bege-cream;
+  background-color: #0A0A0C;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-bege-claro rounded-full border-2 border-bege-cream hover:bg-bege-torrado transition-colors;
+  background-color: #2E281C;
+  border-radius: 9999px;
+  border: 2px solid #0A0A0C;
+  transition: background-color 0.2s;
 }
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #D4AF37;
+}
+

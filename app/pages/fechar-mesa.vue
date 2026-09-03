@@ -60,7 +60,7 @@
 
       <!-- Coluna da Direita: Painel de Pagamento -->
       <div class="space-y-6">
-        <div v-if="mesaSelecionada" class="bg-cafe-dark text-branco rounded-3xl shadow-2xl p-6 sticky top-6 border border-white/10">
+        <div v-if="mesaSelecionada" class="bg-[#111114] text-branco rounded-3xl shadow-2xl p-6 sticky top-6 border border-[rgba(212,175,55,0.2)]">
           <h2 class="text-[10px] font-black text-bege-claro/60 uppercase tracking-widest mb-6">Financeiro</h2>
           
           <div class="space-y-4 mb-8">
@@ -139,7 +139,10 @@
 
           <div v-else class="space-y-6">
             <div class="p-4 bg-green-500/10 border border-green-500/20 rounded-2xl text-center">
-              <p class="text-green-400 text-xs font-black uppercase mb-1">Conta Quitada! 🥂</p>
+              <p class="text-green-400 text-xs font-black uppercase mb-1 flex items-center justify-center gap-1.5">
+                <CheckBadgeIcon class="w-4 h-4 text-green-400" />
+                Conta Quitada!
+              </p>
               <p class="text-[10px] text-green-400/60 leading-tight">Todos os débitos foram liquidados. A mesa pode ser liberada.</p>
             </div>
             
@@ -156,7 +159,7 @@
 
         <!-- EMPTY STATE FINANCEIRO -->
         <div v-else class="bg-branco rounded-3xl shadow-sm border border-bege-soft p-12 flex flex-col items-center justify-center text-center opacity-50 h-[400px]">
-          <div class="text-5xl mb-6 grayscale text-bege-torrado">💳</div>
+          <CreditCardIcon class="w-16 h-16 mb-6 text-bege-torrado opacity-80" />
           <p class="text-caption font-bold text-bege-torrado uppercase tracking-widest leading-loose">Selecione uma mesa<br>para iniciar o acerto</p>
         </div>
       </div>
@@ -169,6 +172,7 @@ import { ref, computed, onMounted } from 'vue';
 import { usePedidos } from '~/composables/usePedidos';
 import { useToast } from '~/composables/useToast';
 import { formatCurrency } from '~/utils/formatters';
+import { CheckBadgeIcon, CreditCardIcon } from '@heroicons/vue/24/outline';
 
 const { mesas, fetchMesas, pedidos, fetchPedidos, fetchPagamentosMesa, registrarPagamento, finalizarMesa } = usePedidos();
 const toast = useToast();

@@ -47,7 +47,7 @@
             <h2 class="text-3xl sm:text-4xl font-black text-cafe-dark leading-none tabular-nums">{{ formatCurrency(totalFaturado).replace('R$', '').trim() }}</h2>
           </div>
         </div>
-        <span class="absolute -right-4 -bottom-4 text-6xl sm:text-8xl opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-500 grayscale pointer-events-none">💰</span>
+        <BanknotesIcon class="absolute -right-4 -bottom-4 w-24 h-24 sm:w-32 sm:h-32 text-cafe/5 group-hover:text-cafe/10 transition-colors pointer-events-none" />
       </div>
 
       <!-- Card Pedidos -->
@@ -59,7 +59,7 @@
             <span class="text-xs sm:text-sm font-black text-moca uppercase tracking-widest">Pedidos</span>
           </div>
         </div>
-        <span class="absolute -right-4 -bottom-4 text-6xl sm:text-8xl opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-500 grayscale pointer-events-none">📝</span>
+        <DocumentTextIcon class="absolute -right-4 -bottom-4 w-24 h-24 sm:w-32 sm:h-32 text-cafe/5 group-hover:text-cafe/10 transition-colors pointer-events-none" />
       </div>
 
       <!-- Card Ticket Médio -->
@@ -71,20 +71,22 @@
             <h2 class="text-3xl sm:text-4xl font-black text-cafe-dark leading-none tabular-nums">{{ formatCurrency(ticketMedio).replace('R$', '').trim() }}</h2>
           </div>
         </div>
-        <span class="absolute -right-4 -bottom-4 text-6xl sm:text-8xl opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-500 grayscale pointer-events-none">🎯</span>
+        <ChartBarIcon class="absolute -right-4 -bottom-4 w-24 h-24 sm:w-32 sm:h-32 text-cafe/5 group-hover:text-cafe/10 transition-colors pointer-events-none" />
       </div>
     </div>
 
     <!-- Resumo de Métodos de Pagamento -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-12">
       <div v-for="item in [
-        { label: 'Pix', valor: totalPix, perc: percPix, icon: '📱', color: 'cyan' },
-        { label: 'Cartão', valor: totalCartao, perc: percCartao, icon: '💳', color: 'purple' },
-        { label: 'Dinheiro', valor: totalDinheiro, perc: percDinheiro, icon: '💵', color: 'amber' }
+        { label: 'Pix', valor: totalPix, perc: percPix, icon: QrCodeIcon, color: 'cyan' },
+        { label: 'Cartão', valor: totalCartao, perc: percCartao, icon: CreditCardIcon, color: 'purple' },
+        { label: 'Dinheiro', valor: totalDinheiro, perc: percDinheiro, icon: BanknotesIcon, color: 'amber' }
       ]" :key="item.label" 
       class="bg-branco p-4 sm:p-6 rounded-3xl border border-bege-soft flex items-center justify-between shadow-premium hover:shadow-xl transition-all group">
         <div class="flex items-center gap-3 sm:gap-4">
-          <div :class="`w-10 h-10 sm:w-12 sm:h-12 bg-${item.color}-50 text-${item.color}-600 rounded-2xl flex items-center justify-center text-lg sm:text-xl group-hover:scale-110 transition-transform`">{{ item.icon }}</div>
+          <div :class="`w-10 h-10 sm:w-12 sm:h-12 bg-${item.color}-50 text-${item.color}-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform`">
+            <component :is="item.icon" class="w-5 h-5 sm:w-6 sm:h-6" />
+          </div>
           <div>
             <p class="text-[9px] sm:text-[10px] font-black text-bege-torrado uppercase tracking-widest">{{ item.label }}</p>
             <h3 class="text-lg sm:text-xl font-black text-cafe-dark tabular-nums">{{ formatCurrency(item.valor) }}</h3>
@@ -173,8 +175,14 @@
           
           <div class="flex justify-between items-center text-[10px]">
             <div class="flex items-center gap-3 text-bege-torrado font-bold">
-              <span class="flex items-center gap-1">📅 {{ formatarDia(venda.data) }}</span>
-              <span class="flex items-center gap-1">🕒 {{ formatarHora(venda.data) }}</span>
+              <span class="flex items-center gap-1">
+                <CalendarIcon class="w-3.5 h-3.5" />
+                {{ formatarDia(venda.data) }}
+              </span>
+              <span class="flex items-center gap-1">
+                <ClockIcon class="w-3.5 h-3.5" />
+                {{ formatarHora(venda.data) }}
+              </span>
             </div>
             <div class="flex items-center gap-2">
                <span :class="['text-[8px] font-black px-1.5 py-0.5 rounded uppercase border', 
@@ -188,7 +196,7 @@
       </div>
 
       <div v-if="vendasAgrupadas.length === 0" class="py-16 text-center">
-        <div class="text-4xl mb-4 grayscale opacity-20">📊</div>
+        <ChartPieIcon class="w-12 h-12 mb-4 mx-auto opacity-20 text-cafe" />
         <p class="text-bege-torrado text-sm font-bold uppercase tracking-widest">Nenhuma venda finalizada encontrada</p>
       </div>
     </div>
@@ -200,6 +208,16 @@ import { ref, computed, onMounted } from 'vue';
 import { usePedidos } from '~/composables/usePedidos';
 import { useToast } from '~/composables/useToast';
 import { formatCurrency } from '~/utils/formatters';
+import { 
+  BanknotesIcon, 
+  DocumentTextIcon, 
+  ChartBarIcon, 
+  QrCodeIcon, 
+  CreditCardIcon, 
+  CalendarIcon, 
+  ClockIcon, 
+  ChartPieIcon 
+} from '@heroicons/vue/24/outline';
 
 const { fetchPedidosPorPeriodo, fetchPagamentosPorPeriodo } = usePedidos();
 const toast = useToast();

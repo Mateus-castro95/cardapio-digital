@@ -137,7 +137,7 @@ const handleFocus = (event: FocusEvent) => {
 .input-label {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #1e293b;
+  color: #D4AF37;
   display: flex;
   align-items: center;
   gap: 0.25rem;
@@ -159,31 +159,32 @@ const handleFocus = (event: FocusEvent) => {
   padding: 0.75rem 1rem;
   font-size: 1rem;
   font-family: inherit;
-  color: #1e293b;
-  background: white;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
+  color: #F2ECE1;
+  background: #18181C;
+  border: 1.5px solid #2C271D;
+  border-radius: 12px;
   transition: all 0.3s ease;
   outline: none;
 }
 
 .base-input::placeholder {
-  color: #94a3b8;
+  color: #7A7261;
 }
 
 .base-input:focus {
-  border-color: #f59e0b;
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+  border-color: #D4AF37;
+  background: #1C1C21;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.18);
 }
 
 .base-input:disabled {
-  background: #f1f5f9;
+  background: #111114;
   cursor: not-allowed;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 .base-input:readonly {
-  background: #f8fafc;
+  background: #141417;
   cursor: default;
 }
 
@@ -192,7 +193,7 @@ const handleFocus = (event: FocusEvent) => {
 }
 
 .base-input.is-error:focus {
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
 }
 
 .base-input.has-prefix {
@@ -209,7 +210,7 @@ const handleFocus = (event: FocusEvent) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #64748b;
+  color: #9C907A;
   pointer-events: none;
 }
 
@@ -229,12 +230,12 @@ const handleFocus = (event: FocusEvent) => {
 
 .hint-message {
   font-size: 0.875rem;
-  color: #64748b;
+  color: #9C907A;
 }
 
 /* Hover effect */
 .base-input:hover:not(:disabled):not(:readonly) {
-  border-color: #cbd5e1;
+  border-color: #4A4232;
 }
 
 /* Number input arrows styling */

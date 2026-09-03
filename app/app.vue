@@ -7,15 +7,22 @@
     <!-- Header Móvel (visível apenas em telas pequenas e rotas não públicas) -->
     <header 
       v-if="!isPublicRoute"
-      class="lg:hidden fixed top-0 left-0 right-0 h-16 bg-cafe-dark text-branco flex items-center justify-between px-6 z-[1100] shadow-md"
+      class="lg:hidden fixed top-0 left-0 right-0 h-16 bg-[#111114] border-b border-[rgba(212,175,55,0.15)] flex items-center justify-between px-6 z-[1100] shadow-md"
     >
-      <h1 class="text-lg font-black uppercase tracking-wider text-bege-claro">Pastel Hora</h1>
+      <div class="flex items-center gap-3 min-w-0">
+        <img 
+          src="/logo-adega.webp" 
+          alt="Adega Canoinhas" 
+          class="h-9 w-auto object-contain shrink-0 logo-adega-gold" 
+        />
+        <h1 class="text-sm font-black uppercase tracking-wider text-[#C5A059] truncate">Adega Canoinhas</h1>
+      </div>
       <button 
         @click="isMobileOpen = !isMobileOpen"
-        class="p-2 text-bege-claro hover:bg-white/10 rounded-lg transition-colors"
+        class="p-2 text-[#B89758] hover:text-[#E5C158] hover:bg-white/5 rounded-lg transition-colors"
       >
-        <svg v-if="!isMobileOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
-        <svg v-else xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        <Bars3Icon v-if="!isMobileOpen" class="w-6 h-6" />
+        <XMarkIcon v-else class="w-6 h-6" />
       </button>
     </header>
 
@@ -43,6 +50,7 @@
 /**
  * App.vue - Shell principal da aplicação
  **/
+import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
 import SideBar from '~/components/SideBar.vue';
 import { useAuthStore } from '~/stores/auth';
 import { onMounted } from 'vue';
@@ -97,7 +105,7 @@ watch(() => route.fullPath, () => {
   width: 100%;
   padding-top: 4rem; /* h-16 */
   min-height: 100vh;
-  background-color: #FDFBFA; /* bege-cream */
+  background-color: #0A0A0C;
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 300ms;

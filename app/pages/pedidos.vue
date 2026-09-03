@@ -71,15 +71,11 @@
                   class="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-600/20 py-2.5 px-6 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 flex items-center justify-center gap-2"
                   @click="handleUpdateStatus(pedido.id, 'entregue')"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                  </svg>
+                  <CheckIcon class="h-4 w-4" />
                   Marcar Entregue
                 </button>
                 <div v-else-if="pedido.status === 'entregue'" class="flex items-center justify-center sm:justify-start gap-2 text-green-700 font-black text-[9px] uppercase bg-green-50 px-3 py-2 rounded-xl border border-green-100 shadow-sm">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                  </svg>
+                  <CheckCircleIcon class="h-3.5 w-3.5" />
                   Entregue na mesa
                 </div>
               </div>
@@ -144,8 +140,8 @@
 
     <!-- Empty State -->
     <div v-else class="flex flex-col items-center justify-center py-32 text-center opacity-60">
-      <div class="w-32 h-32 bg-branco rounded-[2.5rem] shadow-premium border border-bege-soft flex items-center justify-center text-6xl mb-8">
-        📝
+      <div class="w-32 h-32 bg-branco rounded-[2.5rem] shadow-premium border border-bege-soft flex items-center justify-center mb-8">
+        <ClipboardDocumentListIcon class="w-16 h-16 text-cafe-dark" />
       </div>
       <h3 class="text-heading-2 text-cafe-dark">Sem pedidos ativos</h3>
       <p class="text-body text-bege-torrado max-w-sm mt-3">Os pedidos aparecerão nesta tela conforme forem realizados pelos clientes.</p>
@@ -158,6 +154,8 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { usePedidos } from '~/composables/usePedidos';
 import { useToast } from '~/composables/useToast';
+import { CheckIcon, CheckCircleIcon } from '@heroicons/vue/20/solid';
+import { ClipboardDocumentListIcon } from '@heroicons/vue/24/outline';
 
 const { pedidos, fetchPedidos, atualizarStatusPedido, setupRealtimePedidos } = usePedidos();
 const toast = useToast();
