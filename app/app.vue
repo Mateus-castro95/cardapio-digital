@@ -14,8 +14,9 @@
           src="/logo-adega.webp" 
           alt="Adega Canoinhas" 
           class="h-9 w-auto object-contain shrink-0 logo-adega-gold" 
+          style="filter: brightness(0) saturate(100%) invert(84%) sepia(28%) saturate(1088%) hue-rotate(357deg) brightness(97%) contrast(92%) !important;"
         />
-        <h1 class="text-sm font-black uppercase tracking-wider text-[#C5A059] truncate">Adega Canoinhas</h1>
+        <h1 class="text-sm font-black uppercase tracking-wider text-[#E8C86A] truncate">Adega Canoinhas</h1>
       </div>
       <button 
         @click="isMobileOpen = !isMobileOpen"

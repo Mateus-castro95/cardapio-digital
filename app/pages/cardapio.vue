@@ -4,10 +4,15 @@
     <header class="bg-branco px-4 sm:px-6 py-4 sm:py-6 border-b border-bege-soft sticky top-0 z-30 shadow-sm">
       <div class="max-w-2xl mx-auto flex justify-between items-center gap-4">
         <div class="flex items-center gap-3 min-w-0">
-          <img src="/logo-adega.webp" alt="Adega Canoinhas" class="h-11 w-auto object-contain logo-adega-gold shrink-0" />
+          <img 
+            src="/logo-adega.webp" 
+            alt="Adega Canoinhas" 
+            class="h-11 w-auto object-contain logo-adega-gold shrink-0" 
+            style="filter: brightness(0) saturate(100%) invert(84%) sepia(28%) saturate(1088%) hue-rotate(357deg) brightness(97%) contrast(92%) !important;"
+          />
           <div class="min-w-0">
-            <h1 class="text-lg sm:text-heading-3 text-cafe font-black leading-tight tracking-tight truncate">
-              Adega <span class="text-moca">Canoinhas</span>
+            <h1 class="text-lg sm:text-heading-3 text-[#E8C86A] font-black leading-tight tracking-tight truncate">
+              Adega <span class="text-[#E8C86A]">Canoinhas</span>
             </h1>
             <p class="text-[10px] sm:text-caption text-bege-torrado font-medium truncate">Cardápio Digital • Aberto</p>
           </div>

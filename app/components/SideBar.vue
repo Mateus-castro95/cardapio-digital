@@ -26,9 +26,10 @@
             src="/logo-adega.webp" 
             alt="Adega Canoinhas" 
             class="h-10 w-auto object-contain shrink-0 logo-adega-gold" 
+            style="filter: brightness(0) saturate(100%) invert(84%) sepia(28%) saturate(1088%) hue-rotate(357deg) brightness(97%) contrast(92%) !important;"
           />
           <h1 v-show="!isCollapsed || isMobileOpen" class="text-sm font-black m-0 text-[#E8C86A] uppercase tracking-wider whitespace-nowrap overflow-hidden leading-tight">
-            Adega<br><span class="text-xs text-[#B89758] tracking-widest">Canoinhas</span>
+            Adega<br><span class="text-xs text-[#E8C86A]/80 tracking-widest">Canoinhas</span>
           </h1>
         </div>
         
@@ -237,7 +238,11 @@ const handleLogout = async () => {
 }
 
 #sidebar header h1 {
-  color: #C5A059 !important;
+  color: #E8C86A !important;
+}
+
+.logo-adega-gold {
+  filter: brightness(0) saturate(100%) invert(84%) sepia(28%) saturate(1088%) hue-rotate(357deg) brightness(97%) contrast(92%) !important;
 }
 
 #sidebar header button {

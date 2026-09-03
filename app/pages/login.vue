@@ -8,7 +8,12 @@
       <!-- Logo / Título -->
       <div class="text-center mb-8 animate-fade-in-up">
         <div class="flex items-center justify-center mx-auto mb-5">
-          <img src="/logo-adega.webp" alt="Adega Canoinhas" class="h-36 sm:h-40 w-auto max-w-[320px] object-contain logo-adega-gold select-none" />
+          <img 
+            src="/logo-adega.webp" 
+            alt="Adega Canoinhas" 
+            class="h-36 sm:h-40 w-auto max-w-[320px] object-contain logo-adega-gold select-none" 
+            style="filter: brightness(0) saturate(100%) invert(84%) sepia(28%) saturate(1088%) hue-rotate(357deg) brightness(97%) contrast(92%) !important;"
+          />
         </div>
         <p class="text-xs font-black uppercase tracking-[0.25em] text-bege-torrado">Painel Administrativo</p>
       </div>
