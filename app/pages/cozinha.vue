@@ -66,10 +66,17 @@
               {{ item.quantidade }}
             </div>
             <div class="flex-grow min-w-0">
-              <h4 class="font-bold text-cafe-dark leading-tight mb-1">
+              <h4 class="font-bold text-cafe-dark leading-tight mb-1 text-sm sm:text-base">
                 {{ getItemName(item) }}
               </h4>
-              <p class="text-xs text-bege-torrado leading-relaxed font-medium">
+
+              <!-- DESTAQUE DO PONTO DA CARNE PARA A COZINHA -->
+              <div v-if="item.ponto_carne" class="my-1.5 inline-flex items-center gap-1.5 px-3 py-1 bg-red-600 text-white rounded-lg font-black text-xs uppercase tracking-wider shadow-sm">
+                <span>🥩 PONTO:</span>
+                <span class="underline decoration-2 text-yellow-300 font-extrabold">{{ item.ponto_carne }}</span>
+              </div>
+
+              <p v-if="getItemDescription(item)" class="text-xs text-bege-torrado leading-relaxed font-medium">
                 {{ getItemDescription(item) }}
               </p>
               <div v-if="item.observacoes" class="mt-2 p-2.5 bg-red-50 rounded-xl border border-red-100 relative">
@@ -186,6 +193,8 @@ const getStatusVariant = (status: string) => {
 };
 
 const getItemName = (item: any) => {
+    if (item.nome_item) return item.nome_item;
+    if (item.item_cardapio?.nome) return item.item_cardapio.nome;
     if (item.tamanho) return `Pastel ${item.tamanho.nome}`;
     
     // Para bebidas e outros itens simples
@@ -201,6 +210,10 @@ const getItemName = (item: any) => {
 };
 
 const getItemDescription = (item: any) => {
+    if (item.item_cardapio?.descricao) {
+        return item.item_cardapio.descricao;
+    }
+
     if (item.sabores && Array.isArray(item.sabores) && item.sabores.length > 0) {
         return item.sabores.map((s: any) => s.nome).join(' + ');
     }

@@ -9,6 +9,9 @@ type Mesa = Database['public']['Tables']['mesas']['Row'];
 export interface ItemPedidoInput {
     produto_simples_id?: string | null;
     tamanho_id?: string | null;
+    item_cardapio_id?: string | null;
+    nome_item?: string | null;
+    ponto_carne?: string | null;
     sabores?: any;
     quantidade: number;
     preco_unitario: number;
@@ -139,7 +142,8 @@ export const usePedidos = () => {
                     itens:itens_pedido(
                         *,
                         produto_simples:produtos_simples(*),
-                        tamanho:tamanhos(nome)
+                        tamanho:tamanhos(nome),
+                        item_cardapio:itens_cardapio(*)
                     )
                 `)
                 .order('criado_em', { ascending: false });

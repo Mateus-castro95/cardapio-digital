@@ -344,6 +344,8 @@ const handleFinalizarMesa = async () => {
 };
 
 const getItemName = (item: any) => {
+    if (item.nome_item) return item.nome_item;
+    if (item.item_cardapio?.nome) return item.item_cardapio.nome;
     if (item.tamanho) return `Pastel ${item.tamanho.nome}`;
     if (item.produto_simples) {
         const p = item.produto_simples;
@@ -356,8 +358,15 @@ const getItemName = (item: any) => {
 };
 
 const getItemDescription = (item: any) => {
+    const parts = [];
+    if (item.ponto_carne) parts.push(`Ponto: ${item.ponto_carne}`);
+
+    if (item.item_cardapio?.descricao) {
+        parts.push(item.item_cardapio.descricao);
+    }
+
     if (item.sabores && Array.isArray(item.sabores) && item.sabores.length > 0) {
-        return item.sabores.map((s: any) => s.nome).join(' + ');
+        parts.push(item.sabores.map((s: any) => s.nome).join(' + '));
     }
     if (item.produto_simples) {
         const p = item.produto_simples;
@@ -366,9 +375,9 @@ const getItemDescription = (item: any) => {
         if (p.tamanho) detalhes.push(p.tamanho);
         if (p.volume_ml) detalhes.push(`${p.volume_ml}ml`);
         if (p.tipo_gas) detalhes.push(p.tipo_gas === 'com_gas' ? 'C/ Gás' : 'S/ Gás');
-        return detalhes.join(' • ');
+        parts.push(detalhes.join(' • '));
     }
-    return '';
+    return parts.join(' | ');
 };
 </script>
 

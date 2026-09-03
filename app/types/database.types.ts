@@ -279,12 +279,67 @@ export type Database = {
                     }
                 ]
             },
+            itens_cardapio: {
+                Row: {
+                    id: string
+                    categoria_id: string
+                    nome: string
+                    descricao: string | null
+                    preco: number
+                    imagem_url: string | null
+                    destaque: boolean
+                    ativo: boolean
+                    permite_ponto_carne: boolean
+                    ordem: number
+                    criado_em: string
+                    atualizado_em: string
+                }
+                Insert: {
+                    id?: string
+                    categoria_id: string
+                    nome: string
+                    descricao?: string | null
+                    preco: number
+                    imagem_url?: string | null
+                    destaque?: boolean
+                    ativo?: boolean
+                    permite_ponto_carne?: boolean
+                    ordem?: number
+                    criado_em?: string
+                    atualizado_em?: string
+                }
+                Update: {
+                    id?: string
+                    categoria_id?: string
+                    nome?: string
+                    descricao?: string | null
+                    preco?: number
+                    imagem_url?: string | null
+                    destaque?: boolean
+                    ativo?: boolean
+                    permite_ponto_carne?: boolean
+                    ordem?: number
+                    criado_em?: string
+                    atualizado_em?: string
+                }
+                Relationships: [
+                    {
+                        foreignKeyName: "itens_cardapio_categoria_id_fkey"
+                        columns: ["categoria_id"]
+                        referencedRelation: "categorias"
+                        referencedColumns: ["id"]
+                    }
+                ]
+            },
             itens_pedido: {
                 Row: {
                     id: string
                     pedido_id: string
                     produto_simples_id: string | null
                     tamanho_id: string | null
+                    item_cardapio_id: string | null
+                    nome_item: string | null
+                    ponto_carne: string | null
                     sabores: Json
                     quantidade: number
                     preco_unitario: number
@@ -296,6 +351,9 @@ export type Database = {
                     pedido_id: string
                     produto_simples_id?: string | null
                     tamanho_id?: string | null
+                    item_cardapio_id?: string | null
+                    nome_item?: string | null
+                    ponto_carne?: string | null
                     sabores?: Json
                     quantidade?: number
                     preco_unitario: number
@@ -307,6 +365,9 @@ export type Database = {
                     pedido_id?: string
                     produto_simples_id?: string | null
                     tamanho_id?: string | null
+                    item_cardapio_id?: string | null
+                    nome_item?: string | null
+                    ponto_carne?: string | null
                     sabores?: Json
                     quantidade?: number
                     preco_unitario?: number
@@ -330,6 +391,12 @@ export type Database = {
                         foreignKeyName: "itens_pedido_tamanho_id_fkey"
                         columns: ["tamanho_id"]
                         referencedRelation: "tamanhos"
+                        referencedColumns: ["id"]
+                    },
+                    {
+                        foreignKeyName: "itens_pedido_item_cardapio_id_fkey"
+                        columns: ["item_cardapio_id"]
+                        referencedRelation: "itens_cardapio"
                         referencedColumns: ["id"]
                     }
                 ]

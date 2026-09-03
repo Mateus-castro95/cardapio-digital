@@ -1,354 +1,213 @@
 <template>
-  <div class="p-4 sm:p-8 max-w-7xl mx-auto">
-    <div class="mb-8 sm:mb-10 text-center sm:text-left">
-      <h1 class="text-2xl sm:text-heading-1 text-cafe mb-1 sm:mb-2 font-black">Gestão do <span class="text-moca">Cardápio</span></h1>
-      <p class="text-sm sm:text-body-lg text-bege-torrado">Gerencie categorias, produtos e preços em um único lugar</p>
-    </div>
-
-    <div class="space-y-12 sm:space-y-16">
-      <!-- SEÇÃO: CATEGORIAS NO TOPO -->
-      <section>
-        <div class="flex flex-col sm:flex-row justify-between items-center sm:items-end mb-6 gap-4">
-          <div class="text-center sm:text-left">
-            <h2 class="text-xl sm:text-heading-2 text-cafe-dark font-black">Categorias</h2>
-            <p class="text-xs sm:text-caption text-bege-torrado font-bold">Divisões principais do cardápio</p>
-          </div>
-          <button 
-            class="w-full sm:w-auto px-4 py-2.5 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-all font-black text-xs uppercase tracking-widest shadow-lg active:scale-95"
-            @click="handleOpenAddCategory"
-          >
-            Adicionar nova categoria
-          </button>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          <div 
-            v-for="categoria in categorias" :key="categoria.id" 
-            class="group bg-branco rounded-2xl p-4 sm:p-6 shadow-sm border border-bege-soft hover:shadow-premium hover:border-moca/30 transition-all flex justify-between items-center"
-          >
-            <span class="font-black text-base sm:text-lg text-cafe capitalize">{{ categoria.nome }}</span>
-            <div class="flex gap-1 sm:gap-2">
-              <button @click="handleOpenEditCategory(categoria)" class="p-2 text-bege-torrado hover:text-cafe hover:bg-bege-cream rounded-xl transition-colors">
-                <PencilSquareIcon class="h-4 w-4" />
-              </button>
-              <button @click="confirmDelete(categoria, 'categoria')" class="p-2 text-bege-torrado hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors">
-                <TrashIcon class="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SEÇÃO DE ITENS -->
-      <!-- Seção de Pastéis -->
+  <div class="p-4 sm:p-8 max-w-7xl mx-auto space-y-12">
+    <!-- Cabeçalho Principal -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-bege-soft pb-6">
       <div>
-        <div class="mb-8 text-center sm:text-left">
-          <h2 class="text-xl sm:text-heading-2 text-cafe-dark font-black">Pastéis <span class="text-moca">(Configuráveis)</span></h2>
-          <p class="text-xs sm:text-caption text-bege-torrado font-bold">Gerencie tamanhos base e variações de sabores</p>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="text-xl">🍷</span>
+          <span class="text-[10px] font-black uppercase tracking-widest text-bege-torrado bg-bege-cream px-2 py-0.5 rounded-md border border-bege-soft/60">
+            Adega Canoinhas
+          </span>
         </div>
-
-        <div class="flex flex-col gap-10 sm:gap-12">
-          <!-- Card de Tamanhos -->
-          <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft p-5 sm:p-6">
-            <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-              <h3 class="text-lg sm:text-heading-3 text-cafe font-black">Tamanhos</h3>
-              <button class="w-full sm:w-auto px-4 py-2 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-all font-black text-xs uppercase tracking-widest shadow-lg" @click="handleOpenAddTamanho">
-                Adicionar Tamanho
-              </button>
-            </div>
-            
-            <div class="-mx-5 sm:mx-0 overflow-x-auto">
-              <BaseTabela :colunas="colsTamanhos" :data="tamanhos" class="min-w-[500px]">
-                <template #preco_base="{ item }">
-                  <span class="font-black text-moca">
-                    {{ formatCurrency(item.preco_base) }}
-                  </span>
-                </template>
-                <template #max_sabores="{ item }">
-                  <span class="text-bege-torrado font-bold text-xs">
-                    {{ item.max_sabores }} {{ item.max_sabores > 1 ? 'Sabores' : 'Sabor' }}
-                  </span>
-                </template>
-                <template #acoes="{ item }">
-                  <div class="flex gap-2">
-                    <button class="p-2 text-bege-torrado hover:text-cafe transition-colors" @click="handleOpenEditTamanho(item)">
-                      <PencilSquareIcon class="h-5 w-5" />
-                    </button>
-                    <button class="p-2 text-bege-torrado hover:text-red-500 transition-colors" @click="confirmDelete(item, 'tamanho')">
-                      <TrashIcon class="h-5 w-5" />
-                    </button>
-                  </div>
-                </template>
-              </BaseTabela>
-            </div>
-          </div>
-
-          <!-- Seção de Sabores -->
-          <div class="space-y-12">
-            <!-- Salgados -->
-            <div>
-              <div class="mb-6 flex flex-col sm:flex-row justify-between items-center sm:items-end gap-4 overflow-hidden">
-                <div class="text-center sm:text-left">
-                  <h3 class="text-lg sm:text-heading-3 text-cafe font-black flex items-center justify-center sm:justify-start gap-3">
-                    Sabores Salgados
-                    <span class="text-[9px] bg-bege-cream text-cafe-dark px-2 py-0.5 rounded-full font-black uppercase tracking-wider">{{ saboresSalgados.length }}</span>
-                  </h3>
-                  <p class="text-xs sm:text-caption text-bege-torrado font-bold">Gerencie os sabores de pastéis salgados</p>
-                </div>
-                <button class="w-full sm:w-auto px-4 py-2 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-all font-black text-xs uppercase tracking-widest shadow-lg" @click="handleOpenAddSabor('salgado')">
-                  Adicionar Sabor
-                </button>
-              </div>
-
-              <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden">
-                <div class="overflow-x-auto">
-                  <BaseTabela :colunas="colsSabores" :data="saboresSalgados" class="min-w-[800px]">
-                    <template #nome="{ item }">
-                      <div class="flex items-center gap-3 px-4">
-                        <div :class="['w-2.5 h-2.5 rounded-full shadow-sm', item.tipo === 'especial' ? 'bg-moca' : 'bg-green-500']"></div>
-                        <span class="font-black text-cafe-dark capitalize text-sm">{{ item.nome }}</span>
-                      </div>
-                    </template>
-                    <template #tipo="{ item }">
-                      <span class="text-[9px] px-2 py-1 rounded-lg font-black uppercase tracking-widest border" :class="item.tipo === 'especial' ? 'bg-moca/10 text-moca border-moca/20' : 'bg-gray-50 text-gray-400 border-gray-100'">
-                        {{ item.tipo }}
-                      </span>
-                    </template>
-                    <template #adicional="{ item }">
-                      <div v-if="item.tipo === 'especial'" class="flex flex-wrap gap-1.5 py-2">
-                        <span v-for="adj in item.adicionais" :key="adj.tamanho_id" class="text-[8px] bg-bege-cream/50 text-cafe-dark px-1.5 py-0.5 rounded-lg border border-bege-soft/50 font-black whitespace-nowrap">
-                            {{ getTamanhoNome(adj.tamanho_id) }}: +{{ formatCurrency(adj.valor_adicional) }}
-                        </span>
-                      </div>
-                      <span v-else class="text-bege-torrado/50 text-[10px] font-bold italic">Incluído</span>
-                    </template>
-                    <template #ativo="{ item }">
-                      <BaseToggle v-model="item.ativo" @update:model-value="handleToggleAtivo(item, 'sabor')" />
-                    </template>
-                    <template #acoes="{ item }">
-                      <div class="flex gap-1">
-                        <button class="p-2 text-bege-torrado hover:text-cafe transition-colors" @click="handleOpenEditSabor(item)">
-                          <PencilSquareIcon class="h-5 w-5" />
-                        </button>
-                        <button class="p-2 text-bege-torrado hover:text-red-500 transition-colors" @click="confirmDelete(item, 'sabor')">
-                          <TrashIcon class="h-5 w-5" />
-                        </button>
-                      </div>
-                    </template>
-                  </BaseTabela>
-                </div>
-              </div>
-            </div>
-
-            <!-- Doces -->
-            <div>
-              <div class="mb-6 flex flex-col sm:flex-row justify-between items-center sm:items-end gap-4">
-                <div class="text-center sm:text-left">
-                   <h3 class="text-lg sm:text-heading-3 text-cafe font-black flex items-center justify-center sm:justify-start gap-3">
-                    Sabores Doces
-                    <span class="text-[9px] bg-bege-cream text-cafe-dark px-2 py-0.5 rounded-full font-black uppercase tracking-wider">{{ saboresDoces.length }}</span>
-                  </h3>
-                  <p class="text-xs sm:text-caption text-bege-torrado font-bold">Gerencie os sabores de pastéis doces</p>
-                </div>
-                <button class="w-full sm:w-auto px-4 py-2 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-all font-black text-xs uppercase tracking-widest shadow-lg" @click="handleOpenAddSabor('doce')">
-                  Adicionar Sabor
-                </button>
-              </div>
-
-              <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden">
-                <div class="overflow-x-auto">
-                  <BaseTabela :colunas="colsSabores" :data="saboresDoces" class="min-w-[800px]">
-                    <template #nome="{ item }">
-                      <div class="flex items-center gap-3 px-4">
-                        <div :class="['w-2.5 h-2.5 rounded-full shadow-sm', item.tipo === 'especial' ? 'bg-moca' : 'bg-pink-400']"></div>
-                        <span class="font-black text-cafe-dark capitalize text-sm">{{ item.nome }}</span>
-                      </div>
-                    </template>
-                    <template #tipo="{ item }">
-                       <span class="text-[9px] px-2 py-1 rounded-lg font-black uppercase tracking-widest border" :class="item.tipo === 'especial' ? 'bg-moca/10 text-moca border-moca/20' : 'bg-gray-50 text-gray-400 border-gray-100'">
-                        {{ item.tipo }}
-                      </span>
-                    </template>
-                    <template #adicional="{ item }">
-                      <div v-if="item.tipo === 'especial'" class="flex flex-wrap gap-1.5 py-2">
-                        <span v-for="adj in item.adicionais" :key="adj.tamanho_id" class="text-[8px] bg-bege-cream/50 text-cafe-dark px-1.5 py-0.5 rounded-lg border border-bege-soft/50 font-black whitespace-nowrap">
-                            {{ getTamanhoNome(adj.tamanho_id) }}: +{{ formatCurrency(adj.valor_adicional) }}
-                        </span>
-                      </div>
-                      <span v-else class="text-bege-torrado/50 text-[10px] font-bold italic">Incluído</span>
-                    </template>
-                    <template #ativo="{ item }">
-                      <BaseToggle v-model="item.ativo" @update:model-value="handleToggleAtivo(item, 'sabor')" />
-                    </template>
-                    <template #acoes="{ item }">
-                      <div class="flex gap-1">
-                        <button class="p-2 text-bege-torrado hover:text-cafe transition-colors" @click="handleOpenEditSabor(item)">
-                          <PencilSquareIcon class="h-5 w-5" />
-                        </button>
-                        <button class="p-2 text-bege-torrado hover:text-red-500 transition-colors" @click="confirmDelete(item, 'sabor')">
-                          <TrashIcon class="h-5 w-5" />
-                        </button>
-                      </div>
-                    </template>
-                  </BaseTabela>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <h1 class="text-2xl sm:text-heading-1 text-cafe font-black">
+          Gestão do <span class="text-moca">Cardápio</span>
+        </h1>
+        <p class="text-sm sm:text-body text-bege-torrado">
+          Gerencie as categorias e os pratos do restaurante em um único lugar
+        </p>
       </div>
 
-      <!-- Seção de Bebidas Reorganizada -->
-      <div class="space-y-12">
-        <!-- Sucos -->
-        <div>
-          <div class="mb-6 flex flex-col sm:flex-row justify-between items-center sm:items-end gap-4">
-            <div class="text-center sm:text-left">
-              <h2 class="text-xl sm:text-heading-2 text-cafe-dark font-black">Sucos</h2>
-              <p class="text-xs sm:text-caption text-bege-torrado font-bold">Gerencie os sabores e tipos de preparo</p>
-            </div>
-            <button class="w-full sm:w-auto px-4 py-2 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-all font-black text-xs uppercase tracking-widest shadow-lg" @click="handleOpenAddBebida('suco')">
-              Adicionar Suco
-            </button>
-          </div>
-          <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden">
-            <div class="overflow-x-auto">
-              <BaseTabela :colunas="colsSucos" :data="variacoesSucos" class="min-w-[600px]">
-                <template #sabor="{ item }">
-                  <div class="flex items-center gap-3 px-4">
-                    <div class="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-md"></div>
-                    <span class="font-black text-cafe-dark capitalize text-sm">{{ item.sabor }}</span>
-                  </div>
-                </template>
-                <template #tipo_preparo="{ item }">
-                  <span class="text-[9px] px-2 py-1 rounded-lg font-black uppercase tracking-widest border" :class="item.tipo_preparo === 'agua' ? 'bg-blue-50 text-blue-600 border-blue-100' : 'bg-moca/10 text-moca border-moca/20'">
-                    {{ item.tipo_preparo === 'agua' ? 'Com Água' : 'Com Leite' }}
-                  </span>
-                </template>
-                <template #preco="{ item }">
-                  <span class="font-black text-moca text-sm">{{ formatCurrency(item.preco) }}</span>
-                </template>
-                <template #ativo="{ item }">
-                  <BaseToggle v-model="item.ativo" @update:model-value="handleToggleAtivo(item, 'bebida')" />
-                </template>
-                <template #acoes="{ item }">
-                  <div class="flex gap-1">
-                    <button class="p-2 text-bege-torrado hover:text-cafe transition-colors" @click="handleOpenEditBebida(item)">
-                      <PencilSquareIcon class="h-5 w-5" />
-                    </button>
-                    <button class="p-2 text-bege-torrado hover:text-red-600 transition-colors" @click="confirmDelete(item, 'bebida')">
-                      <TrashIcon class="h-5 w-5" />
-                    </button>
-                  </div>
-                </template>
-              </BaseTabela>
-            </div>
-          </div>
-        </div>
-
-        <!-- Refrigerantes -->
-        <div>
-          <div class="mb-6 flex flex-col sm:flex-row justify-between items-center sm:items-end gap-4">
-            <div class="text-center sm:text-left">
-              <h2 class="text-xl sm:text-heading-2 text-cafe-dark font-black">Refrigerantes</h2>
-              <p class="text-xs sm:text-caption text-bege-torrado font-bold">Gerencie marcas e tamanhos</p>
-            </div>
-            <button class="w-full sm:w-auto px-4 py-2 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-all font-black text-xs uppercase tracking-widest shadow-lg" @click="handleOpenAddBebida('refrigerante')">
-              Adicionar Refrigerante
-            </button>
-          </div>
-          <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden">
-            <div class="overflow-x-auto">
-              <BaseTabela :colunas="colsRefrigerantes" :data="variacoesRefrigerantes" class="min-w-[700px]">
-                <template #sabor="{ item }">
-                  <div class="flex items-center gap-3 px-4">
-                    <div class="w-2.5 h-2.5 rounded-full bg-slate-300 shadow-sm"></div>
-                    <span class="font-black text-cafe-dark capitalize text-sm">{{ item.sabor }}</span>
-                  </div>
-                </template>
-                <template #volume_ml="{ item }">
-                  <span class="text-bege-torrado font-bold text-xs tabular-nums">{{ item.volume_ml }}ml</span>
-                </template>
-                <template #tamanho="{ item }">
-                  <span class="text-[9px] bg-bege-cream/50 text-cafe-dark px-2 py-1 rounded-lg font-black uppercase border border-bege-soft/50 shadow-sm" v-if="item.tamanho">{{ item.tamanho }}</span>
-                  <span v-else class="text-bege-torrado/30">-</span>
-                </template>
-                <template #preco="{ item }">
-                  <span class="font-black text-moca text-sm tabular-nums">{{ formatCurrency(item.preco) }}</span>
-                </template>
-                <template #ativo="{ item }">
-                  <BaseToggle v-model="item.ativo" @update:model-value="handleToggleAtivo(item, 'bebida')" />
-                </template>
-                <template #acoes="{ item }">
-                  <div class="flex gap-1">
-                    <button class="p-2 text-bege-torrado hover:text-cafe transition-colors" @click="handleOpenEditBebida(item)">
-                      <PencilSquareIcon class="h-5 w-5" />
-                    </button>
-                    <button class="p-2 text-bege-torrado hover:text-red-600 transition-colors" @click="confirmDelete(item, 'bebida')">
-                      <TrashIcon class="h-5 w-5" />
-                    </button>
-                  </div>
-                </template>
-              </BaseTabela>
-            </div>
-          </div>
-        </div>
-
-        <!-- Águas -->
-        <div>
-          <div class="mb-6 flex flex-col sm:flex-row justify-between items-center sm:items-end gap-4">
-            <div class="text-center sm:text-left">
-              <h2 class="text-xl sm:text-heading-2 text-cafe-dark font-black">Águas</h2>
-              <p class="text-xs sm:text-caption text-bege-torrado font-bold">Gerencie tipos de água e gás</p>
-            </div>
-            <button class="w-full sm:w-auto px-4 py-2 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-all font-black text-xs uppercase tracking-widest shadow-lg" @click="handleOpenAddBebida('agua')">
-              Adicionar Água
-            </button>
-          </div>
-          <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden">
-            <div class="overflow-x-auto">
-              <BaseTabela :colunas="colsAguas" :data="variacoesAguas" class="min-w-[700px]">
-                <template #sabor="{ item }">
-                  <div class="flex items-center gap-3 px-4">
-                    <div class="w-2.5 h-2.5 rounded-full bg-sky-400 shadow-md"></div>
-                    <span class="font-black text-cafe-dark capitalize text-sm">{{ item.sabor || 'Água' }}</span>
-                  </div>
-                </template>
-                <template #volume_ml="{ item }">
-                  <span class="text-bege-torrado font-bold text-xs tabular-nums">{{ item.volume_ml }}ml</span>
-                </template>
-                <template #tipo_gas="{ item }">
-                  <span class="text-[9px] px-2 py-1 rounded-lg font-black uppercase tracking-widest border" :class="item.tipo_gas === 'com_gas' ? 'bg-purple-50 text-purple-600 border-purple-100' : 'bg-gray-50 text-gray-400 border-gray-100'">
-                    {{ item.tipo_gas === 'com_gas' ? 'Com Gás' : 'Sem Gás' }}
-                  </span>
-                </template>
-                <template #preco="{ item }">
-                  <span class="font-black text-moca text-sm tabular-nums">{{ formatCurrency(item.preco) }}</span>
-                </template>
-                <template #ativo="{ item }">
-                  <BaseToggle v-model="item.ativo" @update:model-value="handleToggleAtivo(item, 'bebida')" />
-                </template>
-                <template #acoes="{ item }">
-                  <div class="flex gap-1">
-                    <button class="p-2 text-bege-torrado hover:text-cafe transition-colors" @click="handleOpenEditBebida(item)">
-                      <PencilSquareIcon class="h-5 w-5" />
-                    </button>
-                    <button class="p-2 text-bege-torrado hover:text-red-600 transition-colors" @click="confirmDelete(item, 'bebida')">
-                      <TrashIcon class="h-5 w-5" />
-                    </button>
-                  </div>
-                </template>
-              </BaseTabela>
-            </div>
-          </div>
-        </div>
+      <div class="flex flex-wrap gap-2 w-full sm:w-auto">
+        <button 
+          @click="handleOpenAddCategory"
+          class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl border border-cafe text-cafe hover:bg-bege-cream transition-all font-black text-xs uppercase tracking-wider"
+        >
+          + Nova Categoria
+        </button>
+        <button 
+          @click="handleOpenAddPrato"
+          class="flex-1 sm:flex-none px-5 py-2.5 bg-cafe text-branco hover:bg-cafe-dark transition-all font-black text-xs uppercase tracking-wider rounded-xl shadow-md active:scale-95 flex items-center justify-center gap-2"
+        >
+          <PlusIcon class="w-4 h-4" />
+          <span>Cadastrar Prato</span>
+        </button>
       </div>
     </div>
+
+    <!-- SEÇÃO 1: CATEGORIAS DO RESTAURANTE -->
+    <section class="space-y-4">
+      <div class="flex justify-between items-end">
+        <div>
+          <h2 class="text-lg sm:text-xl font-black text-cafe-dark flex items-center gap-2">
+            Categorias do Cardápio
+            <span class="text-[9px] bg-bege-cream text-cafe-dark px-2 py-0.5 rounded-full font-black uppercase">
+              {{ categorias.length }}
+            </span>
+          </h2>
+          <p class="text-xs text-bege-torrado">Divisões gastronômicas do menu</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+        <div 
+          v-for="categoria in categorias" 
+          :key="categoria.id" 
+          class="bg-branco rounded-2xl p-4 shadow-sm border border-bege-soft hover:shadow-md hover:border-moca/30 transition-all flex justify-between items-center group"
+        >
+          <div class="min-w-0 pr-2">
+            <span class="font-black text-sm text-cafe-dark capitalize truncate block">
+              {{ categoria.nome }}
+            </span>
+            <span class="text-[10px] text-bege-torrado font-bold">
+              {{ contarPratosPorCategoria(categoria.id) }} pratos
+            </span>
+          </div>
+          <div class="flex gap-1 shrink-0">
+            <button 
+              @click="handleOpenEditCategory(categoria)" 
+              class="p-1.5 text-bege-torrado hover:text-cafe hover:bg-bege-cream rounded-lg transition-colors"
+              title="Editar categoria"
+            >
+              <PencilSquareIcon class="h-4 w-4" />
+            </button>
+            <button 
+              @click="confirmDelete(categoria, 'categoria')" 
+              class="p-1.5 text-bege-torrado hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+              title="Excluir categoria"
+            >
+              <TrashIcon class="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 2: PRATOS DA ADEGA CANOINHAS -->
+    <section class="space-y-4 pt-4">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+        <div>
+          <h2 class="text-lg sm:text-xl font-black text-cafe-dark flex items-center gap-2">
+            Pratos e Especialidades
+            <span class="text-[9px] bg-bege-cream text-cafe-dark px-2 py-0.5 rounded-full font-black uppercase">
+              {{ pratosAdega.length }} cadastrados
+            </span>
+          </h2>
+          <p class="text-xs text-bege-torrado">Edite valores, descrições, pontos de carne e disponibilidade</p>
+        </div>
+
+        <!-- Filtros e Busca Rápida -->
+        <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+          <input 
+            v-model="filtroBusca"
+            type="text" 
+            placeholder="Buscar por nome..."
+            class="px-3.5 py-2 text-xs rounded-xl border border-bege-soft focus:border-cafe outline-none bg-branco min-w-[200px]"
+          />
+          <select 
+            v-model="filtroCategoria"
+            class="px-3.5 py-2 text-xs rounded-xl border border-bege-soft focus:border-cafe outline-none bg-branco font-bold text-cafe-dark"
+          >
+            <option value="todas">Todas as categorias</option>
+            <option v-for="cat in categorias" :key="cat.id" :value="cat.id">
+              {{ cat.nome }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Tabela Principal de Pratos -->
+      <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden">
+        <div class="overflow-x-auto">
+          <BaseTabela :colunas="colsPratos" :data="pratosFiltrados" class="min-w-[900px]">
+            <!-- Coluna: Nome & Descrição -->
+            <template #nome="{ item }">
+              <div class="px-4 py-2.5 max-w-sm">
+                <div class="flex items-center gap-2">
+                  <span class="font-black text-cafe-dark text-sm">{{ item.nome }}</span>
+                  <span 
+                    v-if="item.destaque" 
+                    class="text-[8px] bg-amber-100 text-amber-800 border border-amber-200 px-1.5 py-0.5 rounded font-black uppercase tracking-wider"
+                  >
+                    ⭐ Especial
+                  </span>
+                </div>
+                <p v-if="item.descricao" class="text-[11px] text-bege-torrado font-medium line-clamp-2 mt-0.5 leading-relaxed">
+                  {{ item.descricao }}
+                </p>
+              </div>
+            </template>
+
+            <!-- Coluna: Categoria -->
+            <template #categoria="{ item }">
+              <span class="text-[9px] bg-bege-cream text-cafe-dark px-2.5 py-1 rounded-lg font-black uppercase border border-bege-soft/60 whitespace-nowrap">
+                {{ item.categoria?.nome || getCategoryName(item.categoria_id) }}
+              </span>
+            </template>
+
+            <!-- Coluna: Ponto da Carne -->
+            <template #permite_ponto_carne="{ item }">
+              <span 
+                v-if="item.permite_ponto_carne" 
+                class="text-[9px] bg-red-50 text-red-700 px-2 py-1 rounded-lg font-black uppercase border border-red-100 whitespace-nowrap inline-flex items-center gap-1"
+              >
+                🥩 Ponto Ativo
+              </span>
+              <span v-else class="text-[10px] text-bege-torrado/30 font-bold">-</span>
+            </template>
+
+            <!-- Coluna: Preço -->
+            <template #preco="{ item }">
+              <span class="font-black text-cafe text-sm tabular-nums whitespace-nowrap">
+                {{ formatCurrency(item.preco) }}
+              </span>
+            </template>
+
+            <!-- Coluna: Ativo / Pausado -->
+            <template #ativo="{ item }">
+              <BaseToggle v-model="item.ativo" @update:model-value="handleToggleAtivoPrato(item)" />
+            </template>
+
+            <!-- Coluna: Ações -->
+            <template #acoes="{ item }">
+              <div class="flex gap-1">
+                <button 
+                  class="p-2 text-bege-torrado hover:text-cafe hover:bg-bege-cream rounded-xl transition-colors" 
+                  @click="handleOpenEditPrato(item)"
+                  title="Editar prato"
+                >
+                  <PencilSquareIcon class="h-5 w-5" />
+                </button>
+                <button 
+                  class="p-2 text-bege-torrado hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors" 
+                  @click="confirmDelete(item, 'prato')"
+                  title="Excluir prato"
+                >
+                  <TrashIcon class="h-5 w-5" />
+                </button>
+              </div>
+            </template>
+          </BaseTabela>
+        </div>
+
+        <div v-if="pratosFiltrados.length === 0" class="p-12 text-center text-bege-torrado text-sm font-bold italic">
+          Nenhum prato encontrado com os filtros selecionados.
+        </div>
+      </div>
+    </section>
 
     <!-- MODAL CATEGORIA -->
-    <BaseModal :show="showCategoryModal" :title="editingItem ? 'Editar Categoria' : 'Nova Categoria'" @close="showCategoryModal = false">
+    <BaseModal 
+      :show="showCategoryModal" 
+      :title="editingItem ? 'Editar Categoria' : 'Nova Categoria'" 
+      @close="showCategoryModal = false"
+    >
       <div class="py-2">
-        <BaseInput v-model="categoryForm.nome" label="Nome da Categoria" placeholder="Ex: Pizzas, Bebidas..." required />
+        <BaseInput 
+          v-model="categoryForm.nome" 
+          label="Nome da Categoria" 
+          placeholder="Ex: Carnes Nobres, Massas, Sobremesas..." 
+          required 
+        />
       </div>
       <template #footer>
         <BaseButton variant="outline" @click="showCategoryModal = false">Cancelar</BaseButton>
@@ -356,168 +215,85 @@
       </template>
     </BaseModal>
 
-    <!-- MODAL TAMANHO -->
-    <BaseModal :show="showTamanhoModal" :title="editingItem ? 'Editar Tamanho' : 'Novo Tamanho'" @close="showTamanhoModal = false">
+    <!-- MODAL PRATO ADEGA -->
+    <BaseModal 
+      :show="showPratoAdminModal" 
+      :title="editingItem ? 'Editar Prato' : 'Novo Prato da Adega'" 
+      @close="showPratoAdminModal = false" 
+      size="lg"
+    >
       <div class="py-2 space-y-4">
-        <BaseInput v-model="tamanhoForm.nome" label="Nome do Tamanho" placeholder="Ex: Pequeno, Média, Família" required />
-        <div>
-          <label class="block text-sm font-bold text-gray-700 mb-2">Preço Base (R$) *</label>
-          <BaseInputCurrency v-model="tamanhoForm.preco_base" placeholder="0,00" input-class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-cafe focus:ring-2 focus:ring-cafe/20 outline-none transition-all" />
-        </div>
-        <BaseInput v-model.number="tamanhoForm.max_sabores" type="number" label="Máximo de Sabores" required />
-      </div>
-      <template #footer>
-        <BaseButton variant="outline" @click="showTamanhoModal = false">Cancelar</BaseButton>
-        <BaseButton variant="primary" :loading="isSaving" @click="handleSaveTamanho">Confirmar</BaseButton>
-      </template>
-    </BaseModal>
-
-    <!-- MODAL SABOR -->
-    <BaseModal :show="showSaborModal" :title="editingItem ? 'Editar Sabor' : `Novo Sabor ${saborForm.categoria === 'doce' ? 'Doce' : 'Salgado'}`" @close="showSaborModal = false">
-      <div class="py-2 space-y-6">
-        <BaseInput v-model="saborForm.nome" label="Nome do Sabor" placeholder="Ex: Calabresa, Quatro Queijos" required />
+        <BaseInput 
+          v-model="pratoForm.nome" 
+          label="Nome do Prato *" 
+          placeholder="Ex: Mignon Gratinado, Salmão ao Molho de Maracujá" 
+          required 
+        />
         
-        <div class="flex flex-col gap-2">
-            <label class="text-sm font-semibold text-gray-700">Tipo do Preço</label>
-            <div class="grid grid-cols-2 gap-4">
-                <button 
-                    @click="saborForm.tipo = 'tradicional'" 
-                    :class="['p-3 border-2 rounded-lg text-sm font-medium transition-all', saborForm.tipo === 'tradicional' ? 'border-primary-500 bg-primary-50 text-primary-700' : 'border-gray-100 text-gray-500 bg-gray-50']"
-                >
-                    Tradicional
-                </button>
-                <button 
-                    @click="saborForm.tipo = 'especial'" 
-                    :class="['p-3 border-2 rounded-lg text-sm font-medium transition-all', saborForm.tipo === 'especial' ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-100 text-gray-500 bg-gray-50']"
-                >
-                    Especial
-                </button>
-            </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-bold text-gray-700">Categoria *</label>
+            <select 
+              v-model="pratoForm.categoria_id" 
+              class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cafe outline-none bg-white font-medium text-sm"
+            >
+              <option value="" disabled>Selecione uma categoria</option>
+              <option v-for="cat in categorias" :key="cat.id" :value="cat.id">
+                {{ cat.nome }}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-1.5">Preço (R$) *</label>
+            <BaseInputCurrency 
+              v-model="pratoForm.preco" 
+              placeholder="0,00" 
+              input-class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-cafe outline-none font-bold text-sm" 
+            />
+          </div>
         </div>
 
-        <!-- Seção de Adicionais (Apenas se for Especial) -->
-        <div v-if="saborForm.tipo === 'especial'" class="space-y-3 pt-2 border-t border-gray-100">
-            <h4 class="text-sm font-bold text-gray-700">Valores Adicionais por Tamanho</h4>
-            <p class="text-xs text-gray-500">Defina quanto será cobrado a mais além do preço base do tamanho.</p>
-            
-            <div class="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-                <div v-for="tam in tamanhos" :key="tam.id" class="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100">
-                    <div>
-                        <span class="block text-sm font-bold text-gray-700">{{ tam.nome }}</span>
-                        <span class="text-xs text-gray-400">Base: {{ formatCurrency(tam.preco_base) }}</span>
-                    </div>
-                    <div class="w-32">
-                        <div class="relative">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">R$</span>
-                            <BaseInputCurrency 
-                                v-model="saborForm.adicionais[tam.id]" 
-                                placeholder="0,00"
-                                input-class="w-full pl-10 pr-3 py-2 rounded-lg border border-gray-200 focus:border-cafe focus:ring-2 focus:ring-cafe/20 outline-none transition-all"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-      </div>
-      <template #footer>
-        <BaseButton variant="outline" @click="showSaborModal = false">Cancelar</BaseButton>
-        <BaseButton variant="primary" :loading="isSaving" @click="handleSaveSabor">Confirmar</BaseButton>
-      </template>
-    </BaseModal>
-
-    <!-- MODAL BEBIDA -->
-    <BaseModal :show="showBebidaModal" :title="editingItem ? 'Editar Item' : `Novo(a) ${bebidaForm.tipo_bebida}`" @close="showBebidaModal = false" size="lg">
-      <div class="py-2 space-y-6">
-        <!-- Cabeçalho do Produto -->
-        <div class="grid grid-cols-2 gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
-            <BaseInput v-model="bebidaForm.sabor" :label="bebidaForm.tipo_bebida === 'agua' ? 'Marca da Água' : 'Sabor / Marca'" placeholder="Ex: Coca-Cola, Laranja, Cristal" required />
-            <div class="flex flex-col gap-2">
-                <label class="text-sm font-semibold text-gray-700">Tipo de Bebida</label>
-                <select v-model="bebidaForm.tipo_bebida" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-primary-500 outline-none bg-gray-50 cursor-not-allowed" disabled>
-                    <option value="refrigerante">Refrigerante</option>
-                    <option value="suco">Suco</option>
-                    <option value="agua">Água</option>
-                </select>
-            </div>
+        <div class="flex flex-col gap-1.5">
+          <label class="text-sm font-bold text-gray-700">Descrição do Prato</label>
+          <textarea 
+            v-model="pratoForm.descricao" 
+            rows="3" 
+            placeholder="Cortes nobres, modo de preparo, guarnições e acompanhamentos..."
+            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cafe outline-none text-sm placeholder:text-gray-400"
+          ></textarea>
         </div>
 
-        <!-- Seção de Variações -->
-        <div class="space-y-4">
-            <div class="flex justify-between items-center">
-                <h4 class="text-sm font-bold text-gray-700 uppercase tracking-wider">Tamanhos e Preços</h4>
-                <BaseButton v-if="!editingItem" size="small" variant="outline" class="!py-2 !px-4 !text-xs !font-bold !tracking-wide" @click="handleAddVariacaoRow">
-                    ADICIONAR OUTRO TAMANHO
-                </BaseButton>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-2xl border border-gray-100">
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input 
+              type="checkbox" 
+              v-model="pratoForm.permite_ponto_carne" 
+              class="w-5 h-5 text-cafe rounded border-gray-300 focus:ring-cafe" 
+            />
+            <div>
+              <span class="text-sm font-bold text-cafe-dark block">Permite Ponto da Carne</span>
+              <span class="text-xs text-gray-500 block">Exibe opções de corte (mal passado, ao ponto, etc.)</span>
             </div>
+          </label>
 
-            <div class="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
-                <div v-for="(v, index) in bebidaForm.variacoes" :key="index" class="p-5 border-2 border-gray-100 rounded-2xl bg-white relative group hover:border-primary-200 transition-all">
-                    <!-- Indicador de Variação -->
-                    <div class="absolute -left-3 top-4 w-7 h-7 bg-primary-500 text-white rounded-full flex items-center justify-center text-xs font-bold shadow-sm">
-                        {{ index + 1 }}
-                    </div>
-
-                    <!-- Botão Remover no Canto Superior Direito -->
-                    <button 
-                        v-if="bebidaForm.variacoes.length > 1" 
-                        @click="handleRemoveVariacaoRow(index)"
-                        class="absolute -right-2 -top-2 p-1.5 bg-white text-red-500 rounded-full border border-red-100 shadow-sm hover:bg-red-50 transition-colors z-10"
-                        title="Remover este tamanho"
-                    >
-                        <TrashIcon class="h-4 w-4" />
-                    </button>
-
-                    <!-- Layout para REFRIGERANTE (3 campos em uma linha larga) -->
-                    <div v-if="bebidaForm.tipo_bebida === 'refrigerante'" class="grid grid-cols-3 gap-6">
-                        <BaseInput v-model="v.tamanho" label="Tamanho" placeholder="Ex: Lata, 2L, Jarra" />
-                        <BaseInput v-model.number="v.volume_ml" type="number" label="Volume (ML)" placeholder="350" />
-                        <div>
-                          <label class="block text-sm font-bold text-gray-700 mb-2">Preço (R$) *</label>
-                          <BaseInputCurrency v-model="v.preco" placeholder="0,00" input-class="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-cafe focus:ring-2 focus:ring-cafe/20 outline-none transition-all" />
-                        </div>
-                    </div>
-
-                    <!-- Layout para SUCO e AGUA (Duas colunas, duas linhas) -->
-                    <div v-else class="space-y-4">
-                        <div class="grid grid-cols-2 gap-6">
-                            <BaseInput v-model="v.tamanho" label="Tamanho" placeholder="Ex: Copo, Jarra" />
-                            <BaseInput v-model.number="v.volume_ml" type="number" label="Volume (ML)" placeholder="500" />
-                        </div>
-                        <div class="grid grid-cols-2 gap-6">
-                            <div>
-                              <label class="block text-sm font-bold text-gray-700 mb-2">Preço (R$) *</label>
-                              <BaseInputCurrency v-model="v.preco" placeholder="0,00" input-class="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-cafe focus:ring-2 focus:ring-cafe/20 outline-none transition-all" />
-                            </div>
-                            
-                            <!-- Campo Dinâmico: Preparo (Suco) -->
-                            <div v-if="bebidaForm.tipo_bebida === 'suco'" class="flex flex-col gap-2">
-                                <label class="text-sm font-bold text-gray-700">Preparo do Suco</label>
-                                <select v-model="v.tipo_preparo" class="w-full p-2.5 border-2 border-orange-100 bg-orange-50/30 rounded-xl text-sm outline-none focus:border-orange-500">
-                                    <option :value="null">Natural / Fruta</option>
-                                    <option value="agua">Com Água</option>
-                                    <option value="leite">Com Leite</option>
-                                </select>
-                            </div>
-
-                            <!-- Campo Dinâmico: Gás (Água) -->
-                            <div v-if="bebidaForm.tipo_bebida === 'agua'" class="flex flex-col gap-2">
-                                <label class="text-sm font-bold text-gray-700">Tipo de Gás</label>
-                                <select v-model="v.tipo_gas" class="w-full p-2.5 border-2 border-purple-100 bg-purple-50/30 rounded-xl text-sm outline-none focus:border-purple-500">
-                                    <option value="sem_gas">Sem Gás</option>
-                                    <option value="com_gas">Com Gás</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input 
+              type="checkbox" 
+              v-model="pratoForm.destaque" 
+              class="w-5 h-5 text-cafe rounded border-gray-300 focus:ring-cafe" 
+            />
+            <div>
+              <span class="text-sm font-bold text-cafe-dark block">Especialidade da Casa</span>
+              <span class="text-xs text-gray-500 block">Exibe selo de destaque no cardápio</span>
             </div>
+          </label>
         </div>
       </div>
       <template #footer>
-        <BaseButton variant="outline" @click="showBebidaModal = false">Cancelar</BaseButton>
-        <BaseButton variant="primary" :loading="isSaving" @click="handleSaveBebida">
-            {{ editingItem ? 'Salvar Alteração' : `Cadastrar ${bebidaForm.variacoes.length} Itens` }}
+        <BaseButton variant="outline" @click="showPratoAdminModal = false">Cancelar</BaseButton>
+        <BaseButton variant="primary" :loading="isSaving" @click="handleSavePrato">
+          {{ editingItem ? 'Salvar Prato' : 'Cadastrar Prato' }}
         </BaseButton>
       </template>
     </BaseModal>
@@ -538,29 +314,21 @@
 import { ref, reactive, onMounted, computed } from 'vue';
 import { useToast } from '~/composables/useToast';
 import { useCategorias } from '~/composables/useCategorias';
-import { useTamanhos } from '~/composables/useTamanhos';
-import { useSabores } from '~/composables/useSabores';
-import { useProdutos } from '~/composables/useProdutos';
-import { PencilSquareIcon, TrashIcon } from '@heroicons/vue/24/outline';
+import { useCardapioItens, type ItemCardapio } from '~/composables/useCardapioItens';
+import { PencilSquareIcon, TrashIcon, PlusIcon } from '@heroicons/vue/24/outline';
 
 const toast = useToast();
 const { categorias, fetchCategorias, addCategoria, updateCategoria, removeCategoria } = useCategorias();
-const { tamanhos, fetchTamanhos, addTamanho, updateTamanho, removeTamanho } = useTamanhos();
-const { sabores, fetchSabores, addSaborCompleto, updateSaborCompleto, removeSabor } = useSabores();
-const { variacoes, fetchVariacoesBebidas, addNovaVariacao, updateVariacaoCompleta, removeVariacao } = useVariacoes();
-const { produtos, fetchProdutosBebidas, addBebida, updateBebida, removeProduto, toggleAtivo } = useProdutos();
+const { 
+  itens: pratosAdega, 
+  fetchTodosItensAdmin, 
+  addItem: addPrato, 
+  updateItem: updatePrato, 
+  removeItem: removePrato, 
+  toggleAtivo: toggleAtivoPrato 
+} = useCardapioItens();
 
-
-// Filtros para sabores de pastel
-const saboresSalgados = computed(() => sabores.value.filter(s => s.categoria === 'salgado'));
-const saboresDoces = computed(() => sabores.value.filter(s => s.categoria === 'doce'));
-
-// Filtros para variações de bebidas
-const variacoesSucos = computed(() => variacoes.value.filter(v => v.tipo_bebida === 'suco'));
-const variacoesRefrigerantes = computed(() => variacoes.value.filter(v => v.tipo_bebida === 'refrigerante'));
-const variacoesAguas = computed(() => variacoes.value.filter(v => v.tipo_bebida === 'agua'));
-
-// Formatações
+// Formatação Monetária
 const formatCurrency = (value: number) => {
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
@@ -568,397 +336,200 @@ const formatCurrency = (value: number) => {
   }).format(value);
 };
 
-// Tabelas Configurações
-const colsTamanhos = [
-  { key: 'nome', label: 'Nome' },
-  { key: 'preco_base', label: 'Preço Base' },
-  { key: 'max_sabores', label: 'Máx Sabores' },
-  { key: 'acoes', label: 'Ações' }
-];
-
-const colsSabores = [
-  { key: 'nome', label: 'Sabor' },
-  { key: 'tipo', label: 'Tipo' },
-  { key: 'adicional', label: 'Adicional/Preço' },
-  { key: 'ativo', label: 'Ativo' },
-  { key: 'acoes', label: 'Ações' }
-];
-
-const colsSucos = [
-  { key: 'sabor', label: 'Sabor' },
-  { key: 'tipo_preparo', label: 'Preparo' },
+// Colunas da Tabela
+const colsPratos = [
+  { key: 'nome', label: 'Prato' },
+  { key: 'categoria', label: 'Categoria' },
+  { key: 'permite_ponto_carne', label: 'Ponto Carne' },
   { key: 'preco', label: 'Preço' },
   { key: 'ativo', label: 'Ativo' },
   { key: 'acoes', label: 'Ações' }
 ];
 
-const colsRefrigerantes = [
-  { key: 'sabor', label: 'Sabor' },
-  { key: 'volume_ml', label: 'Volume' },
-  { key: 'tamanho', label: 'Tamanho' },
-  { key: 'preco', label: 'Preço' },
-  { key: 'ativo', label: 'Ativo' },
-  { key: 'acoes', label: 'Ações' }
-];
+// Filtros
+const filtroBusca = ref('');
+const filtroCategoria = ref('todas');
 
-const colsAguas = [
-  { key: 'sabor', label: 'Água' },
-  { key: 'volume_ml', label: 'Volume' },
-  { key: 'tipo_gas', label: 'Gás' },
-  { key: 'preco', label: 'Preço' },
-  { key: 'ativo', label: 'Ativo' },
-  { key: 'acoes', label: 'Ações' }
-];
-
-// Busca dados iniciais
-onMounted(async () => {
-    try {
-        await Promise.all([
-            fetchCategorias(),
-            fetchTamanhos(),
-            fetchSabores(),
-            fetchVariacoesBebidas()
-        ]);
-    } catch (error) {
-        toast.error('Erro de Carregamento', 'Não foi possível carregar alguns dados.');
-    }
+const pratosFiltrados = computed(() => {
+  return pratosAdega.value.filter(p => {
+    const matchCategoria = filtroCategoria.value === 'todas' || p.categoria_id === filtroCategoria.value;
+    const matchBusca = !filtroBusca.value || p.nome.toLowerCase().includes(filtroBusca.value.toLowerCase());
+    return matchCategoria && matchBusca;
+  });
 });
 
-// ESTADOS DOS MODAIS
+const contarPratosPorCategoria = (categoriaId: string) => {
+  return pratosAdega.value.filter(p => p.categoria_id === categoriaId).length;
+};
+
+// Modais
 const showCategoryModal = ref(false);
-const showTamanhoModal = ref(false);
-const showSaborModal = ref(false);
-const showBebidaModal = ref(false);
+const showPratoAdminModal = ref(false);
 const showConfirmDeleteModal = ref(false);
 
 const isSaving = ref(false);
 const isDeleting = ref(false);
 
 const editingItem = ref<any>(null);
-const itemToDelete = ref<{ id: string, nome: string, type: 'categoria' | 'tamanho' | 'sabor' | 'bebida' } | null>(null);
+const itemToDelete = ref<{ id: string, nome: string, type: 'categoria' | 'prato' } | null>(null);
 
-// Forms
+// Formulários
 const categoryForm = reactive({ nome: '' });
-const tamanhoForm = reactive({ nome: '', preco_base: 0, max_sabores: 1 });
-const saborForm = reactive({ 
-    nome: '', 
-    tipo: 'tradicional' as 'tradicional' | 'especial', 
-    ativo: true,
-    categoria: 'salgado' as 'salgado' | 'doce',
-    adicionais: {} as Record<string, number> 
-});
-const bebidaForm = reactive({ 
-    sabor: '', 
-    tipo_bebida: 'refrigerante' as 'suco' | 'refrigerante' | 'agua',
-    categoria_id: '',
-    variacoes: [] as {
-        tamanho: string;
-        volume_ml: number;
-        preco: number;
-        tipo_preparo: 'agua' | 'leite' | null;
-        tipo_gas: 'com_gas' | 'sem_gas' | null;
-        ativo: boolean;
-    }[]
+const pratoForm = reactive({
+  nome: '',
+  categoria_id: '',
+  descricao: '',
+  preco: 0,
+  destaque: false,
+  permite_ponto_carne: false,
+  ativo: true
 });
 
-// HANDLERS ABERTURA MODAL
+onMounted(async () => {
+  try {
+    await Promise.all([
+      fetchCategorias(),
+      fetchTodosItensAdmin()
+    ]);
+  } catch (error) {
+    toast.error('Erro de Carregamento', 'Não foi possível carregar os dados do cardápio.');
+  }
+});
+
+// Abertura de Modais
 const handleOpenAddCategory = () => {
-    editingItem.value = null;
-    categoryForm.nome = '';
-    showCategoryModal.value = true;
+  editingItem.value = null;
+  categoryForm.nome = '';
+  showCategoryModal.value = true;
 };
 
 const handleOpenEditCategory = (item: any) => {
-    editingItem.value = item;
-    categoryForm.nome = item.nome;
-    showCategoryModal.value = true;
+  editingItem.value = item;
+  categoryForm.nome = item.nome;
+  showCategoryModal.value = true;
 };
 
-const handleOpenAddTamanho = () => {
-    editingItem.value = null;
-    tamanhoForm.nome = '';
-    tamanhoForm.preco_base = 0;
-    tamanhoForm.max_sabores = 1;
-    showTamanhoModal.value = true;
+const handleOpenAddPrato = () => {
+  editingItem.value = null;
+  pratoForm.nome = '';
+  pratoForm.categoria_id = categorias.value[0]?.id || '';
+  pratoForm.descricao = '';
+  pratoForm.preco = 0;
+  pratoForm.destaque = false;
+  pratoForm.permite_ponto_carne = false;
+  pratoForm.ativo = true;
+  showPratoAdminModal.value = true;
 };
 
-const handleOpenEditTamanho = (item: any) => {
-    editingItem.value = item;
-    tamanhoForm.nome = item.nome;
-    tamanhoForm.preco_base = item.preco_base;
-    tamanhoForm.max_sabores = item.max_sabores;
-    showTamanhoModal.value = true;
+const handleOpenEditPrato = (item: any) => {
+  editingItem.value = item;
+  pratoForm.nome = item.nome;
+  pratoForm.categoria_id = item.categoria_id;
+  pratoForm.descricao = item.descricao || '';
+  pratoForm.preco = item.preco;
+  pratoForm.destaque = !!item.destaque;
+  pratoForm.permite_ponto_carne = !!item.permite_ponto_carne;
+  pratoForm.ativo = item.ativo !== undefined ? item.ativo : true;
+  showPratoAdminModal.value = true;
 };
 
-const handleOpenAddSabor = (secao: 'salgado' | 'doce' = 'salgado') => {
-    editingItem.value = null;
-    saborForm.nome = '';
-    saborForm.tipo = 'tradicional';
-    saborForm.categoria = secao;
-    saborForm.ativo = true;
-    saborForm.adicionais = {};
-    // Preenche adicionais com 0 para todos os tamanhos existentes
-    tamanhos.value.forEach(t => {
-        saborForm.adicionais[t.id] = 0;
-    });
-    showSaborModal.value = true;
-};
-
-const handleOpenEditSabor = (item: any) => {
-    editingItem.value = item;
-    saborForm.nome = item.nome;
-    saborForm.tipo = item.tipo;
-    saborForm.categoria = item.categoria || 'salgado';
-    saborForm.ativo = item.ativo !== undefined ? item.ativo : true;
-    saborForm.adicionais = {};
-    
-    // Preenche com os valores que já existem no banco
-    tamanhos.value.forEach(t => {
-        const adj = item.adicionais?.find((a: any) => a.tamanho_id === t.id);
-        saborForm.adicionais[t.id] = adj ? adj.valor_adicional : 0;
-    });
-    
-    showSaborModal.value = true;
-};
-
-const isAddingRow = ref(false);
-const handleAddVariacaoRow = () => {
-    if (isAddingRow.value) return;
-    isAddingRow.value = true;
-    
-    bebidaForm.variacoes.push({
-        tamanho: '',
-        volume_ml: bebidaForm.tipo_bebida === 'suco' ? 500 : 350,
-        preco: 0,
-        tipo_preparo: null,
-        tipo_gas: bebidaForm.tipo_bebida === 'agua' ? 'sem_gas' : null,
-        ativo: true
-    });
-
-    // Pequeno delay para evitar cliques duplos fantasmagóricos
-    setTimeout(() => {
-        isAddingRow.value = false;
-    }, 200);
-};
-
-const handleRemoveVariacaoRow = (index: number) => {
-    if (bebidaForm.variacoes.length > 1) {
-        bebidaForm.variacoes.splice(index, 1);
-    }
-};
-
-const handleOpenAddBebida = (tipo: 'suco' | 'refrigerante' | 'agua' = 'refrigerante') => {
-    editingItem.value = null;
-    bebidaForm.sabor = '';
-    bebidaForm.tipo_bebida = tipo;
-    
-    const catBebida = categorias.value.find(c => c.nome.toLowerCase().includes('bebida'));
-    bebidaForm.categoria_id = catBebida?.id || categorias.value?.[0]?.id || '';
-    
-    // Inicia com uma variação vazia
-    bebidaForm.variacoes = [];
-    handleAddVariacaoRow();
-    
-    showBebidaModal.value = true;
-};
-
-const handleOpenEditBebida = (item: any) => {
-    editingItem.value = item;
-    bebidaForm.sabor = item.sabor || '';
-    bebidaForm.tipo_bebida = item.tipo_bebida || 'refrigerante';
-    bebidaForm.categoria_id = item.produto?.categoria_id || '';
-    
-    bebidaForm.variacoes = [{
-        tamanho: item.tamanho || '',
-        volume_ml: item.volume_ml || 0,
-        preco: item.preco || 0,
-        tipo_preparo: item.tipo_preparo || null,
-        tipo_gas: item.tipo_gas || null,
-        ativo: item.ativo !== undefined ? item.ativo : true
-    }];
-    
-    showBebidaModal.value = true;
-};
-
-// HANDLERS SALVAR
+// Salvamento
 const handleSaveCategory = async () => {
-    if (!categoryForm.nome) return toast.error('Erro', 'Nome é obrigatório');
-    isSaving.value = true;
-    try {
-        if (editingItem.value) {
-            await updateCategoria(editingItem.value.id, categoryForm.nome);
-            toast.success('Sucesso', 'Categoria atualizada');
-        } else {
-            await addCategoria(categoryForm.nome);
-            toast.success('Sucesso', 'Categoria criada');
-        }
-        showCategoryModal.value = false;
-    } catch (e: any) {
-        toast.error('Erro', e.message);
-    } finally {
-        isSaving.value = false;
+  if (!categoryForm.nome.trim()) return toast.error('Aviso', 'Nome da categoria é obrigatório');
+  isSaving.value = true;
+  try {
+    if (editingItem.value) {
+      await updateCategoria(editingItem.value.id, categoryForm.nome);
+      toast.success('Sucesso', 'Categoria atualizada com sucesso');
+    } else {
+      await addCategoria(categoryForm.nome);
+      toast.success('Sucesso', 'Categoria criada com sucesso');
     }
+    showCategoryModal.value = false;
+  } catch (e: any) {
+    toast.error('Erro ao salvar categoria', e.message);
+  } finally {
+    isSaving.value = false;
+  }
 };
 
-const handleSaveTamanho = async () => {
-    if (!tamanhoForm.nome) return toast.error('Erro', 'Nome é obrigatório');
-    isSaving.value = true;
-    try {
-        const payload = { nome: tamanhoForm.nome, preco_base: tamanhoForm.preco_base, max_sabores: tamanhoForm.max_sabores };
-        if (editingItem.value) {
-            await updateTamanho(editingItem.value.id, payload);
-            toast.success('Sucesso', 'Tamanho atualizado');
-        } else {
-            await addTamanho(payload);
-            toast.success('Sucesso', 'Tamanho criado');
-        }
-        showTamanhoModal.value = false;
-    } catch (e: any) {
-        toast.error('Erro', e.message);
-    } finally {
-        isSaving.value = false;
+const handleSavePrato = async () => {
+  if (!pratoForm.nome.trim()) return toast.warning('Aviso', 'Informe o nome do prato');
+  if (!pratoForm.categoria_id) return toast.warning('Aviso', 'Selecione uma categoria');
+  if (!pratoForm.preco || pratoForm.preco <= 0) return toast.warning('Aviso', 'Informe o valor do prato');
+
+  isSaving.value = true;
+  try {
+    if (editingItem.value) {
+      await updatePrato(editingItem.value.id, {
+        nome: pratoForm.nome,
+        categoria_id: pratoForm.categoria_id,
+        descricao: pratoForm.descricao,
+        preco: pratoForm.preco,
+        destaque: pratoForm.destaque,
+        permite_ponto_carne: pratoForm.permite_ponto_carne,
+        ativo: pratoForm.ativo
+      });
+      toast.success('Sucesso', 'Prato atualizado com sucesso');
+    } else {
+      await addPrato({
+        nome: pratoForm.nome,
+        categoria_id: pratoForm.categoria_id,
+        descricao: pratoForm.descricao,
+        preco: pratoForm.preco,
+        destaque: pratoForm.destaque,
+        permite_ponto_carne: pratoForm.permite_ponto_carne,
+        ativo: pratoForm.ativo
+      });
+      toast.success('Sucesso', 'Prato cadastrado com sucesso');
     }
+    showPratoAdminModal.value = false;
+  } catch (e: any) {
+    toast.error('Erro ao salvar prato', e.message);
+  } finally {
+    isSaving.value = false;
+  }
 };
 
-const handleSaveSabor = async () => {
-    if (!saborForm.nome) return toast.error('Erro', 'Nome é obrigatório');
-    isSaving.value = true;
-    try {
-        const saborPayload: any = { 
-            nome: saborForm.nome, 
-            tipo: saborForm.tipo,
-            categoria: saborForm.categoria,
-            ativo: saborForm.ativo
-        };
-
-        const adicionaisPayload = Object.entries(saborForm.adicionais)
-            .filter(([_, valor]) => valor > 0)
-            .map(([tamanhoId, valor]) => ({
-                tamanho_id: tamanhoId,
-                valor_adicional: Number(valor)
-            }));
-
-        if (editingItem.value) {
-            await updateSaborCompleto(editingItem.value.id, saborPayload, adicionaisPayload);
-            toast.success('Sucesso', 'Sabor atualizado');
-        } else {
-            await addSaborCompleto(saborPayload, adicionaisPayload);
-            toast.success('Sucesso', 'Sabor criado');
-        }
-        showSaborModal.value = false;
-    } catch (e: any) {
-        toast.error('Erro', e.message);
-    } finally {
-        isSaving.value = false;
-    }
+const handleToggleAtivoPrato = async (item: any) => {
+  try {
+    await toggleAtivoPrato(item.id, item.ativo);
+    toast.success('Status atualizado', `Prato ${item.ativo ? 'ativado' : 'desativado'}`);
+  } catch (e: any) {
+    toast.error('Erro', 'Não foi possível alterar o status');
+  }
 };
 
-const handleSaveBebida = async () => {
-    if (!bebidaForm.sabor) return toast.error('Erro', 'Sabor/Nome é obrigatório');
-    if (bebidaForm.variacoes.length === 0) return toast.error('Erro', 'Adicione ao menos um tamanho');
-    
-    isSaving.value = true;
-    try {
-        const nomePai = bebidaForm.sabor;
-
-        if (editingItem.value) {
-            // No modo edição, editamos apenas a variação que foi aberta
-            const v = bebidaForm.variacoes[0];
-            if (!v) return;
-            
-            const detPayload = { 
-                preco: v.preco, 
-                tipo_bebida: bebidaForm.tipo_bebida, 
-                volume_ml: v.volume_ml,
-                tipo_preparo: v.tipo_preparo,
-                tipo_gas: v.tipo_gas,
-                sabor: nomePai,
-                tamanho: v.tamanho || null,
-                ativo: v.ativo
-            };
-
-            await updateVariacaoCompleta(
-                editingItem.value.id, 
-                editingItem.value.produto_id, 
-                nomePai, 
-                detPayload
-            );
-            toast.success('Sucesso', 'Item atualizado');
-        } else {
-            // No modo adição, percorremos a lista de variações
-            for (const v of bebidaForm.variacoes) {
-                const detPayload = { 
-                    preco: v.preco, 
-                    tipo_bebida: bebidaForm.tipo_bebida, 
-                    volume_ml: v.volume_ml,
-                    tipo_preparo: v.tipo_preparo,
-                    tipo_gas: v.tipo_gas,
-                    sabor: nomePai,
-                    tamanho: v.tamanho || null,
-                    ativo: v.ativo
-                };
-                await addNovaVariacao(nomePai, bebidaForm.categoria_id, detPayload);
-            }
-            toast.success('Sucesso', `${bebidaForm.variacoes.length} variações adicionadas`);
-        }
-        showBebidaModal.value = false;
-    } catch (e: any) {
-        toast.error('Erro', e.message);
-    } finally {
-        isSaving.value = false;
-    }
-};
-
-// HANDLERS DELETE
-const confirmDelete = (item: any, type: 'categoria' | 'tamanho' | 'sabor' | 'bebida') => {
-    itemToDelete.value = { id: item.id, nome: item.nome, type };
-    showConfirmDeleteModal.value = true;
+// Exclusão
+const confirmDelete = (item: any, type: 'categoria' | 'prato') => {
+  itemToDelete.value = { id: item.id, nome: item.nome, type };
+  showConfirmDeleteModal.value = true;
 };
 
 const handleDelete = async () => {
-    if (!itemToDelete.value) return;
-    isDeleting.value = true;
-    try {
-        const { id, type } = itemToDelete.value;
-        if (type === 'categoria') await removeCategoria(id);
-        else if (type === 'tamanho') await removeTamanho(id);
-        else if (type === 'sabor') await removeSabor(id);
-        else if (type === 'bebida') {
-            // Pegamos o item original para ter o produto_id
-            const varOriginal = variacoes.value.find(v => v.id === id);
-            if (varOriginal) await removeVariacao(id, varOriginal.produto_id);
-        }
-        
-        toast.success('Excluído', 'Item removido com sucesso');
-        showConfirmDeleteModal.value = false;
-    } catch (e: any) {
-        toast.error('Erro', e.message);
-    } finally {
-        isDeleting.value = false;
+  if (!itemToDelete.value) return;
+  isDeleting.value = true;
+  try {
+    const { id, type } = itemToDelete.value;
+    if (type === 'categoria') {
+      await removeCategoria(id);
+    } else if (type === 'prato') {
+      await removePrato(id);
     }
-};
-
-const handleToggleAtivo = async (item: any, type: 'sabor' | 'bebida') => {
-    try {
-        if (type === 'sabor') {
-            await updateSaborCompleto(item.id, { ativo: item.ativo } as any);
-        } else {
-            await updateVariacaoCompleta(item.id, item.produto_id, item.produto?.nome, { ativo: item.ativo });
-        }
-    } catch (e: any) {
-        toast.error('Erro', 'Não foi possível atualizar o status');
-    }
+    toast.success('Excluído', 'Item removido com sucesso');
+    showConfirmDeleteModal.value = false;
+  } catch (e: any) {
+    toast.error('Erro ao excluir', e.message);
+  } finally {
+    isDeleting.value = false;
+  }
 };
 
 const getCategoryName = (id: string) => {
-    return categorias.value.find(c => c.id === id)?.nome || 'Sem Categoria';
-};
-
-const getTamanhoNome = (id: string) => {
-    return tamanhos.value.find(t => t.id === id)?.nome || 'Tam';
+  return categorias.value.find(c => c.id === id)?.nome || 'Sem Categoria';
 };
 </script>
 
 <style scoped>
-/* Estilos específicos da página de produtos */
+/* Transições suaves */
 </style>

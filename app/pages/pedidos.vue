@@ -90,6 +90,11 @@
                   <span class="w-6 h-6 flex items-center justify-center bg-cafe text-white rounded-lg text-[10px] font-black shadow-sm">{{ item.quantidade }}</span>
                   <span class="text-xs font-black text-cafe-dark truncate">{{ getItemName(item) }}</span>
                 </div>
+                <div v-if="item.ponto_carne" class="ml-9 my-1">
+                  <span class="text-[9px] text-red-700 font-black uppercase bg-red-50 px-2 py-0.5 rounded-md border border-red-100">
+                    🥩 Ponto: {{ item.ponto_carne }}
+                  </span>
+                </div>
                 <div v-if="getItemDescription(item)" class="text-[10px] text-bege-torrado font-bold pl-9 leading-snug">
                   {{ getItemDescription(item) }}
                 </div>
@@ -210,6 +215,8 @@ const handleUpdateStatus = async (pedidoId: string, status: string) => {
 };
 
 const getItemName = (item: any) => {
+    if (item.nome_item) return item.nome_item;
+    if (item.item_cardapio?.nome) return item.item_cardapio.nome;
     if (item.tamanho) return `Pastel ${item.tamanho.nome}`;
     
     if (item.produto_simples) {
@@ -223,6 +230,10 @@ const getItemName = (item: any) => {
 };
 
 const getItemDescription = (item: any) => {
+    if (item.item_cardapio?.descricao) {
+        return item.item_cardapio.descricao;
+    }
+
     if (item.sabores && Array.isArray(item.sabores) && item.sabores.length > 0) {
         return item.sabores.map((s: any) => s.nome).join(' + ');
     }
