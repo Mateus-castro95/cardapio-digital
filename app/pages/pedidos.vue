@@ -92,7 +92,7 @@
                 </div>
                 <div v-if="item.ponto_carne" class="ml-9 my-1">
                   <span class="text-[9px] text-red-700 font-black uppercase bg-red-50 px-2 py-0.5 rounded-md border border-red-100">
-                    🥩 Ponto: {{ item.ponto_carne }}
+                    Ponto: {{ item.ponto_carne }}
                   </span>
                 </div>
                 <div v-if="getItemDescription(item)" class="text-[10px] text-bege-torrado font-bold pl-9 leading-snug">

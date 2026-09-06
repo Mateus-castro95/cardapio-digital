@@ -43,64 +43,22 @@
       </div>
     </header>
 
-    <!-- Barra de Navegação Horizontal de Categorias (Chips Fixos/Roláveis) -->
-    <div class="bg-branco/90 backdrop-blur-md border-b border-bege-soft sticky top-[73px] z-20 shadow-sm py-3 px-4">
-      <div class="max-w-4xl mx-auto flex gap-2 overflow-x-auto custom-scrollbar no-scrollbar">
-        <button 
-          @click="categoriaSelecionada = 'todas'"
-          class="px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap border shrink-0"
-          :class="categoriaSelecionada === 'todas' 
-            ? 'bg-cafe text-white border-cafe shadow-md scale-105' 
-            : 'bg-bege-cream/60 text-cafe-dark border-bege-soft/60 hover:bg-bege-soft/40'"
-        >
-          🍴 Todas
-        </button>
 
-        <button 
-          v-for="cat in categoriasComItens" 
-          :key="cat.id"
-          @click="categoriaSelecionada = cat.id"
-          class="px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap border shrink-0 flex items-center gap-1.5"
-          :class="categoriaSelecionada === cat.id 
-            ? 'bg-cafe text-white border-cafe shadow-md scale-105' 
-            : 'bg-bege-cream/60 text-cafe-dark border-bege-soft/60 hover:bg-bege-soft/40'"
-        >
-          <span>{{ getCategoriaIcon(cat.nome) }}</span>
-          <span>{{ cat.nome }}</span>
-        </button>
-
-        <button 
-          @click="categoriaSelecionada = 'bebidas'"
-          class="px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap border shrink-0 flex items-center gap-1.5"
-          :class="categoriaSelecionada === 'bebidas' 
-            ? 'bg-cafe text-white border-cafe shadow-md scale-105' 
-            : 'bg-bege-cream/60 text-cafe-dark border-bege-soft/60 hover:bg-bege-soft/40'"
-        >
-          <span>🍷</span>
-          <span>Bebidas</span>
-        </button>
-      </div>
-    </div>
 
     <!-- Conteúdo Principal do Cardápio -->
     <main v-if="!mesaInvalida || authStore.perfil" class="max-w-4xl mx-auto p-4 sm:p-6 space-y-8">
       
-      <!-- Banner Sutil de Boas-Vindas da Adega -->
-      <div class="bg-gradient-to-r from-cafe-dark to-cafe text-white p-5 sm:p-6 rounded-3xl shadow-premium relative overflow-hidden">
-        <div class="relative z-10 max-w-xl">
-          <span class="inline-block bg-[#E8C86A]/20 text-[#E8C86A] text-[9px] sm:text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full mb-2 border border-[#E8C86A]/30">
-            Cardápio Exclusivo
-          </span>
-          <h2 class="text-xl sm:text-2xl font-black text-white leading-tight mb-1">
-            Sabores inesquecíveis para apreciar
-          </h2>
-          <p class="text-xs sm:text-sm text-bege-soft font-normal leading-relaxed">
-            Consulte nossa seleção de pratos e carnes nobres preparados artesanalmente pelo nosso chef.
-          </p>
-        </div>
-        <div class="absolute -right-8 -bottom-8 opacity-10 pointer-events-none">
-          <SparklesIcon class="w-48 h-48 text-[#E8C86A]" />
-        </div>
+      <!-- Título de Boas-Vindas do Cardápio -->
+      <div class="pt-2 pb-1">
+        <span class="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#E8C86A] block mb-1">
+          Cardápio Exclusivo
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-black text-white leading-tight tracking-tight">
+          Sabores inesquecíveis para apreciar
+        </h2>
+        <p class="text-xs sm:text-sm text-bege-torrado font-normal mt-1 leading-relaxed">
+          Consulte nossa seleção de pratos e carnes nobres preparados artesanalmente pelo nosso chef.
+        </p>
       </div>
 
       <!-- Loading State -->
@@ -110,78 +68,95 @@
       </div>
 
       <!-- LISTAGEM DE CATEGORIAS E PRATOS -->
-      <div v-else class="space-y-10">
-        <div 
-          v-for="cat in categoriasFiltradas" 
-          :key="cat.id" 
-          class="space-y-4 animate-fade-in"
-        >
-          <!-- Cabeçalho da Categoria -->
-          <div class="flex items-center gap-3 border-b border-bege-soft pb-2 pt-2">
-            <span class="text-xl">{{ getCategoriaIcon(cat.nome) }}</span>
+      <div v-else class="space-y-8">
+        <!-- SEÇÃO: COMIDAS -->
+        <div class="space-y-4 animate-fade-in">
+          <div class="flex items-center gap-3 border-b border-bege-soft pb-2">
             <h3 class="text-base sm:text-lg font-black text-cafe-dark uppercase tracking-wide">
-              {{ cat.nome }}
+              Comidas
             </h3>
             <span class="ml-auto text-[10px] font-black uppercase tracking-wider text-bege-torrado bg-bege-cream px-2 py-0.5 rounded-full border border-bege-soft/50">
-              {{ cat.itens.length }} {{ cat.itens.length === 1 ? 'item' : 'itens' }}
+              {{ totalPratosCount }} opções
             </span>
           </div>
 
-          <!-- Grid de Pratos -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-3">
+            <!-- CARD EXPANSÍVEL: CATEGORIA DE COMIDA -->
             <div 
-              v-for="item in cat.itens" 
-              :key="item.id"
-              class="bg-branco rounded-3xl p-5 border border-bege-soft shadow-premium hover:shadow-lg hover:border-moca/30 transition-all duration-300 flex flex-col justify-between group relative"
+              v-for="cat in categoriasFiltradas" 
+              :key="cat.id"
+              class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden transition-all duration-300"
             >
-              <div>
-                <!-- Badges de Destaque / Ponto de Carne -->
-                <div class="flex flex-wrap items-center gap-2 mb-2">
-                  <span 
-                    v-if="item.destaque" 
-                    class="bg-amber-100 text-amber-800 border border-amber-200 text-[9px] font-black px-2 py-0.5 rounded-md uppercase tracking-wider flex items-center gap-1 shadow-xs"
-                  >
-                    ⭐ Especialidade
-                  </span>
-                  <span 
-                    v-if="item.permite_ponto_carne" 
-                    class="bg-red-50 text-red-700 border border-red-200/60 text-[9px] font-black px-2 py-0.5 rounded-md uppercase tracking-wider flex items-center gap-1"
-                  >
-                    🥩 Ponto da Carne
-                  </span>
+              <button 
+                @click="toggleCategoria(cat.id)" 
+                class="w-full flex items-center justify-between p-5 text-left hover:bg-bege-cream/50 transition-colors"
+              >
+                <div>
+                  <h4 class="font-bold text-cafe-dark text-base uppercase tracking-wide">{{ cat.nome }}</h4>
+                  <p class="text-caption text-bege-torrado">{{ cat.itens.length }} {{ cat.itens.length === 1 ? 'prato disponível' : 'pratos disponíveis' }}</p>
                 </div>
+                <div :class="{'rotate-180': expandedCategoriaId === cat.id}" class="transition-transform duration-300 text-bege-torrado">
+                  <ChevronDownIcon class="h-6 w-6" />
+                </div>
+              </button>
 
-                <!-- Nome e Descrição -->
-                <h4 class="text-base font-black text-cafe-dark group-hover:text-cafe transition-colors leading-snug">
-                  {{ item.nome }}
-                </h4>
-                <p v-if="item.descricao" class="text-xs text-bege-torrado/90 font-medium leading-relaxed mt-1.5 line-clamp-3">
-                  {{ item.descricao }}
-                </p>
-              </div>
+              <div v-show="expandedCategoriaId === cat.id" class="px-5 pb-5 space-y-3 animate-fade-in">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+                  <div 
+                    v-for="item in cat.itens" 
+                    :key="item.id"
+                    class="bg-[#18181C] rounded-2xl p-5 border border-bege-soft/20 shadow-sm hover:border-cafe/30 transition-all flex flex-col justify-between group relative"
+                  >
+                    <div>
+                      <!-- Badges de Destaque / Ponto de Carne -->
+                      <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <span 
+                          v-if="item.destaque" 
+                          class="bg-amber-100 text-amber-800 border border-amber-200 text-[9px] font-black px-2 py-0.5 rounded-md uppercase tracking-wider shadow-xs"
+                        >
+                          Especialidade
+                        </span>
+                        <span 
+                          v-if="item.permite_ponto_carne" 
+                          class="bg-red-50 text-red-700 border border-red-200/60 text-[9px] font-black px-2 py-0.5 rounded-md uppercase tracking-wider"
+                        >
+                          Ponto da Carne
+                        </span>
+                      </div>
 
-              <!-- Preço e Botão de Ação -->
-              <div class="flex items-center justify-between mt-5 pt-3 border-t border-bege-cream">
-                <span class="text-base sm:text-lg font-black text-cafe tabular-nums">
-                  {{ formatCurrency(item.preco) }}
-                </span>
+                      <!-- Nome e Descrição -->
+                      <h5 class="text-base font-black text-cafe-dark group-hover:text-cafe transition-colors leading-snug">
+                        {{ item.nome }}
+                      </h5>
+                      <p v-if="item.descricao" class="text-xs text-bege-torrado/90 font-medium leading-relaxed mt-1.5 line-clamp-3">
+                        {{ item.descricao }}
+                      </p>
+                    </div>
 
-                <button 
-                  @click="abrirModalPrato(item)"
-                  class="bg-cafe hover:bg-cafe-dark active:scale-95 text-white font-black text-xs px-4 py-2.5 rounded-xl transition-all shadow-sm flex items-center gap-2 uppercase tracking-wider"
-                >
-                  <PlusIcon class="h-4 w-4" />
-                  <span>Adicionar</span>
-                </button>
+                    <!-- Preço e Botão de Ação -->
+                    <div class="flex items-center justify-between mt-5 pt-3 border-t border-[#262218]">
+                      <span class="text-base sm:text-lg font-black text-cafe tabular-nums">
+                        {{ formatCurrency(item.preco) }}
+                      </span>
+
+                      <button 
+                        @click="abrirModalPrato(item)"
+                        class="bg-cafe hover:bg-cafe-dark active:scale-95 text-[#0A0A0C] font-black text-xs px-4 py-2.5 rounded-xl transition-all shadow-sm flex items-center gap-2 uppercase tracking-wider"
+                      >
+                        <PlusIcon class="h-4 w-4" />
+                        <span>Adicionar</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         <!-- SEÇÃO: BEBIDAS -->
-        <div v-if="categoriaSelecionada === 'todas' || categoriaSelecionada === 'bebidas'" class="space-y-4 pt-4 animate-fade-in">
+        <div class="space-y-4 pt-4 animate-fade-in">
           <div class="flex items-center gap-3 border-b border-bege-soft pb-2">
-            <span class="text-xl">🍷</span>
             <h3 class="text-base sm:text-lg font-black text-cafe-dark uppercase tracking-wide">
               Bebidas
             </h3>
@@ -296,7 +271,7 @@
         <div>
           <div class="flex items-center gap-2 mb-2">
             <span v-if="pratoSelecionado.destaque" class="bg-amber-100 text-amber-800 text-[10px] font-black px-2 py-0.5 rounded-md uppercase tracking-wider">
-              ⭐ Especialidade Adega
+              Especialidade Adega
             </span>
           </div>
           <h3 class="text-xl font-black text-cafe-dark">{{ pratoSelecionado.nome }}</h3>
@@ -312,9 +287,8 @@
         <!-- SELETOR DE PONTO DA CARNE (DESTACADO SE APLICÁVEL) -->
         <div v-if="pratoSelecionado.permite_ponto_carne" class="bg-bege-cream/40 p-4 sm:p-5 rounded-2xl border border-bege-soft space-y-3">
           <div class="flex items-center justify-between">
-            <label class="text-xs font-black text-cafe uppercase tracking-wider flex items-center gap-2">
-              <span>🥩</span>
-              <span>Escolha o Ponto da Carne</span>
+            <label class="text-xs font-black text-cafe uppercase tracking-wider">
+              Escolha o Ponto da Carne
             </label>
             <span class="text-[9px] font-black uppercase text-red-600 bg-red-50 px-2 py-0.5 rounded-md border border-red-100">
               Obrigatório
@@ -477,7 +451,7 @@
             <!-- Destaque do Ponto da Carne no Carrinho -->
             <div v-if="item.ponto_carne" class="mb-3">
               <span class="bg-red-50 text-red-700 border border-red-200 text-[10px] font-black px-2.5 py-1 rounded-lg uppercase tracking-wider inline-flex items-center gap-1 shadow-2xs">
-                🥩 Ponto: {{ item.ponto_carne }}
+                Ponto: {{ item.ponto_carne }}
               </span>
             </div>
 
@@ -608,9 +582,6 @@ const isMesaLocked = computed(() => {
   return !!route.query.mesa;
 });
 
-// Filtro de Categorias
-const categoriaSelecionada = ref<string>('todas');
-
 // Categorias com pratos
 const categoriasComItens = computed(() => {
   return categorias.value.filter(cat => {
@@ -620,34 +591,24 @@ const categoriasComItens = computed(() => {
 
 // Pratos filtrados agrupados por categoria
 const categoriasFiltradas = computed(() => {
-  const cats = categoriaSelecionada.value === 'todas'
-    ? categoriasComItens.value
-    : categoriasComItens.value.filter(c => c.id === categoriaSelecionada.value);
-
-  return cats.map(cat => ({
+  return categoriasComItens.value.map(cat => ({
     id: cat.id,
     nome: cat.nome,
     itens: pratos.value.filter(p => p.categoria_id === cat.id)
   })).filter(c => c.itens.length > 0);
 });
 
-// Ícones por Categoria
-const getCategoriaIcon = (nome: string) => {
-  const lower = nome.toLowerCase();
-  if (lower.includes('especialidade')) return '⭐';
-  if (lower.includes('massa')) return '🍝';
-  if (lower.includes('carne')) return '🥩';
-  if (lower.includes('risoto')) return '🍚';
-  if (lower.includes('batata')) return '🥔';
-  if (lower.includes('panqueca')) return '🥞';
-  if (lower.includes('salada')) return '🥗';
-  if (lower.includes('porç') || lower.includes('porc')) return '🍟';
-  if (lower.includes('sobremesa')) return '🍰';
-  return '🍴';
+const totalPratosCount = computed(() => pratos.value.length);
+
+// Expansão de Categorias de Comida
+const expandedCategoriaId = ref<string | null>(null);
+const toggleCategoria = (id: string) => {
+  expandedCategoriaId.value = expandedCategoriaId.value === id ? null : id;
 };
 
+
 // Bebidas
-const expandedBebidaSection = ref<string | null>('sucos');
+const expandedBebidaSection = ref<string | null>(null);
 const toggleBebidaSection = (section: string) => {
   expandedBebidaSection.value = expandedBebidaSection.value === section ? null : section;
 };

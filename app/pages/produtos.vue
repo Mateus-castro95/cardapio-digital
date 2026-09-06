@@ -4,7 +4,6 @@
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-bege-soft pb-6">
       <div>
         <div class="flex items-center gap-2 mb-1">
-          <span class="text-xl">🍷</span>
           <span class="text-[10px] font-black uppercase tracking-widest text-bege-torrado bg-bege-cream px-2 py-0.5 rounded-md border border-bege-soft/60">
             Adega Canoinhas
           </span>
@@ -128,7 +127,7 @@
                     v-if="item.destaque" 
                     class="text-[8px] bg-amber-100 text-amber-800 border border-amber-200 px-1.5 py-0.5 rounded font-black uppercase tracking-wider"
                   >
-                    ⭐ Especial
+                    Especial
                   </span>
                 </div>
                 <p v-if="item.descricao" class="text-[11px] text-bege-torrado font-medium line-clamp-2 mt-0.5 leading-relaxed">
@@ -150,7 +149,7 @@
                 v-if="item.permite_ponto_carne" 
                 class="text-[9px] bg-red-50 text-red-700 px-2 py-1 rounded-lg font-black uppercase border border-red-100 whitespace-nowrap inline-flex items-center gap-1"
               >
-                🥩 Ponto Ativo
+                Ponto Ativo
               </span>
               <span v-else class="text-[10px] text-bege-torrado/30 font-bold">-</span>
             </template>

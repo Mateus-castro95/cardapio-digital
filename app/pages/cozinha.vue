@@ -72,7 +72,7 @@
 
               <!-- DESTAQUE DO PONTO DA CARNE PARA A COZINHA -->
               <div v-if="item.ponto_carne" class="my-1.5 inline-flex items-center gap-1.5 px-3 py-1 bg-red-600 text-white rounded-lg font-black text-xs uppercase tracking-wider shadow-sm">
-                <span>🥩 PONTO:</span>
+                <span>PONTO:</span>
                 <span class="underline decoration-2 text-yellow-300 font-extrabold">{{ item.ponto_carne }}</span>
               </div>
 
