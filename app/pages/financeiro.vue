@@ -8,13 +8,13 @@
       </div>
 
       <!-- Filtro de Data -->
-      <div class="grid grid-cols-1 sm:flex sm:flex-row items-end gap-3 bg-branco p-4 sm:p-5 rounded-3xl border border-bege-soft shadow-premium w-full lg:w-auto overflow-hidden">
+      <div class="grid grid-cols-1 sm:flex sm:flex-row items-end gap-3 bg-branco p-3 sm:p-5 rounded-3xl border border-bege-soft shadow-premium w-full lg:w-auto overflow-hidden">
         <div class="w-full space-y-1">
           <label class="text-[9px] sm:text-[10px] font-black text-bege-torrado uppercase tracking-widest px-1">Início</label>
           <input 
             v-model="filtro.inicio" 
             type="date" 
-            class="block w-full box-border px-3 sm:px-4 py-2 bg-bege-cream/30 border border-bege-soft rounded-xl text-xs sm:text-sm font-bold text-cafe focus:border-moca focus:ring-1 focus:ring-moca transition-all outline-none"
+            class="block w-full box-border px-2 sm:px-4 py-2 bg-bege-cream/30 border border-bege-soft rounded-xl text-[10px] sm:text-sm font-bold text-cafe focus:border-moca focus:ring-1 focus:ring-moca transition-all outline-none"
           >
         </div>
         <div class="w-full space-y-1">
@@ -22,7 +22,7 @@
           <input 
             v-model="filtro.fim" 
             type="date" 
-            class="block w-full box-border px-3 sm:px-4 py-2 bg-bege-cream/30 border border-bege-soft rounded-xl text-xs sm:text-sm font-bold text-cafe focus:border-moca focus:ring-1 focus:ring-moca transition-all outline-none"
+            class="block w-full box-border px-2 sm:px-4 py-2 bg-bege-cream/30 border border-bege-soft rounded-xl text-[10px] sm:text-sm font-bold text-cafe focus:border-moca focus:ring-1 focus:ring-moca transition-all outline-none"
           >
         </div>
         <button 
