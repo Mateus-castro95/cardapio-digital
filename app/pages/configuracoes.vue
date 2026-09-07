@@ -3,7 +3,7 @@
     <!-- Cabeçalho -->
     <div class="mb-10 animate-fade-in-up">
       <div class="flex items-center gap-4 mb-4">
-        <div class="w-12 h-12 bg-cafe text-branco rounded-2xl flex items-center justify-center shadow-premium">
+        <div class="w-12 h-12 bg-cafe text-[#0A0A0C] rounded-2xl flex items-center justify-center shadow-premium">
           <Cog6ToothIcon class="w-6 h-6 text-dourado-vivo" />
         </div>
         <div>
@@ -61,7 +61,7 @@
               <select 
                 :key="resetKey"
                 @change="(e) => preHandleChangeCargo(perfil, (e.target as HTMLSelectElement).value as any)"
-                class="appearance-none bg-cafe text-branco text-[10px] font-black uppercase tracking-widest pl-4 pr-10 py-2.5 rounded-xl cursor-pointer hover:bg-cafe-dark transition-all outline-none border-none shadow-premium"
+                class="appearance-none bg-cafe text-[#0A0A0C] text-[10px] font-black uppercase tracking-widest pl-4 pr-10 py-2.5 rounded-xl cursor-pointer hover:bg-cafe-dark transition-all outline-none border-none shadow-premium"
               >
                 <option value="" disabled selected>Alterar Cargo</option>
                 <option v-for="c in cargosDisponiveis" :key="c" :value="c">
@@ -123,8 +123,8 @@ onMounted(() => {
 const getCargoStyle = (cargo: string) => {
   switch (cargo) {
     case 'super_admin': return 'bg-red-100 text-red-700 border border-red-200';
-    case 'dono': return 'bg-moca text-branco shadow-moca/20';
-    case 'caixa': return 'bg-cafe text-branco shadow-cafe/20';
+    case 'dono': return 'bg-moca text-[#0A0A0C] shadow-moca/20';
+    case 'caixa': return 'bg-cafe text-[#0A0A0C] shadow-cafe/20';
     case 'cozinha': return 'bg-bege-soft text-cafe border border-bege-torrado/20';
     default: return 'bg-gray-100 text-gray-600';
   }

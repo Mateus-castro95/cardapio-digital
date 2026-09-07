@@ -22,7 +22,7 @@
         </button>
         <button 
           @click="handleOpenAddItem()"
-          class="flex-1 sm:flex-none px-2 sm:px-5 py-2 sm:py-2.5 bg-cafe text-branco hover:bg-cafe-dark transition-all font-black text-[10px] sm:text-xs uppercase tracking-wider rounded-xl shadow-md active:scale-95 flex items-center justify-center gap-1 sm:gap-2 text-center leading-tight"
+          class="flex-1 sm:flex-none px-2 sm:px-5 py-2 sm:py-2.5 bg-cafe text-[#0A0A0C] hover:bg-cafe-dark transition-all font-black text-[10px] sm:text-xs uppercase tracking-wider rounded-xl shadow-md active:scale-95 flex items-center justify-center gap-1 sm:gap-2 text-center leading-tight"
         >
           <PlusIcon class="w-4 h-4 hidden sm:block" />
           <span>Novo Prato / Bebida</span>

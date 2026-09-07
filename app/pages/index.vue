@@ -45,11 +45,11 @@
             <div 
               v-for="mesa in detalhesMesasOcupadas" 
               :key="mesa.numero"
-              class="group bg-bege-cream/20 hover:bg-branco border border-bege-soft/60 hover:border-moca/30 p-5 sm:p-6 rounded-3xl transition-all duration-300 shadow-sm hover:shadow-md"
+              class="group bg-bege-cream/20 hover:bg-white/10 border border-bege-soft/60 hover:border-moca/30 p-5 sm:p-6 rounded-3xl transition-all duration-300 shadow-sm hover:shadow-md"
             >
               <div class="flex justify-between items-start mb-4">
                 <div class="flex items-center gap-3 sm:gap-4">
-                  <div class="w-10 h-10 sm:w-12 sm:h-12 bg-cafe text-branco rounded-2xl flex items-center justify-center text-lg sm:text-xl font-black shadow-lg">
+                  <div class="w-10 h-10 sm:w-12 sm:h-12 bg-cafe text-[#0A0A0C] rounded-2xl flex items-center justify-center text-lg sm:text-xl font-black shadow-lg">
                     {{ mesa.numero }}
                   </div>
                   <div>

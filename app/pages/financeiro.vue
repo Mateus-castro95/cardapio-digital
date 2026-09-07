@@ -26,7 +26,7 @@
           >
         </div>
         <button 
-          class="w-full sm:w-auto sm:px-6 py-2 rounded-xl bg-cafe text-white font-black tracking-wide text-xs shadow-lg hover:bg-cafe-dark transition-all h-[38px] sm:h-[42px] flex items-center justify-center gap-2"
+          class="w-full sm:w-auto sm:px-6 py-2 rounded-xl bg-cafe text-[#0A0A0C] font-black tracking-wide text-xs shadow-lg hover:bg-cafe-dark transition-all h-[38px] sm:h-[42px] flex items-center justify-center gap-2"
           @click="carregarDados"
           :disabled="loadingReport"
         >
@@ -124,7 +124,7 @@
               <td class="py-5 text-sm font-bold text-cafe-dark tabular-nums">{{ formatarDia(venda.data) }}</td>
               <td class="py-5 text-sm font-bold text-cafe-dark tabular-nums">{{ formatarHora(venda.data) }}</td>
               <td class="py-5">
-                <span v-if="venda.mesa_numero" class="inline-block text-[10px] font-black px-2.5 py-1.5 rounded-lg bg-cafe text-white uppercase tracking-wider shadow-sm">
+                <span v-if="venda.mesa_numero" class="inline-block text-[10px] font-black px-2.5 py-1.5 rounded-lg bg-cafe text-[#0A0A0C] uppercase tracking-wider shadow-sm">
                   MESA {{ venda.mesa_numero }}
                 </span>
                 <span v-else class="inline-block text-[10px] font-black px-2.5 py-1.5 rounded-lg bg-gray-100 text-gray-400 uppercase tracking-wider">
@@ -160,7 +160,7 @@
         <div v-for="venda in vendasAgrupadas" :key="venda.id" class="p-5 hover:bg-bege-cream/20 transition-colors">
           <div class="flex justify-between items-start mb-3">
             <div class="space-y-1">
-              <span v-if="venda.mesa_numero" class="inline-block text-[10px] font-black px-2.5 py-1.5 rounded-lg bg-cafe text-white uppercase tracking-wider mr-2">
+              <span v-if="venda.mesa_numero" class="inline-block text-[10px] font-black px-2.5 py-1.5 rounded-lg bg-cafe text-[#0A0A0C] uppercase tracking-wider mr-2">
                 MESA {{ venda.mesa_numero }}
               </span>
               <span v-else class="inline-block text-[10px] font-black px-2.5 py-1.5 rounded-lg bg-gray-100 text-gray-400 uppercase tracking-wider mr-2">

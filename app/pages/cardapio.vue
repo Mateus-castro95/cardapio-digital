@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-bege-cream pb-28 font-primary">
+  <div class="flex flex-col min-h-screen bg-bege-cream font-primary">
     <!-- Header Minimalista e Sofisticado -->
     <header class="bg-branco px-4 sm:px-6 py-4 border-b border-bege-soft sticky top-0 z-30 shadow-sm">
       <div class="max-w-4xl mx-auto flex justify-between items-center gap-4">
@@ -27,7 +27,7 @@
             <select 
               v-model="mesaSelecionadaId" 
               :disabled="isMesaLocked"
-              class="appearance-none bg-cafe text-branco text-xs sm:text-body font-bold pl-3 sm:pl-4 pr-8 sm:pr-10 py-1.5 sm:py-2 rounded-xl focus:outline-none cursor-pointer shadow-premium disabled:opacity-80 disabled:cursor-not-allowed hover:bg-cafe-dark transition-colors border-none"
+              class="appearance-none bg-cafe text-[#0A0A0C] text-xs sm:text-body font-bold pl-3 sm:pl-4 pr-8 sm:pr-10 py-1.5 sm:py-2 rounded-xl focus:outline-none cursor-pointer shadow-premium disabled:opacity-80 disabled:cursor-not-allowed hover:bg-cafe-dark transition-colors border-none"
               :class="{'bg-red-600': mesaInvalida}"
             >
               <option v-if="!isMesaLocked || mesaInvalida" :value="null">--</option>
@@ -195,7 +195,7 @@
                   </div>
                   <div class="flex items-center gap-3">
                     <span class="font-bold text-cafe text-xs text-right">A partir de<br>{{ formatCurrency(grupo.preco_min) }}</span>
-                    <div class="bg-bege-soft p-1.5 rounded-lg group-active:scale-90"><ChevronRightIcon class="h-4 w-4 text-cafe" /></div>
+                    <div class="bg-cafe p-1.5 rounded-lg group-active:scale-90"><ChevronRightIcon class="h-4 w-4 text-[#0A0A0C]" /></div>
                   </div>
                 </div>
               </div>
@@ -249,7 +249,7 @@
               @click="pontoCarneSelecionado = ponto.valor"
               class="p-3 rounded-xl border-2 text-left transition-all flex items-center justify-between"
               :class="pontoCarneSelecionado === ponto.valor 
-                ? 'border-cafe bg-cafe text-white shadow-md' 
+                ? 'border-cafe bg-cafe text-[#0A0A0C] shadow-md' 
                 : 'border-bege-soft bg-branco text-cafe-dark hover:border-moca/40'"
             >
               <div>
@@ -334,7 +334,7 @@
           <div 
             v-for="opcao in bebidaGrupoAtual?.opcoes" :key="opcao.id"
             @click="adicionarBebidaAoCarrinho(opcao)"
-            class="flex justify-between items-center p-4 bg-bege-cream/40 rounded-2xl border border-bege-soft hover:border-cafe hover:bg-branco transition-all cursor-pointer group shadow-sm"
+            class="flex justify-between items-center p-4 bg-bege-cream/40 rounded-2xl border border-bege-soft hover:border-cafe hover:bg-white/10 transition-all cursor-pointer group shadow-sm"
           >
             <div>
               <div class="flex flex-wrap items-center gap-2">
@@ -350,7 +350,7 @@
             </div>
             <div class="flex items-center gap-4">
               <span class="font-black text-cafe text-base">{{ formatCurrency(opcao.preco) }}</span>
-              <div class="bg-cafe text-white p-2 rounded-xl shadow-sm group-hover:scale-110 transition-transform">
+              <div class="bg-cafe text-[#0A0A0C] p-2 rounded-xl shadow-sm group-hover:scale-110 transition-transform">
                 <PlusIconSolid class="h-4 w-4" />
               </div>
             </div>
@@ -360,10 +360,10 @@
     </BaseModalScrollable>
 
     <!-- Barra de Carrinho Inferior Flutuante (Estilo Ifood) -->
-    <div v-if="cart.length > 0" class="fixed bottom-0 left-0 right-0 p-3 sm:p-4 bg-white/90 backdrop-blur-md border-t border-bege-soft z-40">
+    <div v-if="cart.length > 0" class="sticky bottom-0 w-full mt-auto p-3 sm:p-4 bg-white/90 backdrop-blur-md border-t border-bege-soft z-40">
       <button 
         @click="showCartModal = true"
-        class="max-w-4xl mx-auto w-full bg-cafe text-branco flex justify-between items-center p-4 rounded-2xl shadow-premium active:scale-[0.98] transition-all hover:bg-cafe-dark"
+        class="max-w-4xl mx-auto w-full bg-cafe text-[#0A0A0C] flex justify-between items-center p-4 rounded-2xl shadow-premium active:scale-[0.98] transition-all hover:bg-cafe-dark"
       >
         <div class="flex items-center gap-3">
           <div class="bg-[#E8C86A] text-cafe-dark px-2.5 py-0.5 rounded-lg font-black text-xs shadow-xs">
@@ -372,9 +372,9 @@
           <span class="font-bold text-xs sm:text-sm uppercase tracking-wide">Ver Meu Pedido</span>
         </div>
         <div class="flex items-center gap-3">
-          <span class="text-[10px] text-bege-soft font-bold uppercase tracking-widest">Total:</span>
+          <span class="text-[10px] text-[#0A0A0C]/70 font-bold uppercase tracking-widest">Total:</span>
           <span class="font-black text-base sm:text-lg">{{ formatCurrency(totalCart) }}</span>
-          <ChevronRightIconSolid class="h-4 w-4 text-[#E8C86A]" />
+          <ChevronRightIconSolid class="h-4 w-4 text-[#0A0A0C]" />
         </div>
       </button>
     </div>

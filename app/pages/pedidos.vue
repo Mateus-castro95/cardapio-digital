@@ -22,7 +22,7 @@
         @click="filtroAtual = f.value"
         class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap border-2"
         :class="filtroAtual === f.value 
-          ? 'bg-cafe border-cafe text-white shadow-lg' 
+          ? 'bg-cafe border-cafe text-[#0A0A0C] shadow-lg' 
           : 'bg-branco border-bege-soft text-bege-torrado hover:border-moca hover:text-moca'"
       >
         {{ f.label }}
@@ -49,7 +49,7 @@
           ></div>
 
           <!-- Mesa -->
-          <div class="flex flex-row md:flex-col items-center justify-center bg-cafe text-white rounded-2xl p-3 sm:p-5 min-w-full md:min-w-[110px] shrink-0 shadow-lg ml-0 md:ml-2 gap-2 md:gap-0">
+          <div class="flex flex-row md:flex-col items-center justify-center bg-cafe text-[#0A0A0C] rounded-2xl p-3 sm:p-5 min-w-full md:min-w-[110px] shrink-0 shadow-lg ml-0 md:ml-2 gap-2 md:gap-0">
             <span class="text-[9px] sm:text-[10px] uppercase font-black tracking-widest opacity-60 md:mb-1">Mesa</span>
             <span class="text-2xl sm:text-4xl font-black">{{ pedido.mesa?.numero || '?' }}</span>
           </div>
@@ -87,7 +87,7 @@
                 class="bg-bege-cream/30 p-4 rounded-2xl border border-bege-soft/40 hover:border-moca/30 flex flex-col gap-1 transition-colors group/item"
               >
                 <div class="flex items-center gap-3">
-                  <span class="w-6 h-6 flex items-center justify-center bg-cafe text-white rounded-lg text-[10px] font-black shadow-sm">{{ item.quantidade }}</span>
+                  <span class="w-6 h-6 flex items-center justify-center bg-cafe text-[#0A0A0C] rounded-lg text-[10px] font-black shadow-sm">{{ item.quantidade }}</span>
                   <span class="text-xs font-black text-cafe-dark truncate">{{ getItemName(item) }}</span>
                 </div>
                 <div v-if="item.ponto_carne" class="ml-9 my-1">

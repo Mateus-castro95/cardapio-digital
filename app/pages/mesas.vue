@@ -17,7 +17,7 @@
         </button>
         <button 
           @click="showAddMesaModal = true" 
-          class="w-full sm:w-auto px-6 py-3 rounded-xl bg-cafe text-branco hover:bg-cafe-dark shadow-lg hover:shadow-xl transition-all font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95"
+          class="w-full sm:w-auto px-6 py-3 rounded-xl bg-cafe text-[#0A0A0C] hover:bg-cafe-dark shadow-lg hover:shadow-xl transition-all font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95"
         >
           <PlusIcon class="w-5 h-5" />
           Nova Mesa
@@ -118,7 +118,7 @@
           </div>
           <div class="flex justify-end gap-3 mt-8 pt-4 border-t border-bege-soft">
             <button @click="showAddMesaModal = false" class="px-4 py-2 text-bege-torrado hover:text-cafe font-medium transition-colors">Cancelar</button>
-            <button @click="handleCriarMesa" :disabled="loadingCriar" class="px-6 py-2 bg-cafe text-branco rounded-xl hover:bg-cafe-dark transition-colors font-bold shadow-md">
+            <button @click="handleCriarMesa" :disabled="loadingCriar" class="px-6 py-2 bg-cafe text-[#0A0A0C] rounded-xl hover:bg-cafe-dark transition-colors font-bold shadow-md">
               {{ loadingCriar ? 'Salvando...' : 'SALVAR MESA' }}
             </button>
           </div>

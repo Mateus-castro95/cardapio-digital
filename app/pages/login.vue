@@ -61,7 +61,7 @@
           <button 
             type="submit" 
             :disabled="loading"
-            class="w-full py-4 bg-cafe text-branco rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-cafe/20 hover:bg-cafe-dark hover:shadow-xl active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed group"
+            class="w-full py-4 bg-cafe text-[#0A0A0C] rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-cafe/20 hover:bg-cafe-dark hover:shadow-xl active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed group"
           >
             <span v-if="loading" class="animate-spin w-5 h-5 border-2 border-white/30 border-t-white rounded-full"></span>
             <span v-else>Entrar no Sistema</span>

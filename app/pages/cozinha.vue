@@ -42,7 +42,7 @@
               <span class="text-xl sm:text-heading-2 text-cafe font-black leading-none">#{{ String(pedido.numero_sequencial).padStart(3, '0') }}</span>
             </div>
             <div class="flex items-center gap-2">
-              <span class="px-2 py-1 bg-cafe text-branco text-[9px] sm:text-[10px] font-black rounded-lg uppercase tracking-wide shadow-sm">
+              <span class="px-2 py-1 bg-cafe text-[#0A0A0C] text-[9px] sm:text-[10px] font-black rounded-lg uppercase tracking-wide shadow-sm">
                 Mesa {{ pedido.mesa?.numero || '?' }}
               </span>
               <span class="text-[9px] sm:text-[10px] text-bege-torrado font-black uppercase flex items-center gap-1">
@@ -53,7 +53,7 @@
           </div>
           <span 
             class="px-2.5 py-1 rounded-lg text-[9px] sm:text-[10px] font-black uppercase tracking-widest shadow-sm border"
-            :class="pedido.status === 'em_preparo' ? 'bg-moca text-white border-moca' : 'bg-green-100 text-green-700 border-green-200'"
+            :class="pedido.status === 'em_preparo' ? 'bg-moca text-[#0A0A0C] border-moca' : 'bg-green-100 text-green-700 border-green-200'"
           >
             {{ getStatusLabel(pedido.status) }}
           </span>
@@ -91,7 +91,7 @@
         <div class="p-4 bg-gray-50 mt-auto border-t border-bege-soft">
           <button 
             v-if="pedido.status === 'novo'"
-            class="w-full py-3.5 rounded-xl bg-moca hover:bg-moca-light text-white font-black tracking-widest text-xs shadow-lg shadow-moca/20 transition-all active:scale-95 flex items-center justify-center gap-2"
+            class="w-full py-3.5 rounded-xl bg-moca hover:bg-moca-light text-[#0A0A0C] font-black tracking-widest text-xs shadow-lg shadow-moca/20 transition-all active:scale-95 flex items-center justify-center gap-2"
             @click="handleUpdateStatus(pedido.id, 'em_preparo')"
           >
             <FireIcon class="h-4 w-4" />
@@ -117,7 +117,7 @@
       <h3 class="text-heading-2 text-cafe-dark">Cozinha em repouso</h3>
       <p class="text-body text-bege-torrado max-w-sm mt-3">Não há pedidos pendentes no momento. Aproveite para organizar a bancada!</p>
       <button 
-        class="mt-8 px-8 py-3 rounded-xl border-2 border-bege-soft text-cafe font-bold hover:bg-white hover:border-moca hover:text-moca transition-all"
+        class="mt-8 px-8 py-3 rounded-xl border-2 border-bege-soft text-cafe font-bold hover:bg-white/10 hover:border-moca hover:text-moca transition-all"
         @click="fetchPedidosAtualizados"
       >
         Consultar Pedidos

@@ -85,14 +85,14 @@
               <button 
                 @click="tipoPagamento = 'integral'; valorPagamento = Number(saldoRestante.toFixed(2))"
                 class="flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all"
-                :class="tipoPagamento === 'integral' ? 'bg-moca text-white shadow-md' : 'text-bege-claro/50 hover:text-white'"
+                :class="tipoPagamento === 'integral' ? 'bg-moca text-[#0A0A0C] shadow-md' : 'text-bege-claro/50 hover:text-white'"
               >
                 Integral
               </button>
               <button 
                 @click="tipoPagamento = 'parcial'"
                 class="flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all"
-                :class="tipoPagamento === 'parcial' ? 'bg-moca text-white shadow-md' : 'text-bege-claro/50 hover:text-white'"
+                :class="tipoPagamento === 'parcial' ? 'bg-moca text-[#0A0A0C] shadow-md' : 'text-bege-claro/50 hover:text-white'"
               >
                 Parcial
               </button>
@@ -118,7 +118,7 @@
                   @click="metodoSelecionado = metodo.id"
                   class="py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border border-white/10 transition-all hover:bg-white/5"
                   :class="metodoSelecionado === metodo.id 
-                    ? 'bg-moca !border-moca text-white shadow-lg transform scale-105' 
+                    ? 'bg-moca !border-moca text-[#0A0A0C] shadow-lg transform scale-105' 
                     : 'bg-transparent text-bege-claro/60'"
                 >
                   {{ metodo.label }}
@@ -127,7 +127,7 @@
             </div>
 
             <button 
-              class="w-full py-4 rounded-xl bg-branco text-cafe-dark hover:bg-bege-cream font-black tracking-widest text-xs shadow-xl transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+              class="w-full py-4 rounded-xl bg-cafe text-[#0A0A0C] hover:bg-cafe-dark font-black tracking-widest text-xs shadow-xl transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
               @click="handleRegistrarPagamento"
               :disabled="loadingPagamento || !valorPagamento || Number(valorPagamento) <= 0 || Number(valorPagamento) > (saldoRestante + 0.01) || !metodoSelecionado"
             >
