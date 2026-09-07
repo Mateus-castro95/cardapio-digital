@@ -88,100 +88,84 @@ const handleClick = (event: MouseEvent) => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  font-weight: 700;
+  gap: 0.375rem;
+  font-weight: 400;
   border: none;
-  border-radius: 12px;
+  border-radius: 8px; /* rounded-lg */
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease-in-out;
   font-family: 'Inter', sans-serif;
   position: relative;
   overflow: hidden;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
 }
 
 .base-button:focus {
-  outline: 2px solid #D4AF37;
+  outline: 2px solid rgba(255, 255, 255, 0.1);
   outline-offset: 2px;
 }
 
 /* Sizes */
 .small {
-  padding: 0.5rem 1rem;
+  padding: 0.25rem 0.75rem;
   font-size: 0.75rem;
 }
 
 .medium {
-  padding: 0.875rem 1.75rem;
-  font-size: 0.875rem;
+  padding: 0.375rem 1rem;
+  font-size: 0.75rem; /* text-xs */
 }
 
 .large {
-  padding: 1.125rem 2.25rem;
-  font-size: 1rem;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.875rem; /* text-sm */
 }
 
 /* Variants */
 .primary {
-  background: linear-gradient(135deg, #D4AF37 0%, #B89326 100%);
+  background-color: #D4AF37;
   color: #0A0A0C;
-  font-weight: 800;
-  box-shadow: 0 4px 15px -1px rgba(212, 175, 55, 0.3);
 }
 
 .primary:hover:not(.is-disabled):not(.is-loading) {
-  background: linear-gradient(135deg, #F3D887 0%, #D4AF37 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px -3px rgba(212, 175, 55, 0.5);
+  background-color: #b5952f;
 }
 
 .secondary {
-  background: linear-gradient(135deg, #242017 0%, #15130E 100%);
-  color: #D4AF37;
-  border: 1px solid #D4AF37;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+  background-color: #2E2A20;
+  color: #E2DACB;
 }
 
 .secondary:hover:not(.is-disabled):not(.is-loading) {
-  background: linear-gradient(135deg, #363023 0%, #1F1C14 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(212, 175, 55, 0.2);
+  background-color: #3E382B;
 }
 
 .danger {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  background-color: #dc2626;
   color: white;
 }
 
 .danger:hover:not(.is-disabled):not(.is-loading) {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+  background-color: #b91c1c;
 }
 
 .success {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background-color: #059669;
   color: white;
 }
 
 .success:hover:not(.is-disabled):not(.is-loading) {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  background-color: #047857;
 }
 
 .outline {
-  background: transparent;
-  border: 2px solid #D4AF37;
-  color: #D4AF37;
+  background-color: transparent;
+  border: 1px solid #3E382B;
+  color: #C5B79D;
 }
 
 .outline:hover:not(.is-disabled):not(.is-loading) {
-  background: rgba(212, 175, 55, 0.1);
-  border-color: #F3D887;
-  color: #F3D887;
-  transform: translateY(-2px);
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
 }
 
 /* States */

@@ -156,14 +156,14 @@ const handleFocus = (event: FocusEvent) => {
 
 .base-input {
   width: 100%;
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem; /* text-sm */
   font-family: inherit;
-  color: #F2ECE1;
-  background: #18181C;
-  border: 1.5px solid #2C271D;
-  border-radius: 12px;
-  transition: all 0.3s ease;
+  color: #E2DACB;
+  background-color: transparent;
+  border: 1px solid #2E2A20;
+  border-radius: 8px; /* rounded-lg */
+  transition: all 0.2s ease;
   outline: none;
 }
 
@@ -173,18 +173,17 @@ const handleFocus = (event: FocusEvent) => {
 
 .base-input:focus {
   border-color: #D4AF37;
-  background: #1C1C21;
-  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.18);
+  background-color: transparent;
 }
 
 .base-input:disabled {
-  background: #111114;
+  background-color: rgba(255, 255, 255, 0.05);
   cursor: not-allowed;
   opacity: 0.5;
 }
 
 .base-input:readonly {
-  background: #141417;
+  background-color: rgba(255, 255, 255, 0.02);
   cursor: default;
 }
 
@@ -193,15 +192,15 @@ const handleFocus = (event: FocusEvent) => {
 }
 
 .base-input.is-error:focus {
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
 }
 
 .base-input.has-prefix {
-  padding-left: 2.75rem;
+  padding-left: 2.25rem;
 }
 
 .base-input.has-suffix {
-  padding-right: 2.75rem;
+  padding-right: 2.25rem;
 }
 
 .input-prefix,

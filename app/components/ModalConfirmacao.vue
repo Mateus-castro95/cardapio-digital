@@ -1,25 +1,40 @@
 <template>
-  <BaseModal :show="show" :title="title" size="sm" @close="$emit('cancel')">
-    <div class="text-center">
-      <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-900/20 border border-red-500/20 mb-4">
-        <ExclamationTriangleIcon class="h-6 w-6 text-red-500" />
+  <BaseModal :show="show" :title="title" size="xs" @close="$emit('cancel')">
+    <div class="flex items-start gap-3 py-1">
+      <div class="flex items-center justify-center h-7 w-7 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 shrink-0 mt-0.5">
+        <ExclamationTriangleIcon class="h-4 w-4" />
       </div>
-      <p class="text-[#C5B79D] font-medium">{{ message }}</p>
+      <p class="text-xs text-[#C5B79D] font-normal leading-relaxed">
+        {{ message }}
+      </p>
     </div>
 
     <template #footer>
-      <BaseButton variant="outline" @click="$emit('cancel')">
+      <button
+        type="button"
+        @click="$emit('cancel')"
+        class="px-3 py-1.5 rounded-lg border border-[#3E382B] text-xs font-normal text-[#C5B79D] hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+      >
         {{ cancelLabel }}
-      </BaseButton>
-      <BaseButton :variant="variant" :loading="loading" @click="$emit('confirm')">
+      </button>
+      <button
+        type="button"
+        :disabled="loading"
+        @click="$emit('confirm')"
+        class="px-3.5 py-1.5 rounded-lg text-xs font-normal transition-all flex items-center gap-1.5 disabled:opacity-50 cursor-pointer shadow-sm"
+        :class="confirmButtonClass"
+      >
+        <span v-if="loading" class="inline-block animate-spin h-3 w-3 border-2 border-white border-t-transparent rounded-full"></span>
         {{ confirmLabel }}
-      </BaseButton>
+      </button>
     </template>
   </BaseModal>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline';
+
 /**
  * Componente ModalConfirmacao - Especializado em ações de confirmação
  */
@@ -33,12 +48,27 @@ interface Props {
   variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'outline';
 }
 
-withDefaults(defineProps<Props>(), {
-  title: 'Confirmar Ação',
+const props = withDefaults(defineProps<Props>(), {
+  title: 'Confirmar Exclusão',
   loading: false,
   confirmLabel: 'Confirmar',
   cancelLabel: 'Cancelar',
   variant: 'danger'
+});
+
+const confirmButtonClass = computed(() => {
+  switch (props.variant) {
+    case 'danger':
+      return 'bg-red-600 hover:bg-red-700 text-white';
+    case 'primary':
+      return 'bg-[#D4AF37] hover:bg-[#b5952f] text-black';
+    case 'secondary':
+      return 'bg-[#2E2A20] hover:bg-[#3E382B] text-[#E2DACB]';
+    case 'success':
+      return 'bg-emerald-600 hover:bg-emerald-700 text-white';
+    default:
+      return 'bg-red-600 hover:bg-red-700 text-white';
+  }
 });
 
 defineEmits(['confirm', 'cancel']);

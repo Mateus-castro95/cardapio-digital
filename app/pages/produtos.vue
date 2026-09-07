@@ -4,15 +4,12 @@
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-bege-soft pb-6">
       <div>
         <div class="flex items-center gap-2 mb-1">
-          <span class="text-[10px] font-black uppercase tracking-widest text-bege-torrado bg-bege-cream px-2 py-0.5 rounded-md border border-bege-soft/60">
-            Adega Canoinhas
-          </span>
         </div>
         <h1 class="text-2xl sm:text-heading-1 text-cafe font-black">
           Gestão do <span class="text-moca">Cardápio</span>
         </h1>
         <p class="text-sm sm:text-body text-bege-torrado">
-          Gerencie as categorias e os pratos do restaurante em um único lugar
+          Gerencie as categorias e os produtos do restaurante em um único lugar
         </p>
       </div>
 
@@ -24,180 +21,234 @@
           + Nova Categoria
         </button>
         <button 
-          @click="handleOpenAddPrato"
+          @click="handleOpenAddItem()"
           class="flex-1 sm:flex-none px-5 py-2.5 bg-cafe text-branco hover:bg-cafe-dark transition-all font-black text-xs uppercase tracking-wider rounded-xl shadow-md active:scale-95 flex items-center justify-center gap-2"
         >
           <PlusIcon class="w-4 h-4" />
-          <span>Cadastrar Prato</span>
+          <span>Cadastrar Prato / Bebida</span>
         </button>
       </div>
     </div>
 
-    <!-- SEÇÃO 1: CATEGORIAS DO RESTAURANTE -->
-    <section class="space-y-4">
-      <div class="flex justify-between items-end">
-        <div>
-          <h2 class="text-lg sm:text-xl font-black text-cafe-dark flex items-center gap-2">
-            Categorias do Cardápio
-            <span class="text-[9px] bg-bege-cream text-cafe-dark px-2 py-0.5 rounded-full font-black uppercase">
-              {{ categorias.length }}
-            </span>
-          </h2>
-          <p class="text-xs text-bege-torrado">Divisões gastronômicas do menu</p>
-        </div>
+    <!-- Filtros Globais -->
+    <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
+      <div class="flex-1 w-full relative">
+        <input 
+          v-model="filtroBusca"
+          type="text" 
+          placeholder="Buscar produto ou categoria..."
+          class="w-full px-4 py-2.5 text-sm rounded-xl border border-moca/30 focus:border-moca outline-none bg-transparent text-moca placeholder-moca/50"
+        />
       </div>
+      <select 
+        v-model="filtroCategoria"
+        class="w-full sm:w-auto px-4 py-2.5 text-sm rounded-xl border border-moca/30 focus:border-moca outline-none bg-transparent font-bold text-moca"
+      >
+        <option class="bg-zinc-900 text-moca" value="todas">Todas as categorias</option>
+        <option class="bg-zinc-900 text-moca" v-for="cat in categorias" :key="cat.id" :value="cat.id">
+          {{ cat.nome }}
+        </option>
+      </select>
+    </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
-        <div 
-          v-for="categoria in categorias" 
-          :key="categoria.id" 
-          class="bg-branco rounded-2xl p-4 shadow-sm border border-bege-soft hover:shadow-md hover:border-moca/30 transition-all flex justify-between items-center group"
-        >
-          <div class="min-w-0 pr-2">
-            <span class="font-black text-sm text-cafe-dark capitalize truncate block">
-              {{ categoria.nome }}
-            </span>
-            <span class="text-[10px] text-bege-torrado font-bold">
-              {{ contarPratosPorCategoria(categoria.id) }} pratos
-            </span>
+    <!-- LISTA DE CATEGORIAS (ACORDEÃO) -->
+    <section class="space-y-4">
+      <div 
+        v-for="categoria in categoriasFiltradas" 
+        :key="categoria.id" 
+        class="bg-[#141417] rounded-xl shadow-sm border border-[#2E2A20] overflow-hidden transition-all"
+      >
+        <!-- Cabeçalho do Acordeão -->
+        <div class="flex items-center justify-between p-4 sm:p-5 hover:bg-white/5 transition-colors">
+          <div 
+            class="flex-1 flex items-center gap-4 cursor-pointer"
+            @click="toggleCategory(categoria.id)"
+          >
+            <div class="p-2 bg-[#18181C] rounded-lg text-[#D4AF37] shrink-0 border border-[#2E2A20]">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 transition-transform duration-300" :class="{ 'rotate-180': expandedCategories.includes(categoria.id) }">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-bold text-base text-[#E2DACB] capitalize">{{ categoria.nome }}</h3>
+              <p class="text-xs text-[#9C907A] font-medium mt-0.5">
+                {{ contarItensPorCategoria(categoria.id) }} itens cadastrados
+              </p>
+            </div>
           </div>
-          <div class="flex gap-1 shrink-0">
+
+          <!-- Ações da Categoria -->
+          <div class="flex items-center gap-1.5 sm:gap-2">
             <button 
-              @click="handleOpenEditCategory(categoria)" 
-              class="p-1.5 text-bege-torrado hover:text-cafe hover:bg-bege-cream rounded-lg transition-colors"
+              @click.stop="handleOpenAddItem(categoria.id)"
+              class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-[#D4AF37] text-black hover:bg-[#b5952f] rounded-lg text-xs font-medium transition-all shadow-sm shrink-0"
+              title="Cadastrar novo item nesta categoria"
+            >
+              <PlusIcon class="w-3.5 h-3.5" /> Add Item
+            </button>
+            <button 
+              @click.stop="handleOpenAddItem(categoria.id)"
+              class="sm:hidden p-1.5 bg-[#D4AF37] text-black hover:bg-[#b5952f] rounded-lg transition-all shadow-sm shrink-0"
+            >
+              <PlusIcon class="w-3.5 h-3.5" />
+            </button>
+            <div class="w-px h-6 bg-[#2E2A20] mx-1 hidden sm:block"></div>
+            <button 
+              @click.stop="handleOpenEditCategory(categoria)" 
+              class="p-2 text-[#9C907A] hover:text-[#D4AF37] hover:bg-white/5 rounded-lg transition-colors shrink-0"
               title="Editar categoria"
             >
               <PencilSquareIcon class="h-4 w-4" />
             </button>
             <button 
-              @click="confirmDelete(categoria, 'categoria')" 
-              class="p-1.5 text-bege-torrado hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+              @click.stop="confirmDelete(categoria, 'categoria')" 
+              class="p-2 text-[#9C907A] hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors shrink-0"
               title="Excluir categoria"
             >
               <TrashIcon class="h-4 w-4" />
             </button>
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- SEÇÃO 2: PRATOS DA ADEGA CANOINHAS -->
-    <section class="space-y-4 pt-4">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
-        <div>
-          <h2 class="text-lg sm:text-xl font-black text-cafe-dark flex items-center gap-2">
-            Pratos e Especialidades
-            <span class="text-[9px] bg-bege-cream text-cafe-dark px-2 py-0.5 rounded-full font-black uppercase">
-              {{ pratosAdega.length }} cadastrados
-            </span>
-          </h2>
-          <p class="text-xs text-bege-torrado">Edite valores, descrições, pontos de carne e disponibilidade</p>
-        </div>
+        <!-- Corpo do Acordeão (Tabelas) -->
+        <div v-show="expandedCategories.includes(categoria.id)" class="border-t border-bege-soft bg-branco">
+          <!-- Tabela de Bebidas -->
+          <div v-if="isBebidaCategory(categoria.id)">
+            <div>
+              <BaseTabela :colunas="colsBebidas" :data="getBebidasByCat(categoria.id)" class="w-full border-0">
+                <template #nome="{ item }">
+                  <div class="py-2.5 max-w-sm">
+                    <span class="font-black text-cafe-dark text-sm block">
+                      {{ item.sabor || item.produto?.nome || 'Bebida' }}
+                    </span>
+                    <p v-if="item.produto?.nome && item.sabor && item.produto?.nome !== item.sabor" class="text-[11px] text-bege-torrado font-medium mt-0.5">
+                      {{ item.produto.nome }}
+                    </p>
+                  </div>
+                </template>
 
-        <!-- Filtros e Busca Rápida -->
-        <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-          <input 
-            v-model="filtroBusca"
-            type="text" 
-            placeholder="Buscar por nome..."
-            class="px-3.5 py-2 text-xs rounded-xl border border-bege-soft focus:border-cafe outline-none bg-branco min-w-[200px]"
-          />
-          <select 
-            v-model="filtroCategoria"
-            class="px-3.5 py-2 text-xs rounded-xl border border-bege-soft focus:border-cafe outline-none bg-branco font-bold text-cafe-dark"
-          >
-            <option value="todas">Todas as categorias</option>
-            <option v-for="cat in categorias" :key="cat.id" :value="cat.id">
-              {{ cat.nome }}
-            </option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Tabela Principal de Pratos -->
-      <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden">
-        <div class="overflow-x-auto">
-          <BaseTabela :colunas="colsPratos" :data="pratosFiltrados" class="min-w-[900px]">
-            <!-- Coluna: Nome & Descrição -->
-            <template #nome="{ item }">
-              <div class="px-4 py-2.5 max-w-sm">
-                <div class="flex items-center gap-2">
-                  <span class="font-black text-cafe-dark text-sm">{{ item.nome }}</span>
-                  <span 
-                    v-if="item.destaque" 
-                    class="text-[8px] bg-amber-100 text-amber-800 border border-amber-200 px-1.5 py-0.5 rounded font-black uppercase tracking-wider"
-                  >
-                    Especial
+                <template #tipo_bebida="{ item }">
+                  <span class="text-[9px] bg-bege-cream text-cafe-dark px-2.5 py-1 rounded-lg font-black uppercase border border-bege-soft/60 whitespace-nowrap">
+                    {{ formatTipoBebida(item.tipo_bebida) }}
                   </span>
-                </div>
-                <p v-if="item.descricao" class="text-[11px] text-bege-torrado font-medium line-clamp-2 mt-0.5 leading-relaxed">
-                  {{ item.descricao }}
-                </p>
+                </template>
+
+                <template #detalhes="{ item }">
+                  <span class="text-xs text-bege-torrado font-medium">
+                    {{ formatDetalhesBebida(item) }}
+                  </span>
+                </template>
+
+                <template #preco="{ item }">
+                  <span class="font-black text-cafe text-sm tabular-nums whitespace-nowrap">
+                    {{ formatCurrency(item.preco) }}
+                  </span>
+                </template>
+
+                <template #ativo="{ item }">
+                  <BaseToggle v-model="item.ativo" @update:model-value="handleToggleAtivoBebida(item)" />
+                </template>
+
+                <template #acoes="{ item }">
+                  <div class="flex gap-1">
+                    <button 
+                      class="p-2 text-bege-torrado hover:text-cafe hover:bg-bege-cream rounded-xl transition-colors" 
+                      @click="handleOpenEditItem(item, true)"
+                      title="Editar bebida"
+                    >
+                      <PencilSquareIcon class="h-5 w-5" />
+                    </button>
+                    <button 
+                      class="p-2 text-bege-torrado hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors" 
+                      @click="confirmDelete(item, 'bebida')"
+                      title="Excluir bebida"
+                    >
+                      <TrashIcon class="h-5 w-5" />
+                    </button>
+                  </div>
+                </template>
+              </BaseTabela>
+              <div v-if="getBebidasByCat(categoria.id).length === 0" class="p-8 text-center text-gray-400 text-sm italic">
+                Nenhuma bebida cadastrada nesta categoria.
               </div>
-            </template>
+            </div>
+          </div>
+          
+          <!-- Tabela de Pratos -->
+          <div v-else>
+            <div>
+              <BaseTabela :colunas="colsPratos" :data="getPratosByCat(categoria.id)" class="w-full border-0">
+                <template #nome="{ item }">
+                  <div class="py-2.5 max-w-sm">
+                    <div class="flex items-center gap-2">
+                      <span class="font-black text-cafe-dark text-sm">{{ item.nome }}</span>
+                      <span 
+                        v-if="item.destaque" 
+                        class="text-[8px] bg-amber-100 text-amber-800 border border-amber-200 px-1.5 py-0.5 rounded font-black uppercase tracking-wider shrink-0"
+                      >
+                        Especial
+                      </span>
+                      <span 
+                        v-if="item.permite_ponto_carne" 
+                        class="text-[8px] bg-red-50 text-red-700 border border-red-100 px-1.5 py-0.5 rounded font-black uppercase tracking-wider shrink-0"
+                      >
+                        Ponto Ativo
+                      </span>
+                    </div>
+                    <p v-if="item.descricao" class="text-[11px] text-bege-torrado font-medium line-clamp-2 mt-0.5 leading-relaxed">
+                      {{ item.descricao }}
+                    </p>
+                  </div>
+                </template>
 
-            <!-- Coluna: Categoria -->
-            <template #categoria="{ item }">
-              <span class="text-[9px] bg-bege-cream text-cafe-dark px-2.5 py-1 rounded-lg font-black uppercase border border-bege-soft/60 whitespace-nowrap">
-                {{ item.categoria?.nome || getCategoryName(item.categoria_id) }}
-              </span>
-            </template>
 
-            <!-- Coluna: Ponto da Carne -->
-            <template #permite_ponto_carne="{ item }">
-              <span 
-                v-if="item.permite_ponto_carne" 
-                class="text-[9px] bg-red-50 text-red-700 px-2 py-1 rounded-lg font-black uppercase border border-red-100 whitespace-nowrap inline-flex items-center gap-1"
-              >
-                Ponto Ativo
-              </span>
-              <span v-else class="text-[10px] text-bege-torrado/30 font-bold">-</span>
-            </template>
 
-            <!-- Coluna: Preço -->
-            <template #preco="{ item }">
-              <span class="font-black text-cafe text-sm tabular-nums whitespace-nowrap">
-                {{ formatCurrency(item.preco) }}
-              </span>
-            </template>
+                <template #preco="{ item }">
+                  <span class="font-black text-cafe text-sm tabular-nums whitespace-nowrap">
+                    {{ formatCurrency(item.preco) }}
+                  </span>
+                </template>
 
-            <!-- Coluna: Ativo / Pausado -->
-            <template #ativo="{ item }">
-              <BaseToggle v-model="item.ativo" @update:model-value="handleToggleAtivoPrato(item)" />
-            </template>
+                <template #ativo="{ item }">
+                  <BaseToggle v-model="item.ativo" @update:model-value="handleToggleAtivoPrato(item)" />
+                </template>
 
-            <!-- Coluna: Ações -->
-            <template #acoes="{ item }">
-              <div class="flex gap-1">
-                <button 
-                  class="p-2 text-bege-torrado hover:text-cafe hover:bg-bege-cream rounded-xl transition-colors" 
-                  @click="handleOpenEditPrato(item)"
-                  title="Editar prato"
-                >
-                  <PencilSquareIcon class="h-5 w-5" />
-                </button>
-                <button 
-                  class="p-2 text-bege-torrado hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors" 
-                  @click="confirmDelete(item, 'prato')"
-                  title="Excluir prato"
-                >
-                  <TrashIcon class="h-5 w-5" />
-                </button>
+                <template #acoes="{ item }">
+                  <div class="flex gap-1">
+                    <button 
+                      class="p-2 text-bege-torrado hover:text-cafe hover:bg-bege-cream rounded-xl transition-colors" 
+                      @click="handleOpenEditItem(item, false)"
+                      title="Editar prato"
+                    >
+                      <PencilSquareIcon class="h-5 w-5" />
+                    </button>
+                    <button 
+                      class="p-2 text-bege-torrado hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors" 
+                      @click="confirmDelete(item, 'prato')"
+                      title="Excluir prato"
+                    >
+                      <TrashIcon class="h-5 w-5" />
+                    </button>
+                  </div>
+                </template>
+              </BaseTabela>
+              <div v-if="getPratosByCat(categoria.id).length === 0" class="p-8 text-center text-gray-400 text-sm italic">
+                Nenhum prato cadastrado nesta categoria.
               </div>
-            </template>
-          </BaseTabela>
+            </div>
+          </div>
         </div>
-
-        <div v-if="pratosFiltrados.length === 0" class="p-12 text-center text-bege-torrado text-sm font-bold italic">
-          Nenhum prato encontrado com os filtros selecionados.
-        </div>
+      </div>
+      
+      <div v-if="categoriasFiltradas.length === 0" class="p-12 text-center text-bege-torrado text-sm font-bold bg-branco rounded-2xl border border-bege-soft">
+        Nenhuma categoria ou produto encontrado.
       </div>
     </section>
 
     <!-- MODAL CATEGORIA -->
     <BaseModal 
       :show="showCategoryModal" 
-      :title="editingItem ? 'Editar Categoria' : 'Nova Categoria'" 
+      :title="editingItemType === 'categoria' ? 'Editar Categoria' : 'Nova Categoria'" 
       @close="showCategoryModal = false"
     >
       <div class="py-2">
@@ -214,85 +265,144 @@
       </template>
     </BaseModal>
 
-    <!-- MODAL PRATO ADEGA -->
+    <!-- MODAL PRATO OU BEBIDA -->
     <BaseModal 
-      :show="showPratoAdminModal" 
-      :title="editingItem ? 'Editar Prato' : 'Novo Prato da Adega'" 
-      @close="showPratoAdminModal = false" 
+      :show="showItemModal" 
+      :title="editingItem ? 'Editar Item' : 'Novo Item no Cardápio'" 
+      @close="showItemModal = false" 
       size="lg"
     >
       <div class="py-2 space-y-4">
-        <BaseInput 
-          v-model="pratoForm.nome" 
-          label="Nome do Prato *" 
-          placeholder="Ex: Mignon Gratinado, Salmão ao Molho de Maracujá" 
-          required 
-        />
-        
+        <!-- Campos Base -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="flex flex-col gap-1.5">
-            <label class="text-sm font-bold text-gray-700">Categoria *</label>
+            <label class="block text-xs font-normal text-[#C5B79D]">Categoria *</label>
             <select 
-              v-model="pratoForm.categoria_id" 
-              class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cafe outline-none bg-white font-medium text-sm"
+              v-model="itemForm.categoria_id" 
+              class="w-full px-3 py-1.5 text-sm bg-transparent border border-[#2E2A20] rounded-lg text-[#E2DACB] focus:border-[#D4AF37] outline-none"
+              :disabled="!!editingItem"
             >
-              <option value="" disabled>Selecione uma categoria</option>
-              <option v-for="cat in categorias" :key="cat.id" :value="cat.id">
+              <option class="bg-zinc-900 text-moca" value="" disabled>Selecione uma categoria</option>
+              <option class="bg-zinc-900 text-moca" v-for="cat in categorias" :key="cat.id" :value="cat.id">
                 {{ cat.nome }}
               </option>
             </select>
           </div>
 
           <div>
-            <label class="block text-sm font-bold text-gray-700 mb-1.5">Preço (R$) *</label>
+            <label class="block text-xs font-normal text-[#C5B79D] mb-1.5">Preço (R$) *</label>
             <BaseInputCurrency 
-              v-model="pratoForm.preco" 
-              placeholder="0,00" 
-              input-class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-cafe outline-none font-bold text-sm" 
+              v-model="itemForm.preco" 
+              placeholder="0,00"
             />
           </div>
         </div>
 
-        <div class="flex flex-col gap-1.5">
-          <label class="text-sm font-bold text-gray-700">Descrição do Prato</label>
-          <textarea 
-            v-model="pratoForm.descricao" 
-            rows="3" 
-            placeholder="Cortes nobres, modo de preparo, guarnições e acompanhamentos..."
-            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cafe outline-none text-sm placeholder:text-gray-400"
-          ></textarea>
-        </div>
+        <!-- Se for Bebida, mostra campos específicos de bebida -->
+        <template v-if="isBebidaCategory(itemForm.categoria_id)">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <BaseInput 
+              v-model="itemForm.nome" 
+              label="Nome ou Sabor da Bebida *" 
+              placeholder="Ex: Coca-Cola, Suco de Laranja..." 
+              required 
+            />
+            <div class="flex flex-col gap-1.5">
+              <label class="block text-xs font-normal text-[#C5B79D]">Tipo de Bebida</label>
+              <select 
+                v-model="itemForm.tipo_bebida" 
+                class="w-full px-3 py-1.5 text-sm bg-transparent border border-[#2E2A20] rounded-lg text-[#E2DACB] focus:border-[#D4AF37] outline-none"
+              >
+                <option class="bg-zinc-900 text-moca" value="suco">Suco Natural</option>
+                <option class="bg-zinc-900 text-moca" value="refrigerante">Refrigerante</option>
+                <option class="bg-zinc-900 text-moca" value="agua">Água Mineral</option>
+                <option class="bg-zinc-900 text-moca" value="cerveja">Cerveja</option>
+                <option class="bg-zinc-900 text-moca" value="vinho">Vinho / Espumante</option>
+                <option class="bg-zinc-900 text-moca" value="drink">Drink</option>
+                <option class="bg-zinc-900 text-moca" value="outro">Outro</option>
+              </select>
+            </div>
+          </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-2xl border border-gray-100">
-          <label class="flex items-center gap-3 cursor-pointer">
-            <input 
-              type="checkbox" 
-              v-model="pratoForm.permite_ponto_carne" 
-              class="w-5 h-5 text-cafe rounded border-gray-300 focus:ring-cafe" 
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <BaseInput 
+              v-model="itemForm.tamanho" 
+              label="Tamanho" 
+              placeholder="Ex: Lata, 2L, Jarra..." 
             />
             <div>
-              <span class="text-sm font-bold text-cafe-dark block">Permite Ponto da Carne</span>
-              <span class="text-xs text-gray-500 block">Exibe opções de corte (mal passado, ao ponto, etc.)</span>
+              <label class="block text-xs font-normal text-[#C5B79D] mb-1.5">Volume (ml)</label>
+              <input 
+                type="number"
+                v-model="itemForm.volume_ml" 
+                placeholder="Ex: 350" 
+                class="w-full px-3 py-1.5 text-sm bg-transparent border border-[#2E2A20] rounded-lg text-[#E2DACB] focus:border-[#D4AF37] outline-none"
+              />
             </div>
-          </label>
+            <div class="flex flex-col gap-1.5">
+              <label class="block text-xs font-normal text-[#C5B79D]">Adicionais</label>
+              <select 
+                v-model="itemForm.tipo_preparo" 
+                class="w-full px-3 py-1.5 text-sm bg-transparent border border-[#2E2A20] rounded-lg text-[#E2DACB] focus:border-[#D4AF37] outline-none"
+              >
+                <option class="bg-zinc-900 text-moca" value="">Padrão</option>
+                <option class="bg-zinc-900 text-moca" value="agua">Com Água</option>
+                <option class="bg-zinc-900 text-moca" value="leite">Com Leite</option>
+              </select>
+            </div>
+          </div>
+        </template>
 
-          <label class="flex items-center gap-3 cursor-pointer">
-            <input 
-              type="checkbox" 
-              v-model="pratoForm.destaque" 
-              class="w-5 h-5 text-cafe rounded border-gray-300 focus:ring-cafe" 
-            />
-            <div>
-              <span class="text-sm font-bold text-cafe-dark block">Especialidade da Casa</span>
-              <span class="text-xs text-gray-500 block">Exibe selo de destaque no cardápio</span>
-            </div>
-          </label>
-        </div>
+        <!-- Senão, mostra campos de Prato -->
+        <template v-else>
+          <BaseInput 
+            v-model="itemForm.nome" 
+            label="Nome do Prato *" 
+            placeholder="Ex: Mignon Gratinado, Salmão ao Molho de Maracujá" 
+            required 
+          />
+
+          <div class="flex flex-col gap-1.5">
+            <label class="block text-xs font-normal text-[#C5B79D]">Descrição do Prato</label>
+            <textarea 
+              v-model="itemForm.descricao" 
+              rows="3" 
+              placeholder="Cortes nobres, modo de preparo, guarnições e acompanhamentos..."
+              class="w-full px-3 py-1.5 text-sm bg-transparent border border-[#2E2A20] rounded-lg text-[#E2DACB] focus:border-[#D4AF37] outline-none placeholder:text-[#7A7261]"
+            ></textarea>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-transparent rounded-xl border border-[#2E2A20]">
+            <label class="flex items-center gap-3 cursor-pointer">
+              <input 
+                type="checkbox" 
+                v-model="itemForm.permite_ponto_carne" 
+                class="w-5 h-5 text-cafe rounded border-gray-600 bg-transparent focus:ring-cafe" 
+              />
+              <div>
+                <span class="text-sm font-bold text-[#D4AF37] block">Permite Ponto da Carne</span>
+                <span class="text-xs text-[#9C907A] block">Exibe opções de corte (mal passado, ao ponto, etc.)</span>
+              </div>
+            </label>
+
+            <label class="flex items-center gap-3 cursor-pointer">
+              <input 
+                type="checkbox" 
+                v-model="itemForm.destaque" 
+                class="w-5 h-5 text-cafe rounded border-gray-600 bg-transparent focus:ring-cafe" 
+              />
+              <div>
+                <span class="text-sm font-bold text-[#D4AF37] block">Especialidade da Casa</span>
+                <span class="text-xs text-[#9C907A] block">Exibe selo de destaque no cardápio</span>
+              </div>
+            </label>
+          </div>
+        </template>
       </div>
       <template #footer>
-        <BaseButton variant="outline" @click="showPratoAdminModal = false">Cancelar</BaseButton>
-        <BaseButton variant="primary" :loading="isSaving" @click="handleSavePrato">
-          {{ editingItem ? 'Salvar Prato' : 'Cadastrar Prato' }}
+        <BaseButton variant="outline" @click="showItemModal = false">Cancelar</BaseButton>
+        <BaseButton variant="primary" :loading="isSaving" @click="handleSaveItem">
+          {{ editingItem ? 'Salvar Item' : 'Cadastrar Item' }}
         </BaseButton>
       </template>
     </BaseModal>
@@ -314,7 +424,9 @@ import { ref, reactive, onMounted, computed } from 'vue';
 import { useToast } from '~/composables/useToast';
 import { useCategorias } from '~/composables/useCategorias';
 import { useCardapioItens, type ItemCardapio } from '~/composables/useCardapioItens';
-import { PencilSquareIcon, TrashIcon, PlusIcon } from '@heroicons/vue/24/outline';
+import { useVariacoes } from '~/composables/useVariacoes';
+import { useSupabaseClient } from '#imports';
+import { PencilSquareIcon, TrashIcon, PlusIcon, ChevronDownIcon } from '@heroicons/vue/24/outline';
 
 const toast = useToast();
 const { categorias, fetchCategorias, addCategoria, updateCategoria, removeCategoria } = useCategorias();
@@ -327,6 +439,14 @@ const {
   toggleAtivo: toggleAtivoPrato 
 } = useCardapioItens();
 
+const { 
+  variacoes: bebidas, 
+  fetchVariacoesBebidas,
+  addNovaVariacao,
+  updateVariacaoCompleta,
+  removeVariacao
+} = useVariacoes();
+
 // Formatação Monetária
 const formatCurrency = (value: number) => {
   return new Intl.NumberFormat('pt-BR', {
@@ -335,101 +455,220 @@ const formatCurrency = (value: number) => {
   }).format(value);
 };
 
-// Colunas da Tabela
+// Acordeão de Categorias
+const expandedCategories = ref<string[]>([]);
+const toggleCategory = (id: string) => {
+  const index = expandedCategories.value.indexOf(id);
+  if (index > -1) {
+    expandedCategories.value.splice(index, 1);
+  } else {
+    expandedCategories.value.push(id);
+  }
+};
+
+const getCategoryName = (id: string) => {
+  return categorias.value.find(c => c.id === id)?.nome || '';
+};
+
+const isBebidaCategory = (id: string) => {
+  const name = getCategoryName(id).toLowerCase();
+  return name.includes('bebida') || name.includes('suco') || name.includes('refrigerante') || name.includes('água');
+};
+
+const getPratosByCat = (catId: string) => pratosAdega.value.filter(p => p.categoria_id === catId);
+const getBebidasByCat = (catId: string) => bebidas.value.filter(b => b.produto?.categoria_id === catId);
+
+const contarItensPorCategoria = (categoriaId: string) => {
+  return getPratosByCat(categoriaId).length + getBebidasByCat(categoriaId).length;
+};
+
+// Colunas das Tabelas
 const colsPratos = [
   { key: 'nome', label: 'Prato' },
-  { key: 'categoria', label: 'Categoria' },
-  { key: 'permite_ponto_carne', label: 'Ponto Carne' },
   { key: 'preco', label: 'Preço' },
   { key: 'ativo', label: 'Ativo' },
   { key: 'acoes', label: 'Ações' }
 ];
 
-// Filtros
+const colsBebidas = [
+  { key: 'nome', label: 'Bebida' },
+  { key: 'tipo_bebida', label: 'Tipo' },
+  { key: 'detalhes', label: 'Especificações' },
+  { key: 'preco', label: 'Preço' },
+  { key: 'ativo', label: 'Ativo' },
+  { key: 'acoes', label: 'Ações' }
+];
+
+// Filtros Globais
 const filtroBusca = ref('');
 const filtroCategoria = ref('todas');
 
-const pratosFiltrados = computed(() => {
-  return pratosAdega.value.filter(p => {
-    const matchCategoria = filtroCategoria.value === 'todas' || p.categoria_id === filtroCategoria.value;
-    const matchBusca = !filtroBusca.value || p.nome.toLowerCase().includes(filtroBusca.value.toLowerCase());
-    return matchCategoria && matchBusca;
-  });
+const categoriasFiltradas = computed(() => {
+  let cats = categorias.value;
+  if (filtroCategoria.value !== 'todas') {
+    cats = cats.filter(c => c.id === filtroCategoria.value);
+  }
+  if (filtroBusca.value.trim()) {
+    const search = filtroBusca.value.toLowerCase().trim();
+    cats = cats.filter(c => {
+      if (c.nome.toLowerCase().includes(search)) return true;
+      const pratos = getPratosByCat(c.id);
+      if (pratos.some(p => p.nome.toLowerCase().includes(search))) return true;
+      const bebs = getBebidasByCat(c.id);
+      if (bebs.some(b => (b.sabor || b.produto?.nome || '').toLowerCase().includes(search))) return true;
+      return false;
+    });
+  }
+  return cats;
 });
 
-const contarPratosPorCategoria = (categoriaId: string) => {
-  return pratosAdega.value.filter(p => p.categoria_id === categoriaId).length;
+// Formatação Bebidas
+const formatTipoBebida = (tipo: string) => {
+  if (tipo === 'suco') return 'Suco Natural';
+  if (tipo === 'refrigerante') return 'Refrigerante';
+  if (tipo === 'agua') return 'Água Mineral';
+  if (tipo === 'cerveja') return 'Cerveja';
+  if (tipo === 'vinho') return 'Vinho / Espumante';
+  if (tipo === 'drink') return 'Drink';
+  return tipo || 'Bebida';
+};
+
+const formatDetalhesBebida = (b: any) => {
+  const parts: string[] = [];
+  if (b.volume_ml && b.volume_ml > 0) parts.push(`${b.volume_ml}ml`);
+  if (b.tamanho && !['Padrão', 'Unico', 'Único'].includes(b.tamanho)) parts.push(b.tamanho);
+  if (b.tipo_preparo) parts.push(b.tipo_preparo === 'agua' ? 'Com Água' : 'Com Leite');
+  if (b.tipo_gas) parts.push(b.tipo_gas === 'com_gas' ? 'Com Gás' : 'Sem Gás');
+  return parts.join(' • ') || '-';
+};
+
+const handleToggleAtivoBebida = async (item: any) => {
+  try {
+    const supabase = useSupabaseClient<any>();
+    const { error } = await supabase
+      .from('produtos_simples')
+      .update({ ativo: item.ativo })
+      .eq('id', item.id);
+    if (error) throw error;
+    toast.success('Status atualizado', `Bebida ${item.ativo ? 'ativada' : 'desativada'}`);
+  } catch (e: any) {
+    toast.error('Erro', 'Não foi possível alterar o status');
+  }
+};
+
+const handleToggleAtivoPrato = async (item: any) => {
+  try {
+    await toggleAtivoPrato(item.id, item.ativo);
+    toast.success('Status atualizado', `Prato ${item.ativo ? 'ativado' : 'desativado'}`);
+  } catch (e: any) {
+    toast.error('Erro', 'Não foi possível alterar o status do prato');
+  }
 };
 
 // Modais
 const showCategoryModal = ref(false);
-const showPratoAdminModal = ref(false);
+const showItemModal = ref(false);
 const showConfirmDeleteModal = ref(false);
 
 const isSaving = ref(false);
 const isDeleting = ref(false);
 
 const editingItem = ref<any>(null);
-const itemToDelete = ref<{ id: string, nome: string, type: 'categoria' | 'prato' } | null>(null);
+const editingItemType = ref<'categoria' | 'prato' | 'bebida' | null>(null);
+const itemToDelete = ref<{ id: string, nome: string, type: 'categoria' | 'prato' | 'bebida', produto_id?: string } | null>(null);
 
 // Formulários
 const categoryForm = reactive({ nome: '' });
-const pratoForm = reactive({
+const itemForm = reactive({
   nome: '',
   categoria_id: '',
-  descricao: '',
   preco: 0,
+  ativo: true,
+  // Campos Prato
+  descricao: '',
   destaque: false,
   permite_ponto_carne: false,
-  ativo: true
+  // Campos Bebida
+  tipo_bebida: 'refrigerante',
+  tamanho: '',
+  volume_ml: '',
+  tipo_preparo: '',
+  tipo_gas: ''
 });
 
 onMounted(async () => {
   try {
     await Promise.all([
       fetchCategorias(),
-      fetchTodosItensAdmin()
+      fetchTodosItensAdmin(),
+      fetchVariacoesBebidas()
     ]);
   } catch (error) {
-    toast.error('Erro de Carregamento', 'Não foi possível carregar os dados do cardápio.');
+    toast.error('Erro de Carregamento', 'Não foi possível carregar os dados.');
   }
 });
 
-// Abertura de Modais
+// Ações Categorias
 const handleOpenAddCategory = () => {
   editingItem.value = null;
+  editingItemType.value = 'categoria';
   categoryForm.nome = '';
   showCategoryModal.value = true;
 };
 
 const handleOpenEditCategory = (item: any) => {
   editingItem.value = item;
+  editingItemType.value = 'categoria';
   categoryForm.nome = item.nome;
   showCategoryModal.value = true;
 };
 
-const handleOpenAddPrato = () => {
+// Ações Itens
+const handleOpenAddItem = (catId?: string) => {
   editingItem.value = null;
-  pratoForm.nome = '';
-  pratoForm.categoria_id = categorias.value[0]?.id || '';
-  pratoForm.descricao = '';
-  pratoForm.preco = 0;
-  pratoForm.destaque = false;
-  pratoForm.permite_ponto_carne = false;
-  pratoForm.ativo = true;
-  showPratoAdminModal.value = true;
+  editingItemType.value = null;
+  itemForm.nome = '';
+  itemForm.categoria_id = catId || categorias.value[0]?.id || '';
+  itemForm.preco = 0;
+  itemForm.descricao = '';
+  itemForm.destaque = false;
+  itemForm.permite_ponto_carne = false;
+  itemForm.tipo_bebida = 'refrigerante';
+  itemForm.tamanho = '';
+  itemForm.volume_ml = '';
+  itemForm.tipo_preparo = '';
+  itemForm.tipo_gas = '';
+  itemForm.ativo = true;
+
+  if (catId && !expandedCategories.value.includes(catId)) {
+    expandedCategories.value.push(catId);
+  }
+  
+  showItemModal.value = true;
 };
 
-const handleOpenEditPrato = (item: any) => {
+const handleOpenEditItem = (item: any, isBebida: boolean) => {
   editingItem.value = item;
-  pratoForm.nome = item.nome;
-  pratoForm.categoria_id = item.categoria_id;
-  pratoForm.descricao = item.descricao || '';
-  pratoForm.preco = item.preco;
-  pratoForm.destaque = !!item.destaque;
-  pratoForm.permite_ponto_carne = !!item.permite_ponto_carne;
-  pratoForm.ativo = item.ativo !== undefined ? item.ativo : true;
-  showPratoAdminModal.value = true;
+  editingItemType.value = isBebida ? 'bebida' : 'prato';
+  
+  itemForm.categoria_id = isBebida ? item.produto?.categoria_id : item.categoria_id;
+  itemForm.preco = item.preco;
+  itemForm.ativo = item.ativo !== undefined ? item.ativo : true;
+
+  if (isBebida) {
+    itemForm.nome = item.sabor || item.produto?.nome || '';
+    itemForm.tipo_bebida = item.tipo_bebida || 'refrigerante';
+    itemForm.tamanho = item.tamanho || '';
+    itemForm.volume_ml = item.volume_ml || '';
+    itemForm.tipo_preparo = item.tipo_preparo || '';
+    itemForm.tipo_gas = item.tipo_gas || '';
+  } else {
+    itemForm.nome = item.nome;
+    itemForm.descricao = item.descricao || '';
+    itemForm.destaque = !!item.destaque;
+    itemForm.permite_ponto_carne = !!item.permite_ponto_carne;
+  }
+  showItemModal.value = true;
 };
 
 // Salvamento
@@ -437,7 +676,7 @@ const handleSaveCategory = async () => {
   if (!categoryForm.nome.trim()) return toast.error('Aviso', 'Nome da categoria é obrigatório');
   isSaving.value = true;
   try {
-    if (editingItem.value) {
+    if (editingItem.value && editingItemType.value === 'categoria') {
       await updateCategoria(editingItem.value.id, categoryForm.nome);
       toast.success('Sucesso', 'Categoria atualizada com sucesso');
     } else {
@@ -452,80 +691,104 @@ const handleSaveCategory = async () => {
   }
 };
 
-const handleSavePrato = async () => {
-  if (!pratoForm.nome.trim()) return toast.warning('Aviso', 'Informe o nome do prato');
-  if (!pratoForm.categoria_id) return toast.warning('Aviso', 'Selecione uma categoria');
-  if (!pratoForm.preco || pratoForm.preco <= 0) return toast.warning('Aviso', 'Informe o valor do prato');
+const handleSaveItem = async () => {
+  if (!itemForm.nome.trim()) return toast.warning('Aviso', 'Informe o nome do item');
+  if (!itemForm.categoria_id) return toast.warning('Aviso', 'Selecione uma categoria');
+  if (!itemForm.preco || itemForm.preco <= 0) return toast.warning('Aviso', 'Informe o valor do item');
 
   isSaving.value = true;
+  const isBebida = isBebidaCategory(itemForm.categoria_id);
+
   try {
-    if (editingItem.value) {
-      await updatePrato(editingItem.value.id, {
-        nome: pratoForm.nome,
-        categoria_id: pratoForm.categoria_id,
-        descricao: pratoForm.descricao,
-        preco: pratoForm.preco,
-        destaque: pratoForm.destaque,
-        permite_ponto_carne: pratoForm.permite_ponto_carne,
-        ativo: pratoForm.ativo
-      });
-      toast.success('Sucesso', 'Prato atualizado com sucesso');
+    if (isBebida) {
+      const detalhes = {
+        sabor: itemForm.nome,
+        preco: itemForm.preco,
+        tipo_bebida: itemForm.tipo_bebida as any,
+        tamanho: itemForm.tamanho || null,
+        volume_ml: itemForm.volume_ml ? parseInt(String(itemForm.volume_ml)) : null,
+        tipo_preparo: itemForm.tipo_preparo || null,
+        tipo_gas: itemForm.tipo_gas || null,
+        ativo: itemForm.ativo
+      };
+
+      if (editingItem.value && editingItemType.value === 'bebida') {
+        await updateVariacaoCompleta(
+          editingItem.value.id,
+          editingItem.value.produto_id,
+          editingItem.value.produto?.nome || itemForm.nome,
+          detalhes as any
+        );
+        toast.success('Sucesso', 'Bebida atualizada');
+      } else {
+        await addNovaVariacao(itemForm.nome, itemForm.categoria_id, detalhes as any);
+        toast.success('Sucesso', 'Bebida cadastrada');
+      }
     } else {
-      await addPrato({
-        nome: pratoForm.nome,
-        categoria_id: pratoForm.categoria_id,
-        descricao: pratoForm.descricao,
-        preco: pratoForm.preco,
-        destaque: pratoForm.destaque,
-        permite_ponto_carne: pratoForm.permite_ponto_carne,
-        ativo: pratoForm.ativo
-      });
-      toast.success('Sucesso', 'Prato cadastrado com sucesso');
+      const payload = {
+        nome: itemForm.nome,
+        categoria_id: itemForm.categoria_id,
+        descricao: itemForm.descricao,
+        preco: itemForm.preco,
+        destaque: itemForm.destaque,
+        permite_ponto_carne: itemForm.permite_ponto_carne,
+        ativo: itemForm.ativo
+      };
+      
+      if (editingItem.value && editingItemType.value === 'prato') {
+        await updatePrato(editingItem.value.id, payload);
+        toast.success('Sucesso', 'Prato atualizado');
+      } else {
+        await addPrato(payload);
+        toast.success('Sucesso', 'Prato cadastrado');
+      }
     }
-    showPratoAdminModal.value = false;
+    showItemModal.value = false;
   } catch (e: any) {
-    toast.error('Erro ao salvar prato', e.message);
+    toast.error('Erro ao salvar', e.message);
   } finally {
     isSaving.value = false;
   }
 };
 
-const handleToggleAtivoPrato = async (item: any) => {
-  try {
-    await toggleAtivoPrato(item.id, item.ativo);
-    toast.success('Status atualizado', `Prato ${item.ativo ? 'ativado' : 'desativado'}`);
-  } catch (e: any) {
-    toast.error('Erro', 'Não foi possível alterar o status');
-  }
-};
-
-// Exclusão
-const confirmDelete = (item: any, type: 'categoria' | 'prato') => {
-  itemToDelete.value = { id: item.id, nome: item.nome, type };
+const confirmDelete = (item: any, type: 'categoria' | 'prato' | 'bebida') => {
+  itemToDelete.value = {
+    id: item.id,
+    nome: item.nome || item.sabor || 'item',
+    type,
+    produto_id: type === 'bebida' ? item.produto_id : undefined
+  };
   showConfirmDeleteModal.value = true;
 };
 
 const handleDelete = async () => {
   if (!itemToDelete.value) return;
+  
   isDeleting.value = true;
   try {
-    const { id, type } = itemToDelete.value;
+    const { type, id, produto_id } = itemToDelete.value;
+    
     if (type === 'categoria') {
       await removeCategoria(id);
-    } else if (type === 'prato') {
+      toast.success('Excluído', 'Categoria removida com sucesso');
+    } else if (type === 'bebida') {
+      await removeVariacao(id, produto_id!);
+      toast.success('Excluído', 'Bebida removida com sucesso');
+    } else {
       await removePrato(id);
+      toast.success('Excluído', 'Prato removido com sucesso');
     }
-    toast.success('Excluído', 'Item removido com sucesso');
     showConfirmDeleteModal.value = false;
   } catch (e: any) {
-    toast.error('Erro ao excluir', e.message);
+    if (e.message?.includes('23503') || e.code === '23503') {
+      toast.error('Ação Negada', 'Não é possível excluir esta categoria pois ela possui itens vinculados.');
+    } else {
+      toast.error('Erro ao excluir', 'Tente novamente.');
+    }
   } finally {
     isDeleting.value = false;
+    itemToDelete.value = null;
   }
-};
-
-const getCategoryName = (id: string) => {
-  return categorias.value.find(c => c.id === id)?.nome || 'Sem Categoria';
 };
 </script>
 

@@ -87,7 +87,12 @@ export const useCategorias = () => {
                 .delete()
                 .eq('id', id);
 
-            if (error) throw error;
+            if (error) {
+                if (error.code === '23503' || error.message?.includes('foreign key')) {
+                    throw new Error('Não é possível excluir esta categoria pois ela possui produtos vinculados.');
+                }
+                throw error;
+            }
             categorias.value = categorias.value.filter(c => c.id !== id);
         } catch (error: any) {
             console.error('Erro ao remover categoria:', error.message);
