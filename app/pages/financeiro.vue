@@ -8,25 +8,25 @@
       </div>
 
       <!-- Filtro de Data -->
-      <div class="flex flex-col sm:flex-row items-stretch sm:items-end gap-3 bg-branco p-4 sm:p-5 rounded-3xl border border-bege-soft shadow-premium w-full lg:w-auto overflow-hidden">
-        <div class="flex-1 min-w-0 space-y-1">
+      <div class="grid grid-cols-1 sm:flex sm:flex-row items-end gap-3 bg-branco p-4 sm:p-5 rounded-3xl border border-bege-soft shadow-premium w-full lg:w-auto overflow-hidden">
+        <div class="w-full space-y-1">
           <label class="text-[9px] sm:text-[10px] font-black text-bege-torrado uppercase tracking-widest px-1">Início</label>
           <input 
             v-model="filtro.inicio" 
             type="date" 
-            class="block w-full min-w-0 max-w-full px-3 sm:px-4 py-2 bg-bege-cream/30 border border-bege-soft rounded-xl text-xs sm:text-sm font-bold text-cafe focus:border-moca focus:ring-1 focus:ring-moca transition-all outline-none"
+            class="block w-full box-border px-3 sm:px-4 py-2 bg-bege-cream/30 border border-bege-soft rounded-xl text-xs sm:text-sm font-bold text-cafe focus:border-moca focus:ring-1 focus:ring-moca transition-all outline-none"
           >
         </div>
-        <div class="flex-1 min-w-0 space-y-1">
+        <div class="w-full space-y-1">
           <label class="text-[9px] sm:text-[10px] font-black text-bege-torrado uppercase tracking-widest px-1">Fim</label>
           <input 
             v-model="filtro.fim" 
             type="date" 
-            class="block w-full min-w-0 max-w-full px-3 sm:px-4 py-2 bg-bege-cream/30 border border-bege-soft rounded-xl text-xs sm:text-sm font-bold text-cafe focus:border-moca focus:ring-1 focus:ring-moca transition-all outline-none"
+            class="block w-full box-border px-3 sm:px-4 py-2 bg-bege-cream/30 border border-bege-soft rounded-xl text-xs sm:text-sm font-bold text-cafe focus:border-moca focus:ring-1 focus:ring-moca transition-all outline-none"
           >
         </div>
         <button 
-          class="sm:px-6 py-2 rounded-xl bg-cafe text-white font-black tracking-wide text-xs shadow-lg hover:bg-cafe-dark transition-all h-[38px] sm:h-[42px] flex items-center justify-center gap-2"
+          class="w-full sm:w-auto sm:px-6 py-2 rounded-xl bg-cafe text-white font-black tracking-wide text-xs shadow-lg hover:bg-cafe-dark transition-all h-[38px] sm:h-[42px] flex items-center justify-center gap-2"
           @click="carregarDados"
           :disabled="loadingReport"
         >
