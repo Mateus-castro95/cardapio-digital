@@ -46,7 +46,7 @@
 
 
     <!-- Conteúdo Principal do Cardápio -->
-    <main v-if="!mesaInvalida || authStore.perfil" class="max-w-4xl mx-auto p-4 sm:p-6 space-y-8">
+    <main v-if="!mesaInvalida || authStore.perfil" class="w-full max-w-4xl mx-auto p-4 sm:p-6 space-y-8">
       
       <!-- Título de Boas-Vindas do Cardápio -->
       <div class="pt-2 pb-1">
