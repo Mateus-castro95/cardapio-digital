@@ -14,7 +14,7 @@
           <input 
             v-model="filtro.inicio" 
             type="date" 
-            class="block w-full box-border px-2 sm:px-4 py-2 bg-bege-cream/30 border border-bege-soft rounded-xl text-[10px] sm:text-sm font-bold text-cafe focus:border-moca focus:ring-1 focus:ring-moca transition-all outline-none"
+            class="block w-full box-border px-1 sm:px-4 py-2 bg-bege-cream/30 border border-bege-soft rounded-xl text-xs sm:text-sm font-bold text-cafe focus:border-moca focus:ring-1 focus:ring-moca transition-all outline-none"
           >
         </div>
         <div class="w-full space-y-1">
@@ -22,7 +22,7 @@
           <input 
             v-model="filtro.fim" 
             type="date" 
-            class="block w-full box-border px-2 sm:px-4 py-2 bg-bege-cream/30 border border-bege-soft rounded-xl text-[10px] sm:text-sm font-bold text-cafe focus:border-moca focus:ring-1 focus:ring-moca transition-all outline-none"
+            class="block w-full box-border px-1 sm:px-4 py-2 bg-bege-cream/30 border border-bege-soft rounded-xl text-xs sm:text-sm font-bold text-cafe focus:border-moca focus:ring-1 focus:ring-moca transition-all outline-none"
           >
         </div>
         <button 
