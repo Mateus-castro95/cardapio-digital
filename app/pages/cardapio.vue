@@ -166,86 +166,31 @@
           </div>
 
           <div class="space-y-3">
-            <!-- CARD EXPANSÍVEL: SUCOS -->
-            <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden transition-all duration-300">
-              <button @click="toggleBebidaSection('sucos')" class="w-full flex items-center justify-between p-5 text-left hover:bg-bege-cream/50 transition-colors">
+            <div 
+              v-for="categoriaBebida in bebidasPorTipo" 
+              :key="categoriaBebida.id"
+              class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden transition-all duration-300"
+            >
+              <button @click="toggleBebidaSection(categoriaBebida.id)" class="w-full flex items-center justify-between p-5 text-left hover:bg-bege-cream/50 transition-colors">
                 <div class="flex items-center gap-4">
-                  <div class="w-12 h-12 bg-amber-50 text-amber-700 rounded-2xl flex items-center justify-center shadow-sm">
-                    <BeakerIcon class="w-6 h-6 text-amber-600" />
-                  </div>
                   <div>
-                    <h4 class="font-bold text-cafe-dark text-base">Sucos Naturais</h4>
-                    <p class="text-caption text-bege-torrado">Diversos sabores com água ou leite</p>
+                    <h4 class="font-bold text-cafe-dark text-base">{{ categoriaBebida.titulo }}</h4>
+                    <p class="text-caption text-bege-torrado">{{ categoriaBebida.descricao }}</p>
                   </div>
                 </div>
-                <div :class="{'rotate-180': expandedBebidaSection === 'sucos'}" class="transition-transform duration-300 text-bege-torrado">
+                <div :class="{'rotate-180': expandedBebidaSection === categoriaBebida.id}" class="transition-transform duration-300 text-bege-torrado">
                   <ChevronDownIcon class="h-6 w-6" />
                 </div>
               </button>
-              <div v-show="expandedBebidaSection === 'sucos'" class="px-5 pb-5 space-y-2 animate-fade-in">
-                <div v-for="grupo in sucosAgrupados" :key="grupo.nome" @click="handleAbrirOpcoesBebida(grupo)" class="flex justify-between items-center p-4 hover:bg-bege-cream rounded-2xl transition-colors cursor-pointer group border border-transparent hover:border-bege-soft">
+              <div v-show="expandedBebidaSection === categoriaBebida.id" class="px-5 pb-5 space-y-2 animate-fade-in">
+                <div 
+                  v-for="grupo in categoriaBebida.gruposAgrupados" 
+                  :key="grupo.nome" 
+                  @click="handleAbrirOpcoesBebida(grupo)" 
+                  class="flex justify-between items-center p-4 hover:bg-bege-cream rounded-2xl transition-colors cursor-pointer group border border-transparent hover:border-bege-soft"
+                >
                   <div class="flex-1">
-                    <span class="text-sm font-bold text-cafe-dark">{{ grupo.nome }}</span>
-                    <p class="text-caption text-bege-torrado">{{ grupo.opcoes.length }} opções disponíveis</p>
-                  </div>
-                  <div class="flex items-center gap-3">
-                    <span class="font-bold text-cafe text-xs text-right">A partir de<br>{{ formatCurrency(grupo.preco_min) }}</span>
-                    <div class="bg-bege-soft p-1.5 rounded-lg group-active:scale-90"><ChevronRightIcon class="h-4 w-4 text-cafe" /></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- CARD EXPANSÍVEL: REFRIGERANTES -->
-            <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden transition-all duration-300">
-              <button @click="toggleBebidaSection('refris')" class="w-full flex items-center justify-between p-5 text-left hover:bg-bege-cream/50 transition-colors">
-                <div class="flex items-center gap-4">
-                  <div class="w-12 h-12 bg-red-50 text-red-700/80 rounded-2xl flex items-center justify-center shadow-sm">
-                    <SparklesIcon class="w-6 h-6 text-red-600" />
-                  </div>
-                  <div>
-                    <h4 class="font-bold text-cafe-dark text-base">Refrigerantes</h4>
-                    <p class="text-caption text-bege-torrado">Gelados em latas e garrafas</p>
-                  </div>
-                </div>
-                <div :class="{'rotate-180': expandedBebidaSection === 'refris'}" class="transition-transform duration-300 text-bege-torrado">
-                  <ChevronDownIcon class="h-6 w-6" />
-                </div>
-              </button>
-              <div v-show="expandedBebidaSection === 'refris'" class="px-5 pb-5 space-y-2 animate-fade-in">
-                <div v-for="grupo in refrisAgrupados" :key="grupo.nome" @click="handleAbrirOpcoesBebida(grupo)" class="flex justify-between items-center p-4 hover:bg-bege-cream rounded-2xl transition-colors cursor-pointer group border border-transparent hover:border-bege-soft">
-                  <div class="flex-1">
-                    <span class="text-sm font-bold text-cafe-dark">{{ grupo.nome }}</span>
-                    <p class="text-caption text-bege-torrado">{{ grupo.opcoes.length }} variações</p>
-                  </div>
-                  <div class="flex items-center gap-3">
-                    <span class="font-bold text-cafe text-xs text-right">A partir de<br>{{ formatCurrency(grupo.preco_min) }}</span>
-                    <div class="bg-bege-soft p-1.5 rounded-lg group-active:scale-90"><ChevronRightIcon class="h-4 w-4 text-cafe" /></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- CARD EXPANSÍVEL: ÁGUAS -->
-            <div class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden transition-all duration-300">
-              <button @click="toggleBebidaSection('aguas')" class="w-full flex items-center justify-between p-5 text-left hover:bg-bege-cream/50 transition-colors">
-                <div class="flex items-center gap-4">
-                  <div class="w-12 h-12 bg-blue-50 text-blue-700/80 rounded-2xl flex items-center justify-center shadow-sm">
-                    <SparklesIcon class="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h4 class="font-bold text-cafe-dark text-base">Águas Minerais</h4>
-                    <p class="text-caption text-bege-torrado">Com gás e sem gás</p>
-                  </div>
-                </div>
-                <div :class="{'rotate-180': expandedBebidaSection === 'aguas'}" class="transition-transform duration-300 text-bege-torrado">
-                  <ChevronDownIcon class="h-6 w-6" />
-                </div>
-              </button>
-              <div v-show="expandedBebidaSection === 'aguas'" class="px-5 pb-5 space-y-2 animate-fade-in">
-                <div v-for="grupo in aguasAgrupadas" :key="grupo.nome" @click="handleAbrirOpcoesBebida(grupo)" class="flex justify-between items-center p-4 hover:bg-bege-cream rounded-2xl transition-colors cursor-pointer group border border-transparent hover:border-bege-soft">
-                  <div class="flex-1">
-                    <span class="text-sm font-bold text-cafe-dark">{{ grupo.nome || 'Água' }}</span>
+                    <span class="text-sm font-bold text-cafe-dark">{{ grupo.nome || categoriaBebida.titulo }}</span>
                     <p class="text-caption text-bege-torrado">{{ grupo.opcoes.length }} opções</p>
                   </div>
                   <div class="flex items-center gap-3">
@@ -613,9 +558,25 @@ const toggleBebidaSection = (section: string) => {
   expandedBebidaSection.value = expandedBebidaSection.value === section ? null : section;
 };
 
-const variacoesSucos = computed(() => variacoes.value.filter(v => v.tipo_bebida === 'suco'));
-const variacoesRefrigerantes = computed(() => variacoes.value.filter(v => v.tipo_bebida === 'refrigerante'));
-const variacoesAguas = computed(() => variacoes.value.filter(v => v.tipo_bebida === 'agua'));
+const formatTipoBebida = (tipo: string) => {
+  if (tipo === 'suco') return 'Sucos Naturais';
+  if (tipo === 'refrigerante') return 'Refrigerantes';
+  if (tipo === 'agua') return 'Águas Minerais';
+  if (tipo === 'cerveja') return 'Cervejas';
+  if (tipo === 'vinho') return 'Vinhos / Espumantes';
+  if (tipo === 'drink') return 'Drinks';
+  return 'Outras Bebidas';
+};
+
+const getBebidaDescription = (tipo: string) => {
+  if (tipo === 'suco') return 'Diversos sabores com água ou leite';
+  if (tipo === 'refrigerante') return 'Gelados em latas e garrafas';
+  if (tipo === 'agua') return 'Com gás e sem gás';
+  if (tipo === 'cerveja') return 'Nacionais e Importadas';
+  if (tipo === 'vinho') return 'Tops selecionados';
+  if (tipo === 'drink') return 'Clássicos e autorais';
+  return 'Para todos os gostos';
+};
 
 const groupBebidas = (items: any[]) => {
   const grupos: Record<string, any> = {};
@@ -634,9 +595,27 @@ const groupBebidas = (items: any[]) => {
   return Object.values(grupos);
 };
 
-const sucosAgrupados = computed(() => groupBebidas(variacoesSucos.value));
-const refrisAgrupados = computed(() => groupBebidas(variacoesRefrigerantes.value));
-const aguasAgrupadas = computed(() => groupBebidas(variacoesAguas.value));
+const bebidasPorTipo = computed(() => {
+  const grupos: Record<string, any> = {};
+  
+  variacoes.value.forEach(v => {
+    const tipo = v.tipo_bebida || 'outro';
+    if (!grupos[tipo]) {
+      grupos[tipo] = {
+        id: tipo,
+        titulo: formatTipoBebida(tipo),
+        descricao: getBebidaDescription(tipo),
+        itens: []
+      };
+    }
+    grupos[tipo].itens.push(v);
+  });
+  
+  return Object.values(grupos).map((g: any) => ({
+    ...g,
+    gruposAgrupados: groupBebidas(g.itens)
+  })).sort((a, b) => a.titulo.localeCompare(b.titulo));
+});
 
 const showBebidaOptionsModal = ref(false);
 const bebidaGrupoAtual = ref<any>(null);

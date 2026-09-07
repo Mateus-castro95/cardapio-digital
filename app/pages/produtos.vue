@@ -16,16 +16,16 @@
       <div class="flex flex-wrap gap-2 w-full sm:w-auto">
         <button 
           @click="handleOpenAddCategory"
-          class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl border border-cafe text-cafe hover:bg-bege-cream transition-all font-black text-xs uppercase tracking-wider"
+          class="flex-1 sm:flex-none px-2 sm:px-4 py-2 sm:py-2.5 rounded-xl border border-cafe text-cafe hover:bg-bege-cream transition-all font-black text-[10px] sm:text-xs uppercase tracking-wider text-center"
         >
-          + Nova Categoria
+          <span class="hidden sm:inline">+ </span>Nova Categoria
         </button>
         <button 
           @click="handleOpenAddItem()"
-          class="flex-1 sm:flex-none px-5 py-2.5 bg-cafe text-branco hover:bg-cafe-dark transition-all font-black text-xs uppercase tracking-wider rounded-xl shadow-md active:scale-95 flex items-center justify-center gap-2"
+          class="flex-1 sm:flex-none px-2 sm:px-5 py-2 sm:py-2.5 bg-cafe text-branco hover:bg-cafe-dark transition-all font-black text-[10px] sm:text-xs uppercase tracking-wider rounded-xl shadow-md active:scale-95 flex items-center justify-center gap-1 sm:gap-2 text-center leading-tight"
         >
-          <PlusIcon class="w-4 h-4" />
-          <span>Cadastrar Prato / Bebida</span>
+          <PlusIcon class="w-4 h-4 hidden sm:block" />
+          <span>Novo Prato / Bebida</span>
         </button>
       </div>
     </div>
@@ -118,9 +118,14 @@
               <BaseTabela :colunas="colsBebidas" :data="getBebidasByCat(categoria.id)" class="w-full border-0">
                 <template #nome="{ item }">
                   <div class="py-2.5 max-w-sm">
-                    <span class="font-black text-cafe-dark text-sm block">
-                      {{ item.sabor || item.produto?.nome || 'Bebida' }}
-                    </span>
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <span class="font-black text-cafe-dark text-sm block">
+                        {{ item.sabor || item.produto?.nome || 'Bebida' }}
+                      </span>
+                      <span class="md:hidden text-[9px] bg-bege-cream text-cafe-dark px-1.5 py-0.5 rounded font-black uppercase border border-bege-soft/60 whitespace-nowrap">
+                        {{ formatTipoBebida(item.tipo_bebida) }}
+                      </span>
+                    </div>
                     <p v-if="item.produto?.nome && item.sabor && item.produto?.nome !== item.sabor" class="text-[11px] text-bege-torrado font-medium mt-0.5">
                       {{ item.produto.nome }}
                     </p>
@@ -128,8 +133,11 @@
                 </template>
 
                 <template #tipo_bebida="{ item }">
-                  <span class="text-[9px] bg-bege-cream text-cafe-dark px-2.5 py-1 rounded-lg font-black uppercase border border-bege-soft/60 whitespace-nowrap">
+                  <span class="hidden md:inline-block text-[9px] bg-bege-cream text-cafe-dark px-2.5 py-1 rounded-lg font-black uppercase border border-bege-soft/60 whitespace-nowrap">
                     {{ formatTipoBebida(item.tipo_bebida) }}
+                  </span>
+                  <span class="md:hidden font-black text-cafe text-sm tabular-nums whitespace-nowrap">
+                    {{ formatCurrency(item.preco) }}
                   </span>
                 </template>
 
@@ -140,7 +148,7 @@
                 </template>
 
                 <template #preco="{ item }">
-                  <span class="font-black text-cafe text-sm tabular-nums whitespace-nowrap">
+                  <span class="hidden md:inline-block font-black text-cafe text-sm tabular-nums whitespace-nowrap">
                     {{ formatCurrency(item.preco) }}
                   </span>
                 </template>
@@ -180,7 +188,7 @@
               <BaseTabela :colunas="colsPratos" :data="getPratosByCat(categoria.id)" class="w-full border-0">
                 <template #nome="{ item }">
                   <div class="py-2.5 max-w-sm">
-                    <div class="flex items-center gap-2">
+                    <div class="flex flex-wrap items-center gap-2">
                       <span class="font-black text-cafe-dark text-sm">{{ item.nome }}</span>
                       <span 
                         v-if="item.destaque" 
@@ -275,8 +283,8 @@
       <div class="py-2 space-y-4">
         <!-- Campos Base -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div class="flex flex-col gap-1.5">
-            <label class="block text-xs font-normal text-[#C5B79D]">Categoria *</label>
+          <div>
+            <label class="block text-sm font-bold text-[#D4AF37] mb-1.5">Categoria *</label>
             <select 
               v-model="itemForm.categoria_id" 
               class="w-full px-3 py-1.5 text-sm bg-transparent border border-[#2E2A20] rounded-lg text-[#E2DACB] focus:border-[#D4AF37] outline-none"
@@ -290,7 +298,7 @@
           </div>
 
           <div>
-            <label class="block text-xs font-normal text-[#C5B79D] mb-1.5">Preço (R$) *</label>
+            <label class="block text-sm font-bold text-[#D4AF37] mb-1.5">Preço (R$) *</label>
             <BaseInputCurrency 
               v-model="itemForm.preco" 
               placeholder="0,00"
@@ -303,12 +311,12 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <BaseInput 
               v-model="itemForm.nome" 
-              label="Nome ou Sabor da Bebida *" 
+              label="Nome ou Sabor da Bebida" 
               placeholder="Ex: Coca-Cola, Suco de Laranja..." 
               required 
             />
-            <div class="flex flex-col gap-1.5">
-              <label class="block text-xs font-normal text-[#C5B79D]">Tipo de Bebida</label>
+            <div>
+              <label class="block text-sm font-bold text-[#D4AF37] mb-1.5">Tipo de Bebida</label>
               <select 
                 v-model="itemForm.tipo_bebida" 
                 class="w-full px-3 py-1.5 text-sm bg-transparent border border-[#2E2A20] rounded-lg text-[#E2DACB] focus:border-[#D4AF37] outline-none"
@@ -331,7 +339,7 @@
               placeholder="Ex: Lata, 2L, Jarra..." 
             />
             <div>
-              <label class="block text-xs font-normal text-[#C5B79D] mb-1.5">Volume (ml)</label>
+              <label class="block text-sm font-bold text-[#D4AF37] mb-1.5">Volume (ml)</label>
               <input 
                 type="number"
                 v-model="itemForm.volume_ml" 
@@ -339,8 +347,8 @@
                 class="w-full px-3 py-1.5 text-sm bg-transparent border border-[#2E2A20] rounded-lg text-[#E2DACB] focus:border-[#D4AF37] outline-none"
               />
             </div>
-            <div class="flex flex-col gap-1.5">
-              <label class="block text-xs font-normal text-[#C5B79D]">Adicionais</label>
+            <div>
+              <label class="block text-sm font-bold text-[#D4AF37] mb-1.5">Adicionais</label>
               <select 
                 v-model="itemForm.tipo_preparo" 
                 class="w-full px-3 py-1.5 text-sm bg-transparent border border-[#2E2A20] rounded-lg text-[#E2DACB] focus:border-[#D4AF37] outline-none"
@@ -357,13 +365,13 @@
         <template v-else>
           <BaseInput 
             v-model="itemForm.nome" 
-            label="Nome do Prato *" 
+            label="Nome do Prato" 
             placeholder="Ex: Mignon Gratinado, Salmão ao Molho de Maracujá" 
             required 
           />
 
-          <div class="flex flex-col gap-1.5">
-            <label class="block text-xs font-normal text-[#C5B79D]">Descrição do Prato</label>
+          <div>
+            <label class="block text-sm font-bold text-[#D4AF37] mb-1.5">Descrição do Prato</label>
             <textarea 
               v-model="itemForm.descricao" 
               rows="3" 
@@ -628,7 +636,7 @@ const handleOpenAddItem = (catId?: string) => {
   editingItem.value = null;
   editingItemType.value = null;
   itemForm.nome = '';
-  itemForm.categoria_id = catId || categorias.value[0]?.id || '';
+  itemForm.categoria_id = catId || '';
   itemForm.preco = 0;
   itemForm.descricao = '';
   itemForm.destaque = false;
