@@ -48,7 +48,12 @@
                   <p class="text-[10px] sm:text-caption text-bege-torrado font-bold leading-tight">{{ item.descricao }}</p>
                 </div>
               </div>
-              <span class="text-xs sm:text-body font-black text-cafe-dark tabular-nums ml-2 whitespace-nowrap">{{ formatCurrency(item.preco_unitario * item.quantidade) }}</span>
+              <div class="flex items-center gap-2 sm:gap-4 shrink-0 ml-2">
+                <span class="text-xs sm:text-body font-black text-cafe-dark tabular-nums whitespace-nowrap">{{ formatCurrency(item.preco_unitario * item.quantidade) }}</span>
+                <button @click="handleExcluirItem(item)" title="Excluir 1 lançamento" class="p-1.5 text-bege-torrado/50 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                  <TrashIcon class="w-4 h-4 sm:w-5 sm:h-5" />
+                </button>
+              </div>
             </div>
           </div>
 
@@ -164,6 +169,16 @@
         </div>
       </div>
     </div>
+
+    <!-- MODAL CONFIRMAÇÃO EXCLUSÃO -->
+    <ModalConfirmacao 
+      :show="showConfirmDeleteModal" 
+      title="Confirmar Exclusão" 
+      :message="`Tem certeza que deseja excluir ${itemToDelete?.raw.item.quantidade}x ${itemToDelete?.itemAgrupado.nome} desta mesa?`"
+      :loading="isDeleting"
+      @confirm="confirmarExclusaoItem"
+      @cancel="showConfirmDeleteModal = false"
+    />
   </div>
 </template>
 
@@ -172,10 +187,14 @@ import { ref, computed, onMounted } from 'vue';
 import { usePedidos } from '~/composables/usePedidos';
 import { useToast } from '~/composables/useToast';
 import { formatCurrency } from '~/utils/formatters';
-import { CheckBadgeIcon, CreditCardIcon } from '@heroicons/vue/24/outline';
+import { CheckBadgeIcon, CreditCardIcon, TrashIcon } from '@heroicons/vue/24/outline';
 
-const { mesas, fetchMesas, pedidos, fetchPedidos, fetchPagamentosMesa, registrarPagamento, finalizarMesa } = usePedidos();
+const { mesas, fetchMesas, pedidos, fetchPedidos, fetchPagamentosMesa, registrarPagamento, finalizarMesa, excluirItemPedido } = usePedidos();
 const toast = useToast();
+
+const showConfirmDeleteModal = ref(false);
+const itemToDelete = ref<any>(null);
+const isDeleting = ref(false);
 
 const mesaSelecionada = ref<any>(null);
 const pagamentosMesa = ref<any[]>([]);
@@ -210,13 +229,15 @@ const itensAgrupados = computed(() => {
             if (mapa.has(chave)) {
                 const existente = mapa.get(chave);
                 existente.quantidade += item.quantidade;
+                existente.raw_itens.push({ pedidoId: pedido.id, item });
             } else {
                 mapa.set(chave, {
                     chave,
                     nome: nomeStr,
                     descricao: descStr,
                     quantidade: item.quantidade,
-                    preco_unitario: item.preco_unitario
+                    preco_unitario: item.preco_unitario,
+                    raw_itens: [{ pedidoId: pedido.id, item }]
                 });
             }
         });
@@ -243,17 +264,57 @@ onMounted(async () => {
     await fetchPedidos();
 });
 
+const carregarDadosDaMesa = async (dataMaisAntiga: string) => {
+    try {
+        await fetchPagamentosMesa(mesaSelecionada.value.id, dataMaisAntiga);
+    } catch (error) {
+        toast.error('Erro ao buscar pagamentos', 'Não foi possível carregar o histórico financeiro.');
+    }
+};
+
 const selecionarMesa = async (mesa: any) => {
     mesaSelecionada.value = mesa;
     valorPagamento.value = null;
     
     // Identificamos o pedido mais antigo desta mesa para filtrar pagamentos históricos
-    await buscarPagamentosAtuais();
+    const pedidoAntigo = pedidosDaMesa.value.length > 0 
+        ? pedidosDaMesa.value.reduce((min, p) => p.criado_em < min.criado_em ? p : min, pedidosDaMesa.value[0])
+        : null;
+
+    if (pedidoAntigo) {
+        await carregarDadosDaMesa(pedidoAntigo.criado_em);
+    } else {
+        pagamentosMesa.value = [];
+    }
     
     // Sugere o valor total restante no campo
     setTimeout(() => {
         valorPagamento.value = Number(saldoRestante.value);
     }, 100);
+};
+
+const handleExcluirItem = (itemAgrupado: any) => {
+    const raw = itemAgrupado.raw_itens[0];
+    if (!raw) return;
+    
+    itemToDelete.value = { raw, itemAgrupado };
+    showConfirmDeleteModal.value = true;
+};
+
+const confirmarExclusaoItem = async () => {
+    if (!itemToDelete.value) return;
+    isDeleting.value = true;
+    try {
+        await excluirItemPedido(itemToDelete.value.raw.pedidoId, itemToDelete.value.raw.item.id);
+        toast.success('Item excluído!', 'O valor da mesa foi recalculado.');
+        await fetchPedidos();
+        showConfirmDeleteModal.value = false;
+        itemToDelete.value = null;
+    } catch (error) {
+        toast.error('Erro ao excluir', 'Não foi possível excluir o item.');
+    } finally {
+        isDeleting.value = false;
+    }
 };
 
 // Função para buscar apenas pagamentos que pertencem ao consumo atual

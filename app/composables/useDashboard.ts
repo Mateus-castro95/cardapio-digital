@@ -101,8 +101,12 @@ export const useDashboard = () => {
                 let nome = 'Produto';
                 let tipo = 'Outro';
 
-                if (item.tamanho_id) {
-                    // É um pastel (tem sabores)
+                if (item.nome_item) {
+                    nome = item.nome_item;
+                } else if (item.item_cardapio?.nome) {
+                    nome = item.item_cardapio.nome;
+                } else if (item.tamanho_id) {
+                    // Legado: Pastel
                     tipo = 'Pastel';
                     const sabores = item.sabores;
                     if (Array.isArray(sabores)) {
@@ -111,7 +115,7 @@ export const useDashboard = () => {
                         nome = 'Pastel Montado';
                     }
                 } else if (item.produto_simples) {
-                    // É uma bebida ou produto simples
+                    // Legado: Bebida/Produto simples
                     tipo = 'Bebida';
                     nome = item.produto_simples.sabor || 'Bebida';
                 }
@@ -121,7 +125,7 @@ export const useDashboard = () => {
                 }
                 const current = contagem[nome];
                 if (current) {
-                    current.qtd += item.quantidade || 0;
+                    current.qtd += item.quantidade || 1; // Fallback para 1 caso quantidade venha vazia
                 }
             });
         });

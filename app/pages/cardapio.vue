@@ -359,6 +359,90 @@
       </div>
     </BaseModalScrollable>
 
+    <!-- Modal Meus Pedidos (Acompanhamento) -->
+    <BaseModalScrollable :show="showMeusPedidosModal" @close="showMeusPedidosModal = false" title="Meus Pedidos">
+      <div class="px-5 pt-4 pb-32">
+        <div class="flex justify-between items-center bg-bege-cream/50 p-4 rounded-2xl border border-bege-soft mb-6">
+          <div>
+            <span class="text-[10px] text-bege-torrado font-black uppercase tracking-wider block">Total Consumido</span>
+            <span class="text-xl font-black text-cafe">{{ formatCurrency(totalParcialDaMesa) }}</span>
+          </div>
+          <button @click="carregarMeusPedidos" class="flex items-center gap-2 bg-white px-4 py-2 rounded-xl border border-bege-soft shadow-sm hover:border-cafe text-xs font-black text-cafe-dark uppercase tracking-wider transition-colors">
+            <ArrowPathIcon class="w-4 h-4" :class="{'animate-spin': loadingMeusPedidos}" />
+            Atualizar
+          </button>
+        </div>
+
+        <div v-if="pedidosDaMesa.length === 0" class="text-center py-10 opacity-60">
+          <p class="text-sm font-bold text-bege-torrado">Nenhum pedido pendente.</p>
+        </div>
+
+        <div v-else class="space-y-6">
+          <div v-for="pedido in pedidosDaMesa" :key="pedido.id" class="bg-branco rounded-3xl border border-bege-soft shadow-premium overflow-hidden">
+            <!-- Header do Pedido -->
+            <div class="p-5 border-b border-bege-soft flex justify-between items-center bg-bege-cream/20">
+              <span class="text-xs font-black text-cafe-dark uppercase tracking-wider">Pedido #{{ pedido.id.split('-')[0] }}</span>
+              <span class="text-xs font-black text-cafe">{{ formatCurrency(pedido.total) }}</span>
+            </div>
+            
+            <!-- Linha do Tempo (Status) -->
+            <div class="px-5 sm:px-8 py-6 bg-bege-cream/10 border-b border-bege-soft/50">
+              <div class="flex items-center justify-between relative max-w-sm mx-auto px-2">
+                <div class="absolute top-1/2 left-0 w-full h-0.5 bg-bege-soft/50 -translate-y-1/2 z-0"></div>
+                <div 
+                  v-for="(step, index) in steps" :key="step.status"
+                  class="relative z-10 flex flex-col items-center group/step"
+                  :class="getStatusIndex(pedido.status) >= index ? 'text-cafe' : 'text-bege-torrado/40'"
+                >
+                  <div 
+                    class="w-6 h-6 rounded-full flex items-center justify-center transition-all duration-500 border-2 bg-white"
+                    :class="[
+                      getStatusIndex(pedido.status) >= index 
+                        ? 'border-moca shadow-md scale-110' 
+                        : 'border-bege-soft/60'
+                    ]"
+                  >
+                    <div 
+                      v-if="getStatusIndex(pedido.status) >= index"
+                      class="w-2 h-2 bg-moca rounded-full shadow-inner"
+                      :class="{'animate-pulse': getStatusIndex(pedido.status) === index}"
+                    ></div>
+                  </div>
+                  <span class="text-[8px] sm:text-[9px] font-black uppercase tracking-wider mt-2.5 transition-colors text-center truncate w-12">
+                    {{ step.label }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Itens do Pedido -->
+            <div class="p-5 space-y-3">
+              <div v-for="(item, idx) in pedido.itens" :key="idx" class="flex justify-between items-start">
+                <div>
+                  <span class="text-xs font-bold text-cafe-dark">{{ item.quantidade }}x {{ item.nome_item || item.item_cardapio?.nome || 'Item' }}</span>
+                </div>
+                <span class="text-xs font-bold text-bege-torrado">{{ formatCurrency(item.preco_unitario * item.quantidade) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </BaseModalScrollable>
+
+    <!-- Botão Flutuante Meus Pedidos -->
+    <button 
+      v-if="mesaSelecionadaId && pedidosDaMesa.length > 0 && !showCartModal && !showBebidaOptionsModal"
+      @click="abrirMeusPedidos"
+      class="fixed bottom-24 sm:bottom-28 right-4 sm:right-6 z-30 bg-cafe text-[#0A0A0C] w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:bg-cafe-dark transition-all duration-300 hover:scale-105 active:scale-95 border-2 border-[#E8C86A]"
+    >
+      <div class="relative">
+        <ClipboardDocumentListIcon class="h-5 w-5 sm:h-6 sm:w-6" />
+        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-black w-4 h-4 flex items-center justify-center rounded-full shadow-sm animate-pulse">
+          !
+        </span>
+      </div>
+    </button>
+
     <!-- Barra de Carrinho Inferior Flutuante (Estilo Ifood) -->
     <div v-if="cart.length > 0" class="sticky bottom-0 w-full mt-auto p-3 sm:p-4 bg-white/90 backdrop-blur-md border-t border-bege-soft z-40">
       <button 
@@ -503,7 +587,9 @@ import {
   SparklesIcon,
   BeakerIcon,
   ExclamationTriangleIcon,
-  PencilIcon
+  PencilIcon,
+  ArrowPathIcon,
+  ClipboardDocumentListIcon
 } from '@heroicons/vue/24/outline';
 import { 
   PlusIcon as PlusIconSolid, 
@@ -514,7 +600,7 @@ import {
 const { categorias, fetchCategorias } = useCategorias();
 const { itens: pratos, loading: loadingItens, fetchItensCardapio } = useCardapioItens();
 const { variacoes, fetchVariacoesBebidas } = useVariacoes();
-const { mesas, fetchMesas, criarPedido } = usePedidos();
+const { mesas, fetchMesas, criarPedido, fetchPedidosDaMesa } = usePedidos();
 const toast = useToast();
 const route = useRoute();
 const authStore = useAuthStore();
@@ -524,7 +610,7 @@ const mesaSelecionadaId = ref<string | null>(null);
 const mesaInvalida = ref(false);
 const isMesaLocked = computed(() => {
   if (authStore.perfil) return false;
-  return !!route.query.mesa;
+  return !!route.query.codigo || !!route.query.mesa;
 });
 
 // Categorias com pratos
@@ -651,6 +737,44 @@ const abrirModalPrato = (item: ItemCardapio) => {
 // Carrinho
 const cart = ref<any[]>([]);
 const showCartModal = ref(false);
+
+// Meus Pedidos State
+const showMeusPedidosModal = ref(false);
+const pedidosDaMesa = ref<any[]>([]);
+const loadingMeusPedidos = ref(false);
+
+const steps = [
+  { label: 'Recebido', status: 'novo' },
+  { label: 'Cozinha', status: 'em_preparo' },
+  { label: 'Pronto', status: 'pronto' },
+  { label: 'Entregue', status: 'entregue' },
+];
+
+const getStatusIndex = (status: string) => {
+  return steps.findIndex(s => s.status === status);
+};
+
+const totalParcialDaMesa = computed(() => {
+  return pedidosDaMesa.value.reduce((acc, p) => acc + (p.total || 0), 0);
+});
+
+const carregarMeusPedidos = async () => {
+  if (!mesaSelecionadaId.value) return;
+  loadingMeusPedidos.value = true;
+  try {
+    pedidosDaMesa.value = await fetchPedidosDaMesa(mesaSelecionadaId.value);
+  } catch (error) {
+    console.error('Erro ao buscar meus pedidos:', error);
+  } finally {
+    loadingMeusPedidos.value = false;
+  }
+};
+
+const abrirMeusPedidos = async () => {
+  showMeusPedidosModal.value = true;
+  await carregarMeusPedidos();
+};
+
 const loadingPedido = ref(false);
 
 const totalCart = computed(() => {
@@ -747,6 +871,10 @@ const finalizarPedido = async () => {
     toast.success('Pedido Enviado!', 'Seu pedido foi encaminhado para a nossa cozinha.');
     cart.value = [];
     showCartModal.value = false;
+    
+    // Após enviar, carregar o histórico e abrir o modal para ele acompanhar
+    await carregarMeusPedidos();
+    showMeusPedidosModal.value = true;
   } catch (error) {
     toast.error('Erro ao enviar pedido', 'Tente novamente ou chame o garçom.');
   } finally {
@@ -762,8 +890,26 @@ onMounted(async () => {
     fetchMesas()
   ]);
 
+  const codigoQuery = route.query.codigo;
   const mesaQuery = route.query.mesa;
-  if (mesaQuery) {
+  
+  if (codigoQuery) {
+    const mesa = mesas.value.find(m => m.id === codigoQuery);
+    
+    if (mesa) {
+      mesaSelecionadaId.value = mesa.id;
+      mesaInvalida.value = false;
+      toast.success('Bem-vindo!', `Você está na Mesa ${mesa.numero}`);
+      
+      // Carrega pedidos existentes (caso o cliente tenha saído da aba e voltado)
+      carregarMeusPedidos();
+    } else {
+      mesaInvalida.value = true;
+      if (!authStore.perfil) {
+        toast.error('Mesa Inválida', 'Este código de mesa não existe.');
+      }
+    }
+  } else if (mesaQuery) {
     const numMesa = parseInt(mesaQuery as string);
     const mesa = mesas.value.find(m => m.numero === numMesa);
     
@@ -771,6 +917,9 @@ onMounted(async () => {
       mesaSelecionadaId.value = mesa.id;
       mesaInvalida.value = false;
       toast.success('Bem-vindo!', `Você está na Mesa ${mesa.numero}`);
+      
+      // Carrega pedidos existentes (caso o cliente tenha saído da aba e voltado)
+      carregarMeusPedidos();
     } else {
       mesaInvalida.value = true;
       if (!authStore.perfil) {

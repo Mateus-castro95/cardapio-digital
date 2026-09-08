@@ -15,18 +15,33 @@
       </div>
     </div>
 
-    <!-- Filtros Rápidos -->
-    <div class="flex gap-3 mb-8 overflow-x-auto pb-4 custom-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+    <!-- Filtros Rápidos (Desktop) -->
+    <div class="hidden sm:flex gap-3 mb-8 overflow-x-auto pb-4 custom-scrollbar">
       <button 
         v-for="f in filtros" :key="f.label"
         @click="filtroAtual = f.value"
-        class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap border-2"
+        class="px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap border-2"
         :class="filtroAtual === f.value 
           ? 'bg-cafe border-cafe text-[#0A0A0C] shadow-lg' 
           : 'bg-branco border-bege-soft text-bege-torrado hover:border-moca hover:text-moca'"
       >
         {{ f.label }}
       </button>
+    </div>
+
+    <!-- Filtros Rápidos (Mobile) -->
+    <div class="sm:hidden mb-8 relative">
+      <select 
+        v-model="filtroAtual"
+        class="w-full appearance-none bg-branco border border-bege-soft text-cafe-dark px-4 py-3.5 rounded-xl text-[11px] font-black uppercase tracking-wider focus:outline-none focus:border-cafe focus:ring-1 focus:ring-cafe shadow-sm"
+      >
+        <option v-for="f in filtros" :key="f.value" :value="f.value">
+          {{ f.label }}
+        </option>
+      </select>
+      <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-cafe">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+      </div>
     </div>
 
     <!-- Lista de Pedidos -->
@@ -86,9 +101,14 @@
                 v-for="(item, idx) in pedido.itens" :key="idx"
                 class="bg-bege-cream/30 p-4 rounded-2xl border border-bege-soft/40 hover:border-moca/30 flex flex-col gap-1 transition-colors group/item"
               >
-                <div class="flex items-center gap-3">
-                  <span class="w-6 h-6 flex items-center justify-center bg-cafe text-[#0A0A0C] rounded-lg text-[10px] font-black shadow-sm">{{ item.quantidade }}</span>
-                  <span class="text-xs font-black text-cafe-dark truncate">{{ getItemName(item) }}</span>
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex items-center gap-3 min-w-0">
+                    <span class="w-6 h-6 shrink-0 flex items-center justify-center bg-cafe text-[#0A0A0C] rounded-lg text-[10px] font-black shadow-sm">{{ item.quantidade }}</span>
+                    <span class="text-xs font-black text-cafe-dark truncate">{{ getItemName(item) }}</span>
+                  </div>
+                  <button @click="handleExcluirItem(pedido, item)" title="Excluir item" class="shrink-0 p-1.5 text-bege-torrado/50 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                    <TrashIcon class="w-4 h-4" />
+                  </button>
                 </div>
                 <div v-if="item.ponto_carne" class="ml-9 my-1">
                   <span class="text-[9px] text-red-700 font-black uppercase bg-red-50 px-2 py-0.5 rounded-md border border-red-100">
@@ -151,6 +171,16 @@
       <h3 class="text-heading-2 text-cafe-dark">Sem pedidos ativos</h3>
       <p class="text-body text-bege-torrado max-w-sm mt-3">Os pedidos aparecerão nesta tela conforme forem realizados pelos clientes.</p>
     </div>
+
+    <!-- MODAL CONFIRMAÇÃO EXCLUSÃO -->
+    <ModalConfirmacao 
+      :show="showConfirmDeleteModal" 
+      title="Confirmar Exclusão" 
+      :message="`Tem certeza que deseja excluir ${itemToDelete?.item.quantidade}x ${itemToDelete ? getItemName(itemToDelete.item) : ''} deste pedido?`"
+      :loading="isDeleting"
+      @confirm="confirmarExclusaoItem"
+      @cancel="showConfirmDeleteModal = false"
+    />
   </div>
 </template>
 
@@ -160,12 +190,16 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { usePedidos } from '~/composables/usePedidos';
 import { useToast } from '~/composables/useToast';
 import { CheckIcon, CheckCircleIcon } from '@heroicons/vue/20/solid';
-import { ClipboardDocumentListIcon } from '@heroicons/vue/24/outline';
+import { ClipboardDocumentListIcon, TrashIcon } from '@heroicons/vue/24/outline';
 
-const { pedidos, fetchPedidos, atualizarStatusPedido, setupRealtimePedidos } = usePedidos();
+const { pedidos, fetchPedidos, atualizarStatusPedido, excluirItemPedido, setupRealtimePedidos } = usePedidos();
 const toast = useToast();
 const realtimeChannel = ref<any>(null);
 const filtroAtual = ref('ativos');
+
+const showConfirmDeleteModal = ref(false);
+const itemToDelete = ref<any>(null);
+const isDeleting = ref(false);
 
 const filtros = [
   { label: 'Todos os ativos', value: 'ativos' },
@@ -208,9 +242,29 @@ const getStatusIndex = (status: string) => {
 const handleUpdateStatus = async (pedidoId: string, status: string) => {
     try {
         await atualizarStatusPedido(pedidoId, status);
-        toast.success('Pedido atualizado!');
+        toast.success('Status atualizado!', 'O pedido foi atualizado com sucesso.');
     } catch (error) {
-        toast.error('Erro ao atualizar status');
+        toast.error('Erro ao atualizar', 'Não foi possível atualizar o pedido.');
+    }
+};
+
+const handleExcluirItem = (pedido: any, item: any) => {
+    itemToDelete.value = { pedido, item };
+    showConfirmDeleteModal.value = true;
+};
+
+const confirmarExclusaoItem = async () => {
+    if (!itemToDelete.value) return;
+    isDeleting.value = true;
+    try {
+        await excluirItemPedido(itemToDelete.value.pedido.id, itemToDelete.value.item.id);
+        toast.success('Item excluído!', 'O valor do pedido foi recalculado.');
+        showConfirmDeleteModal.value = false;
+        itemToDelete.value = null;
+    } catch (error) {
+        toast.error('Erro ao excluir', 'Não foi possível excluir o item.');
+    } finally {
+        isDeleting.value = false;
     }
 };
 

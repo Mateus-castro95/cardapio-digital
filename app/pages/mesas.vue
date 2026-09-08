@@ -53,10 +53,10 @@
 
         <!-- QR Code Link & Action -->
         <div class="mt-2 sm:mt-4 pt-3 sm:pt-4 border-t border-bege-soft/50 flex justify-center gap-1.5 sm:gap-2">
-            <button @click="abrirQrCode(mesa.numero)" class="p-2 sm:p-2.5 bg-bege-cream/50 rounded-xl text-cafe hover:bg-cafe hover:text-branco transition-all shadow-sm" title="Ver QR Code">
+            <button @click="abrirQrCode(mesa)" class="p-2 sm:p-2.5 bg-bege-cream/50 rounded-xl text-cafe hover:bg-cafe hover:text-branco transition-all shadow-sm" title="Ver QR Code">
                 <QrCodeIcon class="h-4 w-4 sm:h-5 sm:w-5" />
             </button>
-            <button @click="copiarLinkMesa(mesa.numero)" class="p-2 sm:p-2.5 bg-bege-cream/50 rounded-xl text-bege-torrado hover:bg-cafe hover:text-branco transition-all shadow-sm" title="Copiar Link">
+            <button @click="copiarLinkMesa(mesa)" class="p-2 sm:p-2.5 bg-bege-cream/50 rounded-xl text-bege-torrado hover:bg-cafe hover:text-branco transition-all shadow-sm" title="Copiar Link">
                 <LinkIcon class="h-4 w-4 sm:h-5 sm:w-5" />
             </button>
             <button @click="liberarMesa(mesa)" v-if="mesa.status === 'ocupada'" class="p-2 sm:p-2.5 bg-red-50 rounded-xl text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-sm" title="Liberar Mesa">
@@ -73,7 +73,7 @@
             <XMarkIcon class="w-6 h-6" />
           </button>
           
-          <h3 class="text-heading-3 text-cafe mb-6">Mesa {{ mesaQrAtual }}</h3>
+          <h3 class="text-heading-3 text-cafe mb-6">Mesa {{ mesaQrAtual?.numero }}</h3>
           
           <div class="p-4 bg-white border-4 border-cafe rounded-[2.5rem] shadow-premium mb-6 inline-block">
               <img 
@@ -86,7 +86,7 @@
           <p class="text-description text-preto/70 mb-8 px-4">
               Aponte a câmera para o código acima para acessar o cardápio digital desta mesa.
           </p>
-          <button @click="copiarLinkMesa(mesaQrAtual!)" class="w-full py-3 rounded-xl border border-bege-torrado text-cafe hover:bg-bege-cream font-bold transition-colors">
+          <button @click="copiarLinkMesa(mesaQrAtual)" class="w-full py-3 rounded-xl border border-bege-torrado text-cafe hover:bg-bege-cream font-bold transition-colors">
             COPIAR LINK DA MESA
           </button>
       </div>
@@ -139,7 +139,7 @@ const toast = useToast();
 
 const showAddMesaModal = ref(false);
 const showQrModal = ref(false);
-const mesaQrAtual = ref<number | null>(null);
+const mesaQrAtual = ref<any>(null);
 const novaMesaNumero = ref<number | null>(null);
 const loadingCriar = ref(false);
 const loadingSeed = ref(false);
@@ -153,13 +153,13 @@ onMounted(async () => {
   await fetchMesas();
 });
 
-const getUrlMesa = (numero: number) => {
+const getUrlMesa = (mesa: any) => {
     const origin = typeof window !== 'undefined' ? window.location.origin : '';
-    return `${origin}/cardapio?mesa=${numero}`;
+    return `${origin}/cardapio?codigo=${mesa.id}`;
 };
 
-const abrirQrCode = (numero: number) => {
-    mesaQrAtual.value = numero;
+const abrirQrCode = (mesa: any) => {
+    mesaQrAtual.value = mesa;
     showQrModal.value = true;
 };
 
@@ -214,9 +214,9 @@ const handleConfirmLiberar = async () => {
     }
 };
 
-const copiarLinkMesa = (numero: number) => {
-    const link = getUrlMesa(numero);
+const copiarLinkMesa = (mesa: any) => {
+    const link = getUrlMesa(mesa);
     navigator.clipboard.writeText(link);
-    toast.success('Link Copiado!', `URL para Mesa ${numero} está na área de transferência.`);
+    toast.success('Link Copiado!', `URL para Mesa ${mesa.numero} está na área de transferência.`);
 };
 </script>

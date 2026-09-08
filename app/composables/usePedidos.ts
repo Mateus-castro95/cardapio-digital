@@ -24,10 +24,15 @@ export interface PedidoInput {
     itens: ItemPedidoInput[];
 }
 
+export interface PedidoCompleto extends Pedido {
+    itens: ItemPedido[];
+    mesa?: Mesa | null;
+}
+
 export const usePedidos = () => {
     const client = useSupabaseClient<Database>();
 
-    const pedidos = ref<(Pedido & { itens: ItemPedido[], mesa?: Mesa | null })[]>([]);
+    const pedidos = ref<PedidoCompleto[]>([]);
     const mesas = ref<Mesa[]>([]);
     const loading = ref(false);
 
@@ -164,6 +169,32 @@ export const usePedidos = () => {
         }
     };
 
+    // Busca pedidos ativos (não finalizados) de uma mesa específica
+    const fetchPedidosDaMesa = async (mesaId: string) => {
+        try {
+            const { data, error } = await client
+                .from('pedidos')
+                .select(`
+                    *,
+                    itens:itens_pedido(
+                        *,
+                        produto_simples:produtos_simples(*),
+                        tamanho:tamanhos(nome),
+                        item_cardapio:itens_cardapio(*)
+                    )
+                `)
+                .eq('mesa_id', mesaId)
+                .neq('status', 'finalizado')
+                .order('criado_em', { ascending: false });
+
+            if (error) throw error;
+            return data || [];
+        } catch (error: any) {
+            console.error('Erro ao buscar pedidos da mesa:', error.message);
+            throw error;
+        }
+    };
+
     // Atualiza apenas o status do pedido (Cozinha -> Pronto -> Entregue)
     const atualizarStatusPedido = async (pedidoId: string, novoStatus: string) => {
         try {
@@ -175,13 +206,57 @@ export const usePedidos = () => {
             if (error) throw error;
 
             // Atualiza estado local
-            const index = pedidos.value.findIndex(p => p.id === pedidoId);
+            const index = pedidos.value.findIndex((p: any) => p.id === pedidoId);
             const pedidoExistente = pedidos.value[index];
             if (pedidoExistente) {
                 pedidoExistente.status = novoStatus as any;
             }
         } catch (error: any) {
             console.error('Erro ao atualizar status do pedido:', error.message);
+            throw error;
+        }
+    };
+
+    // Exclui um item específico de um pedido e recalcula o total
+    const excluirItemPedido = async (pedidoId: string, itemId: string) => {
+        try {
+            // 1. Deletar o item
+            const { error: errorDelete } = await client
+                .from('itens_pedido')
+                .delete()
+                .eq('id', itemId);
+                
+            if (errorDelete) throw errorDelete;
+
+            // 2. Buscar itens restantes para recalcular
+            const { data: itensRestantes, error: errorItens } = await client
+                .from('itens_pedido')
+                .select('*')
+                .eq('pedido_id', pedidoId);
+
+            if (errorItens) throw errorItens;
+
+            // 3. Calcular novo total
+            const novoTotal = itensRestantes.reduce((acc, item) => acc + (item.preco_unitario * item.quantidade), 0);
+
+            // 4. Atualizar o pedido com novo total
+            const { error: errorUpdate } = await client
+                .from('pedidos')
+                .update({ total: novoTotal } as any)
+                .eq('id', pedidoId);
+
+            if (errorUpdate) throw errorUpdate;
+
+            // 5. Atualizar estado local
+            const pedido = pedidos.value.find((p: any) => p.id === pedidoId);
+            if (pedido) {
+                pedido.total = novoTotal;
+                pedido.itens = pedido.itens.filter((i: any) => i.id !== itemId);
+            }
+            
+            return { sucesso: true, novoTotal };
+        } catch (error: any) {
+            console.error('Erro ao excluir item do pedido:', error.message);
             throw error;
         }
     };
@@ -325,10 +400,12 @@ export const usePedidos = () => {
         loading,
         fetchMesas,
         fetchPedidos,
+        fetchPedidosDaMesa,
         fetchPedidosPorPeriodo,
         fetchPagamentosPorPeriodo,
         criarPedido,
         atualizarStatusPedido,
+        excluirItemPedido,
         atualizarStatusMesa,
         criarMesa,
         setupRealtimePedidos,
