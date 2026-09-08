@@ -85,11 +85,13 @@
             <div 
               v-for="cat in categoriasFiltradas" 
               :key="cat.id"
-              class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden transition-all duration-300"
+              :id="'cat-' + cat.id"
+              class="bg-[#121215] bg-gradient-to-br from-[#18181C] to-[#121215] rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-[#E8C86A]/20 overflow-hidden transition-all duration-300"
             >
               <button 
                 @click="toggleCategoria(cat.id)" 
-                class="w-full flex items-center justify-between p-5 text-left hover:bg-bege-cream/50 transition-colors"
+                class="w-full flex items-center justify-between p-5 text-left transition-colors"
+                :class="expandedCategoriaId === cat.id ? 'bg-[#1C1C20] border-b border-bege-soft/10' : 'bg-transparent hover:bg-[#1C1C20]/50'"
               >
                 <div>
                   <h4 class="font-bold text-cafe-dark text-base uppercase tracking-wide">{{ cat.nome }}</h4>
@@ -100,12 +102,12 @@
                 </div>
               </button>
 
-              <div v-show="expandedCategoriaId === cat.id" class="px-5 pb-5 space-y-3 animate-fade-in">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+              <div v-show="expandedCategoriaId === cat.id" class="px-5 pb-5 space-y-3 md:space-y-0 animate-fade-in">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-4 pt-1">
                   <div 
                     v-for="item in cat.itens" 
                     :key="item.id"
-                    class="bg-[#18181C] rounded-2xl p-5 border border-bege-soft/20 shadow-sm hover:border-cafe/30 transition-all flex flex-col justify-between group relative"
+                    class="py-4 md:bg-[#18181C] md:rounded-2xl md:p-5 border-b border-bege-soft/20 md:border md:shadow-sm hover:border-cafe/30 transition-all flex flex-col justify-between group relative last:border-b-0 md:last:border"
                   >
                     <div>
                       <!-- Badges de Destaque / Ponto de Carne -->
@@ -169,9 +171,14 @@
             <div 
               v-for="categoriaBebida in bebidasPorTipo" 
               :key="categoriaBebida.id"
-              class="bg-branco rounded-3xl shadow-premium border border-bege-soft overflow-hidden transition-all duration-300"
+              :id="'bebida-' + categoriaBebida.id"
+              class="bg-[#121215] bg-gradient-to-br from-[#18181C] to-[#121215] rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-[#E8C86A]/20 overflow-hidden transition-all duration-300"
             >
-              <button @click="toggleBebidaSection(categoriaBebida.id)" class="w-full flex items-center justify-between p-5 text-left hover:bg-bege-cream/50 transition-colors">
+              <button 
+                @click="toggleBebidaSection(categoriaBebida.id)" 
+                class="w-full flex items-center justify-between p-5 text-left transition-colors"
+                :class="expandedBebidaSection === categoriaBebida.id ? 'bg-[#1C1C20] border-b border-bege-soft/10' : 'bg-transparent hover:bg-[#1C1C20]/50'"
+              >
                 <div class="flex items-center gap-4">
                   <div>
                     <h4 class="font-bold text-cafe-dark text-base">{{ categoriaBebida.titulo }}</h4>
@@ -254,15 +261,15 @@
             >
               <div>
                 <span class="text-xs font-black block leading-tight">{{ ponto.rotulo }}</span>
-                <span class="text-[10px] opacity-80 block mt-0.5" :class="pontoCarneSelecionado === ponto.valor ? 'text-bege-soft' : 'text-bege-torrado'">
+                <span class="text-[10px] block mt-0.5" :class="pontoCarneSelecionado === ponto.valor ? 'text-[#0A0A0C]/80 font-bold' : 'text-bege-torrado opacity-80'">
                   {{ ponto.descricao }}
                 </span>
               </div>
               <div 
                 class="w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ml-2"
-                :class="pontoCarneSelecionado === ponto.valor ? 'border-white bg-white/20' : 'border-bege-soft'"
+                :class="pontoCarneSelecionado === ponto.valor ? 'border-[#0A0A0C] bg-[#0A0A0C]/10' : 'border-bege-soft'"
               >
-                <div v-if="pontoCarneSelecionado === ponto.valor" class="w-2.5 h-2.5 rounded-full bg-[#E8C86A]"></div>
+                <div v-if="pontoCarneSelecionado === ponto.valor" class="w-2.5 h-2.5 rounded-full bg-[#0A0A0C]"></div>
               </div>
             </button>
           </div>
@@ -634,14 +641,36 @@ const totalPratosCount = computed(() => pratos.value.length);
 // Expansão de Categorias de Comida
 const expandedCategoriaId = ref<string | null>(null);
 const toggleCategoria = (id: string) => {
-  expandedCategoriaId.value = expandedCategoriaId.value === id ? null : id;
+  if (expandedCategoriaId.value === id) {
+    expandedCategoriaId.value = null;
+  } else {
+    expandedCategoriaId.value = id;
+    setTimeout(() => {
+      const el = document.getElementById('cat-' + id);
+      if (el) {
+        const y = el.getBoundingClientRect().top + window.scrollY - 100;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    }, 150);
+  }
 };
 
 
 // Bebidas
 const expandedBebidaSection = ref<string | null>(null);
 const toggleBebidaSection = (section: string) => {
-  expandedBebidaSection.value = expandedBebidaSection.value === section ? null : section;
+  if (expandedBebidaSection.value === section) {
+    expandedBebidaSection.value = null;
+  } else {
+    expandedBebidaSection.value = section;
+    setTimeout(() => {
+      const el = document.getElementById('bebida-' + section);
+      if (el) {
+        const y = el.getBoundingClientRect().top + window.scrollY - 100;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    }, 150);
+  }
 };
 
 const formatTipoBebida = (tipo: string) => {
