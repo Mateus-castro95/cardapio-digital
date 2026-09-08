@@ -216,18 +216,17 @@
     <BaseModalScrollable 
       :show="showPratoModal" 
       @close="showPratoModal = false" 
-      :title="pratoSelecionado?.nome || 'Detalhes do Prato'"
     >
       <div v-if="pratoSelecionado" class="p-6 pt-8 pb-32 space-y-6">
         <!-- Cabeçalho do Prato no Modal -->
-        <div>
+        <div class="relative">
           <div class="flex items-center gap-2 mb-2">
             <span v-if="pratoSelecionado.destaque" class="bg-amber-100 text-amber-800 text-[10px] font-black px-2 py-0.5 rounded-md uppercase tracking-wider">
               Especialidade Adega
             </span>
           </div>
-          <h3 class="text-xl font-black text-cafe-dark">{{ pratoSelecionado.nome }}</h3>
-          <p v-if="pratoSelecionado.descricao" class="text-xs text-bege-torrado font-medium mt-2 leading-relaxed">
+          <h3 class="text-xl font-black text-cafe-dark pr-12">{{ pratoSelecionado.nome }}</h3>
+          <p v-if="pratoSelecionado.descricao" class="text-xs text-bege-torrado font-medium mt-2 leading-relaxed pr-8">
             {{ pratoSelecionado.descricao }}
           </p>
           <div class="mt-4 inline-block bg-bege-cream px-3 py-1.5 rounded-xl border border-bege-soft/60">
@@ -334,9 +333,10 @@
     </BaseModalScrollable>
 
     <!-- Modal Opções de Bebidas -->
-    <BaseModalScrollable :show="showBebidaOptionsModal" @close="showBebidaOptionsModal = false" :title="bebidaGrupoAtual?.nome">
+    <BaseModalScrollable :show="showBebidaOptionsModal" @close="showBebidaOptionsModal = false">
       <div class="p-6 pt-8 pb-32">
-        <p class="text-caption text-bege-torrado font-bold uppercase tracking-widest mb-6">Escolha o formato e tamanho</p>
+        <h3 class="text-xl font-black text-cafe-dark pr-12 mb-2">{{ bebidaGrupoAtual?.nome }}</h3>
+        <p class="text-caption text-bege-torrado font-bold uppercase tracking-widest mb-6 pr-8">Escolha o formato e tamanho</p>
         <div class="space-y-3">
           <div 
             v-for="opcao in bebidaGrupoAtual?.opcoes" :key="opcao.id"

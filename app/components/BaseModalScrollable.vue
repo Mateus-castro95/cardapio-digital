@@ -9,10 +9,10 @@
 
       <!-- Modal Content -->
       <div 
-        class="relative w-full max-w-2xl bg-[#141417] border border-[#2E2A20] text-[#E2DACB] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col max-h-[92vh] sm:max-h-[85vh] overflow-hidden animate-slide-up"
+        class="relative w-full max-w-2xl bg-[#141417] border border-[#2E2A20] text-[#E2DACB] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col max-h-[80vh] sm:max-h-[85vh] overflow-hidden animate-slide-up"
       >
         <!-- Header -->
-        <div class="px-6 py-4 border-b border-[#2E2A20] flex justify-between items-center bg-[#18181C] sticky top-0 z-10">
+        <div v-if="title" class="px-6 py-4 border-b border-[#2E2A20] flex justify-between items-center bg-[#18181C] sticky top-0 z-10">
           <h3 class="text-xl font-bold text-cafe">{{ title }}</h3>
           <button 
             @click="$emit('close')"
@@ -21,9 +21,18 @@
             <XMarkIcon class="h-6 w-6" />
           </button>
         </div>
+        
+        <!-- Absolute Close Button (When no header) -->
+        <button 
+          v-else
+          @click="$emit('close')"
+          class="absolute top-4 right-4 z-20 p-2 bg-[#18181C]/80 hover:bg-[#2E2A20] rounded-full transition-colors text-bege-torrado hover:text-cafe backdrop-blur-md shadow-sm"
+        >
+          <XMarkIcon class="h-6 w-6" />
+        </button>
 
         <!-- Body Scrollable -->
-        <div class="flex-1 overflow-y-auto px-1">
+        <div class="flex-1 overflow-y-auto px-1" :class="{'pt-2': !title}">
           <slot></slot>
         </div>
 
