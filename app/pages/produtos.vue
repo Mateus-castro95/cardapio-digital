@@ -297,7 +297,7 @@
             </select>
           </div>
 
-          <div>
+          <div v-if="!isBebidaCategory(itemForm.categoria_id)">
             <label class="block text-sm font-bold text-[#D4AF37] mb-1.5">Preço (R$) *</label>
             <BaseInputCurrency 
               v-model="itemForm.preco" 
@@ -332,31 +332,64 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <BaseInput 
-              v-model="itemForm.tamanho" 
-              label="Tamanho" 
-              placeholder="Ex: Lata, 2L, Jarra..." 
-            />
-            <div>
-              <label class="block text-sm font-bold text-[#D4AF37] mb-1.5">Volume (ml)</label>
-              <input 
-                type="number"
-                v-model="itemForm.volume_ml" 
-                placeholder="Ex: 350" 
-                class="w-full px-3 py-1.5 text-sm bg-transparent border border-[#2E2A20] rounded-lg text-[#E2DACB] focus:border-[#D4AF37] outline-none"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-bold text-[#D4AF37] mb-1.5">Adicionais</label>
-              <select 
-                v-model="itemForm.tipo_preparo" 
-                class="w-full px-3 py-1.5 text-sm bg-transparent border border-[#2E2A20] rounded-lg text-[#E2DACB] focus:border-[#D4AF37] outline-none"
+          <div class="space-y-3 mt-4">
+            <div class="flex items-center justify-between">
+              <h4 class="text-sm font-bold text-[#D4AF37]">Tamanhos e Variações</h4>
+              <button 
+                v-if="!editingItem"
+                type="button"
+                @click="itemForm.variacoesBebida.push({preco: 0, tamanho: '', volume_ml: '', tipo_preparo: '', tipo_gas: ''})"
+                class="flex items-center gap-1 text-xs font-bold text-[#D4AF37] hover:text-[#b5952f] transition-colors bg-[#2E2A20]/40 px-2 py-1 rounded"
               >
-                <option class="bg-zinc-900 text-moca" value="">Padrão</option>
-                <option class="bg-zinc-900 text-moca" value="agua">Com Água</option>
-                <option class="bg-zinc-900 text-moca" value="leite">Com Leite</option>
-              </select>
+                <PlusIcon class="w-4 h-4" /> Adicionar
+              </button>
+            </div>
+            
+            <div 
+              v-for="(v, index) in itemForm.variacoesBebida" 
+              :key="index"
+              class="relative p-3 sm:p-4 border border-[#2E2A20] bg-[#18181C] rounded-xl"
+            >
+              <button 
+                v-if="!editingItem && index > 0"
+                type="button"
+                @click="itemForm.variacoesBebida.splice(index, 1)"
+                class="absolute -top-2 -right-2 p-1 bg-red-900/90 hover:bg-red-900 text-red-100 hover:text-white rounded-full transition-colors border border-red-800 shadow-md"
+                title="Remover variação"
+              >
+                <XMarkIcon class="w-4 h-4" />
+              </button>
+
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                <div>
+                  <label class="block text-[10px] font-bold text-[#9C907A] mb-1 uppercase tracking-wider">Preço (R$) *</label>
+                  <BaseInputCurrency v-model="v.preco" placeholder="0,00" />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-[#9C907A] mb-1 uppercase tracking-wider">Tamanho</label>
+                  <BaseInput v-model="v.tamanho" placeholder="Ex: Lata, 2L..." />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-[#9C907A] mb-1 uppercase tracking-wider">Volume (ml)</label>
+                  <input 
+                    type="number"
+                    v-model="v.volume_ml" 
+                    placeholder="Ex: 350" 
+                    class="w-full px-3 py-1.5 text-sm bg-transparent border border-[#2E2A20] rounded-lg text-[#E2DACB] focus:border-[#D4AF37] outline-none"
+                  />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-[#9C907A] mb-1 uppercase tracking-wider">Adicionais</label>
+                  <select 
+                    v-model="v.tipo_preparo" 
+                    class="w-full px-3 py-1.5 text-sm bg-transparent border border-[#2E2A20] rounded-lg text-[#E2DACB] focus:border-[#D4AF37] outline-none"
+                  >
+                    <option class="bg-zinc-900 text-moca" value="">Padrão</option>
+                    <option class="bg-zinc-900 text-moca" value="agua">Com Água</option>
+                    <option class="bg-zinc-900 text-moca" value="leite">Com Leite</option>
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
         </template>
@@ -434,7 +467,7 @@ import { useCategorias } from '~/composables/useCategorias';
 import { useCardapioItens, type ItemCardapio } from '~/composables/useCardapioItens';
 import { useVariacoes } from '~/composables/useVariacoes';
 import { useSupabaseClient } from '#imports';
-import { PencilSquareIcon, TrashIcon, PlusIcon, ChevronDownIcon } from '@heroicons/vue/24/outline';
+import { PencilSquareIcon, TrashIcon, PlusIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 
 const toast = useToast();
 const { categorias, fetchCategorias, addCategoria, updateCategoria, removeCategoria } = useCategorias();
@@ -598,10 +631,9 @@ const itemForm = reactive({
   permite_ponto_carne: false,
   // Campos Bebida
   tipo_bebida: 'refrigerante',
-  tamanho: '',
-  volume_ml: '',
-  tipo_preparo: '',
-  tipo_gas: ''
+  variacoesBebida: [
+    { preco: 0, tamanho: '', volume_ml: '', tipo_preparo: '', tipo_gas: '' }
+  ]
 });
 
 onMounted(async () => {
@@ -642,10 +674,7 @@ const handleOpenAddItem = (catId?: string) => {
   itemForm.destaque = false;
   itemForm.permite_ponto_carne = false;
   itemForm.tipo_bebida = 'refrigerante';
-  itemForm.tamanho = '';
-  itemForm.volume_ml = '';
-  itemForm.tipo_preparo = '';
-  itemForm.tipo_gas = '';
+  itemForm.variacoesBebida = [{ preco: 0, tamanho: '', volume_ml: '', tipo_preparo: '', tipo_gas: '' }];
   itemForm.ativo = true;
 
   if (catId && !expandedCategories.value.includes(catId)) {
@@ -666,10 +695,13 @@ const handleOpenEditItem = (item: any, isBebida: boolean) => {
   if (isBebida) {
     itemForm.nome = item.sabor || item.produto?.nome || '';
     itemForm.tipo_bebida = item.tipo_bebida || 'refrigerante';
-    itemForm.tamanho = item.tamanho || '';
-    itemForm.volume_ml = item.volume_ml || '';
-    itemForm.tipo_preparo = item.tipo_preparo || '';
-    itemForm.tipo_gas = item.tipo_gas || '';
+    itemForm.variacoesBebida = [{
+      preco: item.preco || 0,
+      tamanho: item.tamanho || '',
+      volume_ml: item.volume_ml || '',
+      tipo_preparo: item.tipo_preparo || '',
+      tipo_gas: item.tipo_gas || ''
+    }];
   } else {
     itemForm.nome = item.nome;
     itemForm.descricao = item.descricao || '';
@@ -702,25 +734,33 @@ const handleSaveCategory = async () => {
 const handleSaveItem = async () => {
   if (!itemForm.nome.trim()) return toast.warning('Aviso', 'Informe o nome do item');
   if (!itemForm.categoria_id) return toast.warning('Aviso', 'Selecione uma categoria');
-  if (!itemForm.preco || itemForm.preco <= 0) return toast.warning('Aviso', 'Informe o valor do item');
+  
+  const isBebida = isBebidaCategory(itemForm.categoria_id);
+  
+  if (!isBebida && (!itemForm.preco || itemForm.preco <= 0)) {
+    return toast.warning('Aviso', 'Informe o valor do item');
+  }
+  
+  if (isBebida && itemForm.variacoesBebida.some(v => !v.preco || v.preco <= 0)) {
+    return toast.warning('Aviso', 'Informe o valor para todos os tamanhos/variações');
+  }
 
   isSaving.value = true;
-  const isBebida = isBebidaCategory(itemForm.categoria_id);
 
   try {
     if (isBebida) {
-      const detalhes = {
-        sabor: itemForm.nome,
-        preco: itemForm.preco,
-        tipo_bebida: itemForm.tipo_bebida as any,
-        tamanho: itemForm.tamanho || null,
-        volume_ml: itemForm.volume_ml ? parseInt(String(itemForm.volume_ml)) : null,
-        tipo_preparo: itemForm.tipo_preparo || null,
-        tipo_gas: itemForm.tipo_gas || null,
-        ativo: itemForm.ativo
-      };
-
       if (editingItem.value && editingItemType.value === 'bebida') {
+        const v = itemForm.variacoesBebida[0]!;
+        const detalhes = {
+          sabor: itemForm.nome,
+          preco: v.preco,
+          tipo_bebida: itemForm.tipo_bebida as any,
+          tamanho: v.tamanho || null,
+          volume_ml: v.volume_ml ? parseInt(String(v.volume_ml)) : null,
+          tipo_preparo: v.tipo_preparo || null,
+          tipo_gas: v.tipo_gas || null,
+          ativo: itemForm.ativo
+        };
         await updateVariacaoCompleta(
           editingItem.value.id,
           editingItem.value.produto_id,
@@ -729,8 +769,20 @@ const handleSaveItem = async () => {
         );
         toast.success('Sucesso', 'Bebida atualizada');
       } else {
-        await addNovaVariacao(itemForm.nome, itemForm.categoria_id, detalhes as any);
-        toast.success('Sucesso', 'Bebida cadastrada');
+        for (const v of itemForm.variacoesBebida) {
+          const detalhes = {
+            sabor: itemForm.nome,
+            preco: v.preco,
+            tipo_bebida: itemForm.tipo_bebida as any,
+            tamanho: v.tamanho || null,
+            volume_ml: v.volume_ml ? parseInt(String(v.volume_ml)) : null,
+            tipo_preparo: v.tipo_preparo || null,
+            tipo_gas: v.tipo_gas || null,
+            ativo: itemForm.ativo
+          };
+          await addNovaVariacao(itemForm.nome, itemForm.categoria_id, detalhes as any);
+        }
+        toast.success('Sucesso', 'Bebida(s) cadastrada(s)');
       }
     } else {
       const payload = {
