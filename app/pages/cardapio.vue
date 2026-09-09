@@ -217,7 +217,7 @@
       :show="showPratoModal" 
       @close="showPratoModal = false" 
     >
-      <div v-if="pratoSelecionado" class="p-6 pt-8 pb-32 space-y-6">
+      <div v-if="pratoSelecionado" class="p-6 pt-8 pb-8 space-y-6">
         <!-- Cabeçalho do Prato no Modal -->
         <div class="relative">
           <div class="flex items-center gap-2 mb-2">
@@ -283,7 +283,7 @@
             v-model="observacaoPrato"
             rows="3"
             placeholder="Ex: Molho à parte, bem passado, sem salada, talheres extras..."
-            class="w-full text-xs p-3.5 rounded-2xl border border-bege-soft focus:border-cafe focus:ring-1 focus:ring-cafe outline-none bg-branco placeholder:text-bege-torrado/50"
+            class="w-full text-[16px] sm:text-xs p-3.5 rounded-2xl border border-bege-soft focus:border-cafe focus:ring-1 focus:ring-cafe outline-none bg-branco placeholder:text-bege-torrado/50"
           ></textarea>
         </div>
 
@@ -334,7 +334,7 @@
 
     <!-- Modal Opções de Bebidas -->
     <BaseModalScrollable :show="showBebidaOptionsModal" @close="showBebidaOptionsModal = false">
-      <div class="p-6 pt-8 pb-32">
+      <div class="p-6 pt-8 pb-8">
         <h3 class="text-xl font-black text-cafe-dark pr-12 mb-2">{{ bebidaGrupoAtual?.nome }}</h3>
         <p class="text-caption text-bege-torrado font-bold uppercase tracking-widest mb-6 pr-8">Escolha o formato e tamanho</p>
         <div class="space-y-3">
@@ -368,7 +368,7 @@
 
     <!-- Modal Meus Pedidos (Acompanhamento) -->
     <BaseModalScrollable :show="showMeusPedidosModal" @close="showMeusPedidosModal = false" title="Meus Pedidos">
-      <div class="px-5 pt-4 pb-32">
+      <div class="px-5 pt-4 pb-8">
         <div class="flex justify-between items-center bg-bege-cream/50 p-4 rounded-2xl border border-bege-soft mb-6">
           <div>
             <span class="text-[10px] text-bege-torrado font-black uppercase tracking-wider block">Total Consumido</span>
@@ -472,7 +472,7 @@
 
     <!-- Modal Carrinho Completo -->
     <BaseModalScrollable :show="showCartModal" @close="showCartModal = false" title="Meu Pedido">
-      <div class="px-5 pt-2 pb-48">
+      <div class="px-5 pt-2 pb-8">
         <div v-for="(item, index) in cart" :key="index" class="bg-branco py-5 flex flex-col sm:flex-row gap-4 border-b border-bege-cream last:border-0">
           <div class="flex-1">
             <div class="flex justify-between items-start mb-1">
@@ -519,11 +519,11 @@
                   v-model="item.observacoes" 
                   rows="2"
                   placeholder="Ex: Sem cebola, molho à parte..."
-                  class="w-full text-xs p-3 rounded-xl border border-bege-soft focus:border-moca focus:ring-1 focus:ring-moca outline-none bg-branco mb-2"
+                  class="w-full text-[16px] sm:text-xs p-3 rounded-xl border border-bege-soft focus:border-moca focus:ring-1 focus:ring-moca outline-none bg-branco mb-2"
                 ></textarea>
                 <button 
                   @click="item.editandoObs = false"
-                  class="w-full text-[10px] font-black text-branco bg-moca hover:bg-cafe px-3 py-2 rounded-xl transition-colors shadow-sm uppercase tracking-widest"
+                  class="w-full text-[10px] font-black text-[#0A0A0C] bg-moca hover:bg-cafe px-3 py-2 rounded-xl transition-colors shadow-sm uppercase tracking-widest"
                 >
                   Salvar Observação
                 </button>
@@ -565,9 +565,9 @@
           <button 
             @click="finalizarPedido"
             :disabled="!mesaSelecionadaId || loadingPedido || cart.length === 0"
-            class="w-full py-5 bg-green-600 hover:bg-green-700 active:bg-green-800 disabled:bg-bege-soft disabled:text-bege-torrado text-branco font-black rounded-2xl transition-all shadow-xl shadow-green-100 flex items-center justify-center gap-3 uppercase tracking-widest"
+            class="w-full py-3.5 text-sm bg-green-600 hover:bg-green-700 active:bg-green-800 disabled:bg-bege-soft disabled:text-bege-torrado text-white font-black rounded-xl transition-all shadow-lg shadow-green-900/20 flex items-center justify-center gap-3 uppercase tracking-widest"
           >
-            <span v-if="loadingPedido" class="w-5 h-5 border-3 border-branco/30 border-t-branco rounded-full animate-spin"></span>
+            <span v-if="loadingPedido" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
             {{ loadingPedido ? 'ENVIANDO PEDIDO...' : 'FAZER PEDIDO AGORA' }}
           </button>
         </div>
