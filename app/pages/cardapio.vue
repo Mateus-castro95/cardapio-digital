@@ -205,11 +205,20 @@
                   v-for="grupo in categoriaBebida.gruposAgrupados" 
                   :key="grupo.nome" 
                   @click="handleAbrirOpcoesBebida(grupo)" 
-                  class="flex justify-between items-center p-4 hover:bg-bege-cream rounded-2xl transition-colors cursor-pointer group border border-transparent hover:border-bege-soft"
+                  class="flex justify-between items-center py-3 hover:bg-bege-cream/50 md:p-4 md:rounded-2xl transition-colors cursor-pointer group border-b border-bege-soft/20 md:border md:border-transparent hover:border-bege-soft last:border-0"
                 >
-                  <div class="flex-1">
-                    <span class="text-sm font-bold text-cafe-dark">{{ grupo.nome || categoriaBebida.titulo }}</span>
-                    <p class="text-caption text-bege-torrado">{{ grupo.opcoes.length }} opções</p>
+                  <div class="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
+                    <div 
+                      v-if="grupo.imagem_url" 
+                      class="shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden shadow-sm border border-bege-soft/50 bg-bege-cream/30 cursor-pointer hover:opacity-80 transition-opacity"
+                      @click.stop="openLightbox(grupo.imagem_url)"
+                    >
+                      <img :src="grupo.imagem_url" :alt="grupo.nome || categoriaBebida.titulo" class="w-full h-full object-cover" loading="lazy" />
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <span class="text-sm font-bold text-cafe-dark truncate block">{{ grupo.nome || categoriaBebida.titulo }}</span>
+                      <p class="text-caption text-bege-torrado">{{ grupo.opcoes.length }} {{ grupo.opcoes.length === 1 ? 'opção' : 'opções' }}</p>
+                    </div>
                   </div>
                   <div class="flex items-center gap-3">
                     <span class="font-bold text-cafe text-xs text-right">A partir de<br>{{ formatCurrency(grupo.preco_min) }}</span>
@@ -715,11 +724,15 @@ const groupBebidas = (items: any[]) => {
       grupos[key] = {
         nome: key,
         opcoes: [],
-        preco_min: v.preco
+        preco_min: v.preco,
+        imagem_url: v.imagem_url || v.produto?.imagem_url || null
       };
     }
     grupos[key].opcoes.push(v);
     if (v.preco < grupos[key].preco_min) grupos[key].preco_min = v.preco;
+    if (!grupos[key].imagem_url && (v.imagem_url || v.produto?.imagem_url)) {
+      grupos[key].imagem_url = v.imagem_url || v.produto?.imagem_url;
+    }
   });
   return Object.values(grupos);
 };
