@@ -929,7 +929,7 @@ onMounted(async () => {
   await Promise.all([
     fetchCategorias(),
     fetchItensCardapio(),
-    fetchVariacoesBebidas(),
+    fetchVariacoesBebidas(true),
     fetchMesas()
   ]);
 

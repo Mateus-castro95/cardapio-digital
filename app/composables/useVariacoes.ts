@@ -11,16 +11,21 @@ export const useVariacoes = () => {
     const variacoes = ref<VariacaoSimples[]>([]);
     const loading = ref(false);
 
-    const fetchVariacoesBebidas = async () => {
+    const fetchVariacoesBebidas = async (somenteAtivos: boolean = false) => {
         loading.value = true;
         try {
-            const { data, error } = await client
+            let query = client
                 .from('produtos_simples')
                 .select(`
                     *,
                     produto:produtos(*)
-                `)
-                .order('sabor', { ascending: true });
+                `);
+            
+            if (somenteAtivos) {
+                query = query.eq('ativo', true);
+            }
+
+            const { data, error } = await query.order('sabor', { ascending: true });
 
             if (error) throw error;
             variacoes.value = (data || []).filter(v => v.produto?.subtipo === 'bebida');

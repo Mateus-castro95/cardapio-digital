@@ -963,7 +963,11 @@ const handleDelete = async () => {
     showConfirmDeleteModal.value = false;
   } catch (e: any) {
     if (e.message?.includes('23503') || e.code === '23503') {
-      toast.error('Ação Negada', 'Não é possível excluir esta categoria pois ela possui itens vinculados.');
+      if (itemToDelete.value?.type === 'categoria') {
+        toast.error('Ação Negada', 'Não é possível excluir esta categoria pois ela possui itens vinculados.');
+      } else {
+        toast.error('Ação Negada', 'Não é possível excluir este item pois ele já faz parte de pedidos antigos. Em vez disso, experimente desativá-lo!');
+      }
     } else {
       toast.error('Erro ao excluir', 'Tente novamente.');
     }
