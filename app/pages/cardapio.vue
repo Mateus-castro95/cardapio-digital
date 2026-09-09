@@ -109,30 +109,41 @@
                     :key="item.id"
                     class="py-4 md:bg-[#18181C] md:rounded-2xl md:p-5 border-b border-bege-soft/20 md:border md:shadow-sm hover:border-cafe/30 transition-all flex flex-col justify-between group relative last:border-b-0 md:last:border"
                   >
-                    <div>
-                      <!-- Badges de Destaque / Ponto de Carne -->
-                      <div class="flex flex-wrap items-center gap-2 mb-2">
-                        <span 
-                          v-if="item.destaque" 
-                          class="bg-amber-100 text-amber-800 border border-amber-200 text-[9px] font-black px-2 py-0.5 rounded-md uppercase tracking-wider shadow-xs"
-                        >
-                          Especialidade
-                        </span>
-                        <span 
-                          v-if="item.permite_ponto_carne" 
-                          class="bg-red-50 text-red-700 border border-red-200/60 text-[9px] font-black px-2 py-0.5 rounded-md uppercase tracking-wider"
-                        >
-                          Ponto da Carne
-                        </span>
-                      </div>
+                    <div class="flex items-start justify-between gap-4">
+                      <div class="flex-1 min-w-0">
+                        <!-- Badges de Destaque / Ponto de Carne -->
+                        <div class="flex flex-wrap items-center gap-2 mb-2">
+                          <span 
+                            v-if="item.destaque" 
+                            class="bg-amber-100 text-amber-800 border border-amber-200 text-[9px] font-black px-2 py-0.5 rounded-md uppercase tracking-wider shadow-xs"
+                          >
+                            Especialidade
+                          </span>
+                          <span 
+                            v-if="item.permite_ponto_carne" 
+                            class="bg-red-50 text-red-700 border border-red-200/60 text-[9px] font-black px-2 py-0.5 rounded-md uppercase tracking-wider"
+                          >
+                            Ponto da Carne
+                          </span>
+                        </div>
 
-                      <!-- Nome e Descrição -->
-                      <h5 class="text-base font-black text-cafe-dark group-hover:text-cafe transition-colors leading-snug">
-                        {{ item.nome }}
-                      </h5>
-                      <p v-if="item.descricao" class="text-xs text-bege-torrado/90 font-medium leading-relaxed mt-1.5 line-clamp-3">
-                        {{ item.descricao }}
-                      </p>
+                        <!-- Nome e Descrição -->
+                        <h5 class="text-base font-black text-cafe-dark group-hover:text-cafe transition-colors leading-snug truncate">
+                          {{ item.nome }}
+                        </h5>
+                        <p v-if="item.descricao" class="text-xs text-bege-torrado/90 font-medium leading-relaxed mt-1.5 line-clamp-3">
+                          {{ item.descricao }}
+                        </p>
+                      </div>
+                      
+                      <!-- Imagem do Produto -->
+                      <div 
+                        v-if="item.imagem_url" 
+                        class="shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden shadow-sm border border-bege-soft/50 bg-bege-cream/30 cursor-pointer hover:opacity-80 transition-opacity"
+                        @click="openLightbox(item.imagem_url)"
+                      >
+                        <img :src="item.imagem_url" :alt="item.nome" class="w-full h-full object-cover" loading="lazy" />
+                      </div>
                     </div>
 
                     <!-- Preço e Botão de Ação -->
@@ -585,6 +596,9 @@ import { useVariacoes } from '~/composables/useVariacoes';
 import { usePedidos } from '~/composables/usePedidos';
 import { useToast } from '~/composables/useToast';
 import { useAuthStore } from '~/stores/auth';
+import { useLightbox } from '~/composables/useLightbox';
+
+const { openLightbox } = useLightbox();
 
 import { 
   ChevronDownIcon, 

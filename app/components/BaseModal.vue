@@ -1,7 +1,7 @@
 <template>
   <Teleport to="body">
     <Transition name="fade">
-      <div v-if="show" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div v-if="show" class="fixed inset-0 z-[2000] flex items-center justify-center p-4">
         <!-- Backdrop -->
         <div class="fixed inset-0 bg-black/70 backdrop-blur-sm" @click="$emit('close')"></div>
         

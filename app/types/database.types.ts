@@ -52,6 +52,7 @@ export type Database = {
                     tipo: 'tradicional' | 'especial'
                     ativo: boolean
                     categoria: 'salgado' | 'doce'
+                    imagem_url: string | null
                 }
                 Insert: {
                     id?: string
@@ -59,6 +60,7 @@ export type Database = {
                     tipo: 'tradicional' | 'especial'
                     ativo?: boolean
                     categoria: 'salgado' | 'doce'
+                    imagem_url?: string | null
                 }
                 Update: {
                     id?: string
@@ -66,6 +68,7 @@ export type Database = {
                     tipo?: 'tradicional' | 'especial'
                     ativo?: boolean
                     categoria?: 'salgado' | 'doce'
+                    imagem_url?: string | null
                 }
                 Relationships: []
             },
@@ -78,6 +81,7 @@ export type Database = {
                     ativo: boolean
                     criado_em: string
                     subtipo: string
+                    imagem_url: string | null
                 }
                 Insert: {
                     id?: string
@@ -87,6 +91,7 @@ export type Database = {
                     ativo?: boolean
                     criado_em?: string
                     subtipo: string
+                    imagem_url?: string | null
                 }
                 Update: {
                     id?: string
@@ -94,6 +99,7 @@ export type Database = {
                     categoria_id?: string
                     tipo_produto?: 'simples' | 'configuravel'
                     ativo?: boolean
+                    imagem_url?: string | null
                 }
                 Relationships: [
                     {
@@ -116,6 +122,7 @@ export type Database = {
                     tipo_gas: 'com_gas' | 'sem_gas' | null
                     sabor: string | null
                     tamanho: string | null
+                    imagem_url: string | null
                 }
                 Insert: {
                     id?: string
@@ -128,6 +135,7 @@ export type Database = {
                     tipo_gas?: 'com_gas' | 'sem_gas' | null
                     sabor?: string | null
                     tamanho?: string | null
+                    imagem_url?: string | null
                 }
                 Update: {
                     id?: string
@@ -140,6 +148,7 @@ export type Database = {
                     tipo_gas?: 'com_gas' | 'sem_gas' | null
                     sabor?: string | null
                     tamanho?: string | null
+                    imagem_url?: string | null
                 }
                 Relationships: [
                     {

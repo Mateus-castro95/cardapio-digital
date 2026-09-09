@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 sm:p-8 max-w-7xl mx-auto space-y-12">
+  <div class="p-4 sm:p-8 pb-[20vh] max-w-7xl mx-auto space-y-12">
     <!-- Cabeçalho Principal -->
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-bege-soft pb-6">
       <div>
@@ -117,18 +117,30 @@
             <div>
               <BaseTabela :colunas="colsBebidas" :data="getBebidasByCat(categoria.id)" class="w-full border-0">
                 <template #nome="{ item }">
-                  <div class="py-2.5 max-w-sm">
-                    <div class="flex items-center gap-2 flex-wrap">
-                      <span class="font-black text-cafe-dark text-sm block">
-                        {{ item.sabor || item.produto?.nome || 'Bebida' }}
-                      </span>
-                      <span class="md:hidden text-[9px] bg-bege-cream text-cafe-dark px-1.5 py-0.5 rounded font-black uppercase border border-bege-soft/60 whitespace-nowrap">
-                        {{ formatTipoBebida(item.tipo_bebida) }}
-                      </span>
+                  <div class="py-2.5 w-full flex items-start sm:items-center gap-3 sm:gap-4">
+                    <!-- Imagem (Esquerda) -->
+                    <div 
+                      v-if="item.imagem_url" 
+                      class="shrink-0 w-12 h-12 rounded-lg overflow-hidden border border-[#2E2A20] bg-[#141417] shadow-sm cursor-pointer hover:opacity-80 transition-opacity"
+                      @click="openLightbox(item.imagem_url)"
+                    >
+                      <img :src="item.imagem_url" class="w-full h-full object-cover" loading="lazy" />
                     </div>
-                    <p v-if="item.produto?.nome && item.sabor && item.produto?.nome !== item.sabor" class="text-[11px] text-bege-torrado font-medium mt-0.5">
-                      {{ item.produto.nome }}
-                    </p>
+                    
+                    <!-- Informações do Item -->
+                    <div class="flex-1 min-w-0">
+                      <div class="flex items-center gap-2 flex-wrap">
+                        <span class="font-black text-cafe-dark text-sm block truncate">
+                          {{ item.sabor || item.produto?.nome || 'Bebida' }}
+                        </span>
+                        <span class="md:hidden text-[9px] bg-bege-cream text-cafe-dark px-1.5 py-0.5 rounded font-black uppercase border border-bege-soft/60 whitespace-nowrap">
+                          {{ formatTipoBebida(item.tipo_bebida) }}
+                        </span>
+                      </div>
+                      <p v-if="item.produto?.nome && item.sabor && item.produto?.nome !== item.sabor" class="text-[11px] text-bege-torrado font-medium mt-0.5 truncate">
+                        {{ item.produto.nome }}
+                      </p>
+                    </div>
                   </div>
                 </template>
 
@@ -187,25 +199,37 @@
             <div>
               <BaseTabela :colunas="colsPratos" :data="getPratosByCat(categoria.id)" class="w-full border-0">
                 <template #nome="{ item }">
-                  <div class="py-2.5 max-w-sm">
-                    <div class="flex flex-wrap items-center gap-2">
-                      <span class="font-black text-cafe-dark text-sm">{{ item.nome }}</span>
-                      <span 
-                        v-if="item.destaque" 
-                        class="text-[8px] bg-amber-100 text-amber-800 border border-amber-200 px-1.5 py-0.5 rounded font-black uppercase tracking-wider shrink-0"
-                      >
-                        Especial
-                      </span>
-                      <span 
-                        v-if="item.permite_ponto_carne" 
-                        class="text-[8px] bg-red-50 text-red-700 border border-red-100 px-1.5 py-0.5 rounded font-black uppercase tracking-wider shrink-0"
-                      >
-                        Ponto Ativo
-                      </span>
+                  <div class="py-2.5 w-full flex items-start sm:items-center gap-3 sm:gap-4">
+                    <!-- Imagem (Esquerda) -->
+                    <div 
+                      v-if="item.imagem_url" 
+                      class="shrink-0 w-12 h-12 rounded-lg overflow-hidden border border-[#2E2A20] bg-[#141417] shadow-sm cursor-pointer hover:opacity-80 transition-opacity"
+                      @click="openLightbox(item.imagem_url)"
+                    >
+                      <img :src="item.imagem_url" class="w-full h-full object-cover" loading="lazy" />
                     </div>
-                    <p v-if="item.descricao" class="text-[11px] text-bege-torrado font-medium line-clamp-2 mt-0.5 leading-relaxed">
-                      {{ item.descricao }}
-                    </p>
+                    
+                    <!-- Informações do Item -->
+                    <div class="flex-1 min-w-0">
+                      <div class="flex flex-wrap items-center gap-2">
+                        <span class="font-black text-cafe-dark text-sm truncate">{{ item.nome }}</span>
+                        <span 
+                          v-if="item.destaque" 
+                          class="text-[8px] bg-amber-100 text-amber-800 border border-amber-200 px-1.5 py-0.5 rounded font-black uppercase tracking-wider shrink-0"
+                        >
+                          Especial
+                        </span>
+                        <span 
+                          v-if="item.permite_ponto_carne" 
+                          class="text-[8px] bg-red-50 text-red-700 border border-red-100 px-1.5 py-0.5 rounded font-black uppercase tracking-wider shrink-0"
+                        >
+                          Ponto Ativo
+                        </span>
+                      </div>
+                      <p v-if="item.descricao" class="text-[11px] text-bege-torrado font-medium line-clamp-2 mt-0.5 leading-relaxed">
+                        {{ item.descricao }}
+                      </p>
+                    </div>
                   </div>
                 </template>
 
@@ -254,12 +278,12 @@
     </section>
 
     <!-- MODAL CATEGORIA -->
-    <BaseModal 
+    <BaseModalScrollable 
       :show="showCategoryModal" 
       :title="editingItemType === 'categoria' ? 'Editar Categoria' : 'Nova Categoria'" 
       @close="showCategoryModal = false"
     >
-      <div class="py-2">
+      <div class="py-2 p-6">
         <BaseInput 
           v-model="categoryForm.nome" 
           label="Nome da Categoria" 
@@ -267,20 +291,58 @@
           required 
         />
       </div>
-      <template #footer>
-        <BaseButton variant="outline" @click="showCategoryModal = false">Cancelar</BaseButton>
-        <BaseButton variant="primary" :loading="isSaving" @click="handleSaveCategory">Confirmar</BaseButton>
+      <template #footer-fixed>
+        <div class="p-4 flex justify-end gap-2 bg-[#18181C] border-t border-[#2E2A20]">
+          <BaseButton variant="outline" @click="showCategoryModal = false">Cancelar</BaseButton>
+          <BaseButton variant="primary" :loading="isSaving" @click="handleSaveCategory">Confirmar</BaseButton>
+        </div>
       </template>
-    </BaseModal>
+    </BaseModalScrollable>
 
     <!-- MODAL PRATO OU BEBIDA -->
-    <BaseModal 
+    <BaseModalScrollable 
       :show="showItemModal" 
       :title="editingItem ? 'Editar Item' : 'Novo Item no Cardápio'" 
       @close="showItemModal = false" 
-      size="lg"
     >
-      <div class="py-2 space-y-4">
+      <div class="py-2 space-y-4 p-6">
+        <!-- Upload de Imagem -->
+        <div>
+          <label class="block text-sm font-bold text-[#D4AF37] mb-1.5">Foto do Produto</label>
+          <div class="flex items-center gap-4">
+            <div 
+              class="w-24 h-24 shrink-0 rounded-2xl border-2 border-dashed flex items-center justify-center overflow-hidden bg-[#141417] relative"
+              :class="itemForm.imagemPreview ? 'border-[#D4AF37]' : 'border-[#2E2A20]'"
+            >
+              <img v-if="itemForm.imagemPreview" :src="itemForm.imagemPreview" class="w-full h-full object-cover" />
+              <div v-else class="text-[#9C907A] flex flex-col items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 opacity-50 mb-1">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                </svg>
+                <span class="text-[9px] uppercase tracking-wider font-bold opacity-70">Sem Foto</span>
+              </div>
+            </div>
+            <div class="flex-1">
+              <input 
+                type="file" 
+                id="upload-foto"
+                accept="image/png, image/jpeg, image/webp"
+                class="hidden"
+                @change="handleImageChange"
+              />
+              <label 
+                for="upload-foto"
+                class="inline-flex items-center gap-2 px-4 py-2 bg-[#2E2A20] hover:bg-[#D4AF37] hover:text-black text-[#E2DACB] text-xs font-bold rounded-xl cursor-pointer transition-colors"
+              >
+                Escolher Imagem
+              </label>
+              <p class="text-[10px] text-[#9C907A] mt-2 max-w-[200px] leading-tight">
+                Tamanho recomendado: 500x500. Formatos aceitos: JPG, PNG, WEBP.
+              </p>
+            </div>
+          </div>
+        </div>
+
         <!-- Campos Base -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
@@ -440,13 +502,15 @@
           </div>
         </template>
       </div>
-      <template #footer>
-        <BaseButton variant="outline" @click="showItemModal = false">Cancelar</BaseButton>
-        <BaseButton variant="primary" :loading="isSaving" @click="handleSaveItem">
-          {{ editingItem ? 'Salvar Item' : 'Cadastrar Item' }}
-        </BaseButton>
+      <template #footer-fixed>
+        <div class="p-4 flex justify-end gap-2 bg-[#18181C] border-t border-[#2E2A20]">
+          <BaseButton variant="outline" @click="showItemModal = false">Cancelar</BaseButton>
+          <BaseButton variant="primary" :loading="isSaving" @click="handleSaveItem">
+            {{ editingItem ? 'Salvar Item' : 'Cadastrar Item' }}
+          </BaseButton>
+        </div>
       </template>
-    </BaseModal>
+    </BaseModalScrollable>
 
     <!-- MODAL CONFIRMAÇÃO EXCLUSÃO -->
     <ModalConfirmacao 
@@ -462,11 +526,12 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, computed } from 'vue';
+import { useSupabaseClient } from '#imports';
 import { useToast } from '~/composables/useToast';
 import { useCategorias } from '~/composables/useCategorias';
-import { useCardapioItens, type ItemCardapio } from '~/composables/useCardapioItens';
+import { useCardapioItens } from '~/composables/useCardapioItens';
 import { useVariacoes } from '~/composables/useVariacoes';
-import { useSupabaseClient } from '#imports';
+import { useLightbox } from '~/composables/useLightbox';
 import { PencilSquareIcon, TrashIcon, PlusIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 
 const toast = useToast();
@@ -487,6 +552,8 @@ const {
   updateVariacaoCompleta,
   removeVariacao
 } = useVariacoes();
+
+const { openLightbox } = useLightbox();
 
 // Formatação Monetária
 const formatCurrency = (value: number) => {
@@ -633,8 +700,29 @@ const itemForm = reactive({
   tipo_bebida: 'refrigerante',
   variacoesBebida: [
     { preco: 0, tamanho: '', volume_ml: '', tipo_preparo: '', tipo_gas: '' }
-  ]
+  ],
+  // Imagem
+  imagemFile: null as File | null,
+  imagemPreview: null as string | null,
+  imagem_url: null as string | null
 });
+
+// Manipulador de Mudança de Imagem
+const handleImageChange = (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files[0]) {
+    const file = input.files[0];
+    itemForm.imagemFile = file;
+    // Criar preview local
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      if (e.target?.result) {
+        itemForm.imagemPreview = e.target.result as string;
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+};
 
 onMounted(async () => {
   try {
@@ -676,6 +764,9 @@ const handleOpenAddItem = (catId?: string) => {
   itemForm.tipo_bebida = 'refrigerante';
   itemForm.variacoesBebida = [{ preco: 0, tamanho: '', volume_ml: '', tipo_preparo: '', tipo_gas: '' }];
   itemForm.ativo = true;
+  itemForm.imagemFile = null;
+  itemForm.imagemPreview = null;
+  itemForm.imagem_url = null;
 
   if (catId && !expandedCategories.value.includes(catId)) {
     expandedCategories.value.push(catId);
@@ -708,6 +799,11 @@ const handleOpenEditItem = (item: any, isBebida: boolean) => {
     itemForm.destaque = !!item.destaque;
     itemForm.permite_ponto_carne = !!item.permite_ponto_carne;
   }
+  
+  itemForm.imagemFile = null;
+  itemForm.imagem_url = item.imagem_url || null;
+  itemForm.imagemPreview = item.imagem_url || null;
+  
   showItemModal.value = true;
 };
 
@@ -748,6 +844,29 @@ const handleSaveItem = async () => {
   isSaving.value = true;
 
   try {
+    const supabaseClient = useSupabaseClient();
+    let uploadedUrl = itemForm.imagem_url;
+
+    if (itemForm.imagemFile) {
+      const file = itemForm.imagemFile;
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const filePath = `${fileName}`;
+      
+      const { error: uploadError } = await supabaseClient.storage
+        .from('produtos-imagens')
+        .upload(filePath, file);
+        
+      if (uploadError) {
+        toast.error('Erro de Upload', 'Não foi possível enviar a imagem.');
+        isSaving.value = false;
+        return;
+      }
+      
+      const { data } = supabaseClient.storage.from('produtos-imagens').getPublicUrl(filePath);
+      uploadedUrl = data.publicUrl;
+    }
+
     if (isBebida) {
       if (editingItem.value && editingItemType.value === 'bebida') {
         const v = itemForm.variacoesBebida[0]!;
@@ -759,7 +878,8 @@ const handleSaveItem = async () => {
           volume_ml: v.volume_ml ? parseInt(String(v.volume_ml)) : null,
           tipo_preparo: v.tipo_preparo || null,
           tipo_gas: v.tipo_gas || null,
-          ativo: itemForm.ativo
+          ativo: itemForm.ativo,
+          imagem_url: uploadedUrl
         };
         await updateVariacaoCompleta(
           editingItem.value.id,
@@ -778,7 +898,8 @@ const handleSaveItem = async () => {
             volume_ml: v.volume_ml ? parseInt(String(v.volume_ml)) : null,
             tipo_preparo: v.tipo_preparo || null,
             tipo_gas: v.tipo_gas || null,
-            ativo: itemForm.ativo
+            ativo: itemForm.ativo,
+            imagem_url: uploadedUrl
           };
           await addNovaVariacao(itemForm.nome, itemForm.categoria_id, detalhes as any);
         }
@@ -792,7 +913,8 @@ const handleSaveItem = async () => {
         preco: itemForm.preco,
         destaque: itemForm.destaque,
         permite_ponto_carne: itemForm.permite_ponto_carne,
-        ativo: itemForm.ativo
+        ativo: itemForm.ativo,
+        imagem_url: uploadedUrl
       };
       
       if (editingItem.value && editingItemType.value === 'prato') {

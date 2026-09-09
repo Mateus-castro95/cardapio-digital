@@ -44,6 +44,7 @@
     <!-- Notificações globais -->
     <BaseToast />
     <BaseLoading />
+    <BaseImageLightbox />
   </div>
 </template>
 
