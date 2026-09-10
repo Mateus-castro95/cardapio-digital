@@ -91,7 +91,7 @@
                   class="w-48 h-48"
               />
           </div>
-          <p class="text-description text-preto/70 mb-8 px-4">
+          <p class="text-description text-cafe mb-8 px-4">
               Aponte a câmera para o código acima para acessar o cardápio digital desta mesa.
           </p>
           <div class="grid grid-cols-2 gap-3 mb-6">
