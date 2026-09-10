@@ -3,6 +3,7 @@
   <div class="app-container" :class="{ 'sidebar-collapsed': isCollapsed, 'is-public': isPublicRoute }">
     <!-- Componente de acessibilidade para anunciar mudanças de rota -->
     <NuxtRouteAnnouncer />
+    <VitePwaManifest />
     
     <!-- Header Móvel (visível apenas em telas pequenas e rotas não públicas) -->
     <header 
