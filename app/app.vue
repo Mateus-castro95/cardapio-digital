@@ -37,8 +37,25 @@
     />
     
     <!-- Área de conteúdo principal onde as páginas são renderizadas -->
-    <main class="main-content" :class="{ 'ml-0 lg:ml-0 w-full lg:w-full pt-0': isPublicRoute }">
-      <NuxtPage />
+    <main class="main-content flex flex-col" :class="{ 'ml-0 lg:ml-0 w-full lg:w-full pt-0': isPublicRoute }">
+      <div class="flex-1 w-full">
+        <NuxtPage />
+      </div>
+
+      <!-- Footer Global -->
+      <footer class="w-full py-6 mt-auto bg-[#0A0A0C] border-t border-white/5 flex flex-col items-center justify-center gap-1.5 z-10 print:hidden">
+        <p class="text-sm text-[#B89758]/70 font-medium">
+          © {{ new Date().getFullYear() }} - Todos os direitos reservados.
+        </p>
+        <a 
+          href="https://mateuscastro-dev.vercel.app/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="text-sm font-black text-[#E8C86A] hover:text-[#F3D781] transition-colors drop-shadow-[0_0_8px_rgba(232,200,106,0.4)]"
+        >
+          Desenvolvido por Mateus Castro
+        </a>
+      </footer>
     </main>
 
     <!-- Notificações globais -->
@@ -80,6 +97,7 @@ watch(user, (newUser) => {
 // 2. For o Cardápio e NÃO houver um usuário logado (visão do cliente)
 const isPublicRoute = computed(() => {
   if (route.path.startsWith('/login')) return true;
+  if (route.path.startsWith('/imprimir-mesas')) return true;
   if (route.path.startsWith('/cardapio') && !user.value) return true;
   return false;
 });

@@ -7,6 +7,14 @@
       </div>
       <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
         <button 
+          v-if="mesas.length > 0"
+          @click="abrirImpressao" 
+          class="w-full sm:w-auto px-6 py-3 rounded-xl border-2 border-cafe text-cafe hover:bg-bege-cream shadow-sm hover:shadow transition-all font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2"
+        >
+          <PrinterIcon class="w-5 h-5" />
+          Imprimir Todos
+        </button>
+        <button 
             v-if="mesas.length === 0"
             @click="seedMesas" 
             :disabled="loadingSeed"
@@ -86,6 +94,16 @@
           <p class="text-description text-preto/70 mb-8 px-4">
               Aponte a câmera para o código acima para acessar o cardápio digital desta mesa.
           </p>
+          <div class="grid grid-cols-2 gap-3 mb-6">
+            <button @click="downloadQrCode('png')" class="w-full py-2.5 rounded-xl border border-cafe/30 text-cafe hover:bg-cafe/10 font-bold transition-colors text-xs flex items-center justify-center gap-2">
+              <ArrowDownTrayIcon class="w-4 h-4" />
+              BAIXAR PNG
+            </button>
+            <button @click="downloadQrCode('svg')" class="w-full py-2.5 rounded-xl border border-cafe/30 text-cafe hover:bg-cafe/10 font-bold transition-colors text-xs flex items-center justify-center gap-2">
+              <ArrowDownTrayIcon class="w-4 h-4" />
+              BAIXAR SVG
+            </button>
+          </div>
           <button @click="copiarLinkMesa(mesaQrAtual)" class="w-full py-3 rounded-xl border border-bege-torrado text-cafe hover:bg-bege-cream font-bold transition-colors">
             COPIAR LINK DA MESA
           </button>
@@ -132,7 +150,7 @@
 import { ref, onMounted } from 'vue';
 import { usePedidos } from '~/composables/usePedidos';
 import { useToast } from '~/composables/useToast';
-import { PlusIcon, QrCodeIcon, LinkIcon, XCircleIcon, XMarkIcon, TableCellsIcon, ArrowPathIcon } from '@heroicons/vue/24/outline';
+import { PlusIcon, QrCodeIcon, LinkIcon, XCircleIcon, XMarkIcon, TableCellsIcon, ArrowPathIcon, PrinterIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/outline';
 
 const { mesas, fetchMesas, criarMesa, atualizarStatusMesa, loading } = usePedidos();
 const toast = useToast();
@@ -161,6 +179,36 @@ const getUrlMesa = (mesa: any) => {
 const abrirQrCode = (mesa: any) => {
     mesaQrAtual.value = mesa;
     showQrModal.value = true;
+};
+
+const abrirImpressao = () => {
+    window.open('/imprimir-mesas', '_blank');
+};
+
+const downloadQrCode = async (formato: 'png' | 'svg') => {
+    if (!mesaQrAtual.value) return;
+    
+    toast.success('Iniciando download...', `Baixando QR Code em ${formato.toUpperCase()}`);
+    
+    try {
+        const url = getUrlMesa(mesaQrAtual.value);
+        const apiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(url)}&format=${formato}`;
+        
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error('Falha ao gerar o QR Code');
+        
+        const blob = await response.blob();
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = `Mesa-${mesaQrAtual.value.numero}-QRCode.${formato}`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(downloadUrl);
+        document.body.removeChild(a);
+    } catch (error) {
+        toast.error('Erro no download', 'Não foi possível baixar a imagem.');
+    }
 };
 
 const handleCriarMesa = async () => {

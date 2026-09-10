@@ -39,13 +39,13 @@
 
           <div class="divide-y divide-bege-soft/50 max-h-[50vh] lg:max-h-[400px] overflow-y-auto custom-scrollbar">
             <div v-for="item in itensAgrupados" :key="item.chave" class="p-4 sm:p-5 flex justify-between items-center hover:bg-bege-cream/10 transition-colors">
-              <div class="flex gap-3 sm:gap-4 items-center">
-                <div class="w-8 h-8 sm:w-10 sm:h-10 bg-bege-cream rounded-xl flex items-center justify-center font-black text-cafe text-[10px] sm:text-xs shadow-sm border border-bege-soft">
+              <div class="flex gap-3 sm:gap-4 items-center flex-1 min-w-0">
+                <div class="shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-bege-cream rounded-xl flex items-center justify-center font-black text-cafe text-[10px] sm:text-xs shadow-sm border border-bege-soft">
                   {{ item.quantidade }}x
                 </div>
-                <div class="min-w-0">
-                  <h4 class="text-xs sm:text-body font-black text-cafe-dark leading-tight truncate">{{ item.nome }}</h4>
-                  <p class="text-[10px] sm:text-caption text-bege-torrado font-bold leading-tight">{{ item.descricao }}</p>
+                <div class="min-w-0 flex-1">
+                  <h4 class="text-xs sm:text-body font-black text-cafe-dark leading-tight break-words">{{ item.nome }}</h4>
+                  <p class="text-[10px] sm:text-caption text-bege-torrado font-bold leading-tight break-words mt-1">{{ item.descricao }}</p>
                 </div>
               </div>
               <div class="flex items-center gap-2 sm:gap-4 shrink-0 ml-2">
